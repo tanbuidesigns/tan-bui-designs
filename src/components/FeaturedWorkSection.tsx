@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { projects } from "@/data/projects";
 
 export default function FeaturedWorkSection() {
@@ -8,6 +9,7 @@ export default function FeaturedWorkSection() {
         <p className="uppercase tracking-[0.3em] text-sm text-gray-500 mb-4">
           Selected Work
         </p>
+
         <h2 className="text-4xl md:text-6xl font-bold">
           Projects with purpose.
         </h2>
@@ -15,9 +17,10 @@ export default function FeaturedWorkSection() {
 
       <div className="grid md:grid-cols-2 gap-8">
         {projects.map((project) => (
-          <article
+          <Link
             key={project.title}
-            className="group border border-gray-200 hover:border-black transition overflow-hidden"
+            href={`/work/${project.slug}`}
+            className="group block border border-gray-200 hover:border-black transition overflow-hidden"
           >
             <div className="relative z-0 aspect-[4/3] bg-gray-100 border-b border-gray-200">
               <Image
@@ -39,7 +42,7 @@ export default function FeaturedWorkSection() {
 
               <p className="text-gray-600">{project.result}</p>
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </section>
