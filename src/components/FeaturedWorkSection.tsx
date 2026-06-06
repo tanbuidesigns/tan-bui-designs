@@ -3,28 +3,43 @@ import { projects } from "@/data/projects";
 export default function FeaturedWorkSection() {
   return (
     <section className="max-w-6xl mx-auto px-8 py-24">
-      <h2 className="text-4xl font-bold mb-16">
-        Selected Work
-      </h2>
+      <div className="flex justify-between items-end mb-16">
+        <div>
+          <p className="uppercase tracking-[0.3em] text-sm text-gray-500 mb-4">
+            Selected Work
+          </p>
+          <h2 className="text-4xl md:text-6xl font-bold">
+            Projects with purpose.
+          </h2>
+        </div>
+      </div>
 
-      <div className="grid gap-8">
+      <div className="grid md:grid-cols-2 gap-8">
         {projects.map((project) => (
-          <div
+          <article
             key={project.title}
-            className="border border-gray-200 p-8 hover:border-black transition"
+            className="group border border-gray-200 hover:border-black transition"
           >
-            <p className="text-sm uppercase text-gray-500 mb-3">
-              {project.category}
-            </p>
+            <div className="aspect-[4/3] bg-gray-100 border-b border-gray-200 flex items-center justify-center">
+              <span className="text-gray-400 text-sm">
+                Project image
+              </span>
+            </div>
 
-            <h3 className="text-2xl font-semibold mb-3">
-              {project.title}
-            </h3>
+            <div className="p-8">
+              <p className="text-sm uppercase tracking-wide text-gray-500 mb-4">
+                {project.category}
+              </p>
 
-            <p className="text-gray-600">
-              {project.result}
-            </p>
-          </div>
+              <h3 className="text-2xl font-semibold mb-4">
+                {project.title}
+              </h3>
+
+              <p className="text-gray-600">
+                {project.result}
+              </p>
+            </div>
+          </article>
         ))}
       </div>
     </section>
