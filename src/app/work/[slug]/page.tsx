@@ -21,55 +21,6 @@ export default async function ProjectPage({
 
   const nextProject = projects[(projectIndex + 1) % projects.length];
 
-  const servicesMap: Record<string, string[]> = {
-    "healthy-muslim-marriage-handbook": [
-      "Branding",
-      "Publication Design",
-      "Typography",
-      "Print Production",
-      "Creative Direction",
-    ],
-
-    "colonis-exhibition": [
-      "Creative Direction",
-      "Exhibition Design",
-      "3D Visualisation",
-      "Brand Application",
-      "Artwork Production",
-    ],
-
-    "menarini-healthcare-exhibition": [
-      "Concept Development",
-      "3D Visualisation",
-      "Exhibition Design",
-      "Presentation Design",
-    ],
-
-    "islamiya-series-books": [
-      "Branding",
-      "Book Design",
-      "Illustration",
-      "Educational Design",
-      "Creative Direction",
-    ],
-
-    "al-furqaan-school": [
-      "Brand Identity",
-      "Website Design",
-      "WordPress Development",
-      "SEO",
-      "Creative Direction",
-    ],
-
-    "urban-eat": [
-      "Packaging Design",
-      "Artwork Production",
-      "Brand Application",
-      "Print Design",
-    ],
-  };
-
-  const services = servicesMap[project.slug] || [];
 
   return (
     <main className="bg-white text-black">
@@ -224,7 +175,7 @@ export default async function ProjectPage({
   </h2>
 
   <div className="flex flex-wrap gap-4">
-    {services.map((service) => (
+    {project.services?.map((service) => (
       <div
         key={service}
         className="px-5 py-3 border border-gray-200 rounded-full text-sm"
