@@ -1,11 +1,25 @@
 export const projects = [
-  {
-    title: "Healthy Muslim Marriage Handbook",
-    slug: "healthy-muslim-marriage-handbook",
-    category: "Publication Design & Branding",
-    result: "80,000 copies sold",
-    image: "/projects/healthy-muslim-marriage/cover.jpg",
-  },
+{
+  title: "Healthy Muslim Marriage Handbook",
+  slug: "healthy-muslim-marriage-handbook",
+  category: "Publication Design & Branding",
+  client: "White Thread Press",
+  result: "80,000 copies sold",
+  image: "/projects/healthy-muslim-marriage/cover.jpg",
+  intro:
+    "Book cover design, visual branding and print-ready artwork for one of White Thread Press’s bestselling Islamic publications.",
+  challenge:
+    "The cover needed to communicate trust, professionalism and warmth while appealing to a broad Muslim audience across bookshops and online platforms.",
+  role: [
+    "Research and visual direction",
+    "Cover design",
+    "Typography selection",
+    "Brand positioning ideas",
+    "Print-ready artwork",
+  ],
+  outcome:
+    "The book became a bestseller, selling nearly 80,000 copies and becoming a recognised title across Islamic bookstores in the UK.",
+},
   {
     title: "Colonis Exhibition",
     slug: "colonis-exhibition",
