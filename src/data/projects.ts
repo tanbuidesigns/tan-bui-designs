@@ -40,40 +40,55 @@ solution:
     outcome:
       "The book became a bestseller, selling nearly 80,000 copies and becoming a recognised title across Islamic bookstores in the UK.",
   },
-  {
-    title: "Colonis Exhibition",
-    slug: "colonis-exhibition",
-    category: "Exhibition Design",
-    client: "Colonis",
-    result: "Completed in 3 days",
-    image: "/projects/colonis-exhibition/cover.jpg",
-    gallery: [
-  "/projects/colonis-exhibition/cover.jpg",
-  "/projects/colonis-exhibition/cover.jpg",
-  "/projects/colonis-exhibition/cover.jpg",
+{
+title: "Colonis Exhibition",
+slug: "colonis-exhibition",
+category: "Exhibition Design",
+client: "Colonis",
+result: "Delivered in 3 days",
+image: "/projects/colonis-exhibition/cover.jpg",
+
+gallery: [
+"/projects/colonis-exhibition/cover.jpg",
+"/projects/colonis-exhibition/cover.jpg",
+"/projects/colonis-exhibition/cover.jpg",
 ],
 
 services: [
-  "Creative Direction",
-  "Exhibition Design",
-  "3D Visualisation",
-  "Brand Application",
-  "Artwork Production",
+"Creative Direction",
+"Exhibition Design",
+"3D Visualisation",
+"Brand Application",
+"Artwork Production",
 ],
-    intro:
-      "A fast-turnaround exhibition concept created for Colonis, built around a landscape-led visual theme.",
-    challenge:
-      "The project needed a strong concept, clear visual direction and polished execution within an extremely tight timeframe.",
-    role: [
-      "Creative concept",
-      "Exhibition design",
-      "Visual direction",
-      "Layout design",
-      "Final artwork execution",
-    ],
-    outcome:
-      "The first concept was approved straight away, the exhibition was completed in three days, and the success helped build further client confidence.",
-  },
+
+intro:
+"A pharmaceutical exhibition concept developed and delivered from brief to print in just three days.",
+
+overview:
+"What made this project unusual wasn't the design. It was the speed. The exhibition went from initial brief to final print files in just three days.",
+
+challenge:
+"The client needed a complete exhibition concept under an extremely tight deadline. There wasn't time for endless concepts, meetings or revisions.",
+
+approach:
+"I focused on finding a strong central idea that could carry the entire exhibition. By making key decisions early, I was able to move quickly without sacrificing quality.",
+
+solution:
+"A landscape-inspired visual theme was developed that connected the graphics, messaging and exhibition experience into one coherent concept.",
+
+role: [
+"Creative Concept",
+"Exhibition Design",
+"Visual Direction",
+"Artwork Production",
+"Client Presentation",
+],
+
+outcome:
+"The first concept was approved almost immediately and the project was delivered to print within three days, helping build confidence and secure future opportunities.",
+},
+
   {
     title: "Menarini Healthcare Exhibition",
     slug: "menarini-healthcare-exhibition",
