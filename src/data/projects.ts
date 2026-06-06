@@ -11,6 +11,13 @@ export const projects = [
   "/projects/healthy-muslim-marriage/cover.jpg",
   "/projects/healthy-muslim-marriage/cover.jpg",
 ],
+services: [
+  "Branding",
+  "Publication Design",
+  "Typography",
+  "Print Production",
+  "Creative Direction",
+],
     intro:
       "Book cover design, visual branding and print-ready artwork for one of White Thread Press’s bestselling Islamic publications.",
     overview:
@@ -40,6 +47,19 @@ solution:
     client: "Colonis",
     result: "Completed in 3 days",
     image: "/projects/colonis-exhibition/cover.jpg",
+    gallery: [
+  "/projects/colonis-exhibition/cover.jpg",
+  "/projects/colonis-exhibition/cover.jpg",
+  "/projects/colonis-exhibition/cover.jpg",
+],
+
+services: [
+  "Creative Direction",
+  "Exhibition Design",
+  "3D Visualisation",
+  "Brand Application",
+  "Artwork Production",
+],
     intro:
       "A fast-turnaround exhibition concept created for Colonis, built around a landscape-led visual theme.",
     challenge:
@@ -61,6 +81,18 @@ solution:
     client: "Menarini",
     result: "2D concept transformed into 3D pitch",
     image: "/projects/menarini-exhibition/cover.jpg",
+    gallery: [
+  "/projects/menarini-exhibition/cover.jpg",
+  "/projects/menarini-exhibition/cover.jpg",
+  "/projects/menarini-exhibition/cover.jpg",
+],
+
+services: [
+  "Concept Development",
+  "3D Visualisation",
+  "Exhibition Design",
+  "Presentation Design",
+],
     intro:
       "Healthcare exhibition ideation developed from a 2D concept into a branded 3D pitch presentation.",
     challenge:
@@ -82,6 +114,19 @@ solution:
     client: "Madressa Islamiya",
     result: "Extended into web and mobile app",
     image: "/projects/islamiya-series/cover.jpg",
+    gallery: [
+  "/projects/islamiya-series/cover.jpg",
+  "/projects/islamiya-series/cover.jpg",
+  "/projects/islamiya-series/cover.jpg",
+],
+
+services: [
+  "Branding",
+  "Book Design",
+  "Illustration",
+  "Educational Design",
+  "Creative Direction",
+],
     intro:
       "A branded educational book series helping children learn Qur’an reading, Islamic teachings and life skills.",
     challenge:
@@ -103,6 +148,19 @@ solution:
     client: "Al Furqaan Primary School",
     result: "Complete school identity system",
     image: "/projects/al-furqaan-school/cover.jpg",
+    gallery: [
+  "/projects/al-furqaan-school/cover.jpg",
+  "/projects/al-furqaan-school/cover.jpg",
+  "/projects/al-furqaan-school/cover.jpg",
+],
+
+services: [
+  "Brand Identity",
+  "Website Design",
+  "WordPress Development",
+  "SEO",
+  "Creative Direction",
+],
     intro:
       "A full branding and website system for Al Furqaan Primary School, built on WordPress using Bricks.",
     challenge:
@@ -124,6 +182,18 @@ solution:
     client: "Urban Eat",
     result: "Commercial packaging project",
     image: "/projects/urban-eat/cover.jpg",
+    gallery: [
+  "/projects/urban-eat/cover.jpg",
+  "/projects/urban-eat/cover.jpg",
+  "/projects/urban-eat/cover.jpg",
+],
+
+services: [
+  "Packaging Design",
+  "Artwork Production",
+  "Brand Application",
+  "Print Design",
+],
     intro:
       "Commercial packaging design work for Urban Eat, supporting product presentation and brand consistency.",
     challenge:
