@@ -90,38 +90,53 @@ outcome:
 },
 
   {
-    title: "Menarini Healthcare Exhibition",
-    slug: "menarini-healthcare-exhibition",
-    category: "3D Exhibition Design",
-    client: "Menarini",
-    result: "2D concept transformed into 3D pitch",
-    image: "/projects/menarini-exhibition/cover.jpg",
-    gallery: [
-  "/projects/menarini-exhibition/cover.jpg",
-  "/projects/menarini-exhibition/cover.jpg",
-  "/projects/menarini-exhibition/cover.jpg",
+title: "Menarini Healthcare Exhibition",
+slug: "menarini-healthcare-exhibition",
+category: "3D Exhibition Design",
+client: "Menarini",
+result: "Generated further opportunities",
+image: "/projects/menarini-exhibition/cover.jpg",
+
+gallery: [
+"/projects/menarini-exhibition/cover.jpg",
+"/projects/menarini-exhibition/cover.jpg",
+"/projects/menarini-exhibition/cover.jpg",
 ],
 
 services: [
-  "Concept Development",
-  "3D Visualisation",
-  "Exhibition Design",
-  "Presentation Design",
+"Concept Development",
+"3D Visualisation",
+"Exhibition Design",
+"Presentation Design",
 ],
-    intro:
-      "Healthcare exhibition ideation developed from a 2D concept into a branded 3D pitch presentation.",
-    challenge:
-      "The pitch needed to communicate an exhibition idea clearly and convincingly without relying on restricted NDA client work.",
-    role: [
-      "2D ideation",
-      "3D visualisation",
-      "Brand application",
-      "Pitch presentation",
-      "Exhibition storytelling",
-    ],
-    outcome:
-      "The project demonstrated the ability to take an idea from flat concept into a more immersive branded experience for presentation.",
-  },
+
+intro:
+"An exhibition pitch that helped showcase capabilities, generate recognition and create further opportunities.",
+
+overview:
+"While this exhibition wasn't ultimately selected, the project achieved something equally valuable. It demonstrated capability, generated visibility and helped open the door to future opportunities.",
+
+challenge:
+"The concept needed to exist both as a strategic idea and as a realistic exhibition experience that stakeholders could evaluate and understand quickly.",
+
+approach:
+"I worked across concept development, copywriting, strategy, 2D ideation, 3D visualisation and presentation design. The goal wasn't simply to create attractive renders. The goal was to tell a convincing story around the exhibition concept.",
+
+solution:
+"The project evolved from early ideas into fully realised 3D renders, supporting visuals and presentation materials that clearly communicated the concept and its potential.",
+
+role: [
+"2D Ideation",
+"3D Visualisation",
+"Copywriting",
+"Strategy",
+"Presentation Design",
+],
+
+outcome:
+"Although the exhibition itself wasn't ultimately chosen, the project generated exposure, demonstrated capability and led to further exhibition and visualisation opportunities.",
+},
+
   {
     title: "Islamiya Series Books",
     slug: "islamiya-series-books",
