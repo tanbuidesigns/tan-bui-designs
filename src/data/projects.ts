@@ -187,70 +187,101 @@ outcome:
 },
 
   {
-    title: "Al Furqaan School",
-    slug: "al-furqaan-school",
-    category: "Branding & Website Design",
-    client: "Al Furqaan Primary School",
-    result: "Complete school identity system",
-    image: "/projects/al-furqaan-school/cover.jpg",
-    gallery: [
-  "/projects/al-furqaan-school/cover.jpg",
-  "/projects/al-furqaan-school/cover.jpg",
-  "/projects/al-furqaan-school/cover.jpg",
+title: "Al Furqaan School",
+slug: "al-furqaan-school",
+category: "Branding & Website Design",
+client: "Al Furqaan Primary School",
+result: "Complete school identity system",
+image: "/projects/al-furqaan-school/cover.jpg",
+
+gallery: [
+"/projects/al-furqaan-school/cover.jpg",
+"/projects/al-furqaan-school/cover.jpg",
+"/projects/al-furqaan-school/cover.jpg",
 ],
 
 services: [
-  "Brand Identity",
-  "Website Design",
-  "WordPress Development",
-  "SEO",
-  "Creative Direction",
+"Brand Identity",
+"Website Design",
+"WordPress Development",
+"SEO",
+"Creative Direction",
 ],
-    intro:
-      "A full branding and website system for Al Furqaan Primary School, built on WordPress using Bricks.",
-    challenge:
-      "The school needed a professional identity and a usable website system that could communicate clearly with parents and the wider community.",
-    role: [
-      "Logo design",
-      "Branding system",
-      "Website design",
-      "WordPress development",
-      "SEO foundations",
-    ],
-    outcome:
-      "The school now has a professional website and visual system that supports communication, credibility and ongoing content updates.",
-  },
+
+intro:
+"A complete identity and website system designed to support the growth of a modern Islamic primary school.",
+
+overview:
+"This project involved building a complete visual identity and digital platform for Al Furqaan Primary School. The goal wasn't simply to create a website. The goal was to create a professional system the school could grow into and rely on for years.",
+
+challenge:
+"The school needed a stronger visual identity and a more professional online presence. At the same time, the project needed approval from trustees, meaning every design decision had to balance modernisation with familiarity and trust.",
+
+approach:
+"I worked on branding, logo refinement, typography, colour systems, website design, development and SEO. Rather than treating these as separate tasks, everything was developed as part of one connected design system.",
+
+solution:
+"The final solution included a refined identity, a structured visual system and a custom WordPress website built using Bricks. Additional custom functionality and SEO foundations were implemented to support long-term growth.",
+
+role: [
+"Brand Identity",
+"Logo Refinement",
+"Website Design",
+"WordPress Development",
+"SEO",
+],
+
+outcome:
+"The identity received first-round approval from trustees and the website now serves as the school's primary communication platform. The result is a scalable system that supports both day-to-day communication and future development.",
+},
+
   {
-    title: "Urban Eat",
-    slug: "urban-eat",
-    category: "Packaging Design",
-    client: "Urban Eat",
-    result: "Commercial packaging project",
-    image: "/projects/urban-eat/cover.jpg",
-    gallery: [
-  "/projects/urban-eat/cover.jpg",
-  "/projects/urban-eat/cover.jpg",
-  "/projects/urban-eat/cover.jpg",
+title: "Urban Eat",
+slug: "urban-eat",
+category: "Packaging Design",
+client: "Urban Eat",
+result: "400+ packaging SKUs delivered",
+image: "/projects/urban-eat/cover.jpg",
+
+gallery: [
+"/projects/urban-eat/cover.jpg",
+"/projects/urban-eat/cover.jpg",
+"/projects/urban-eat/cover.jpg",
 ],
 
 services: [
-  "Packaging Design",
-  "Artwork Production",
-  "Brand Application",
-  "Print Design",
+"Packaging Design",
+"Artwork Production",
+"Brand Application",
+"Print Design",
+"3D Visualisation",
 ],
-    intro:
-      "Commercial packaging design work for Urban Eat, supporting product presentation and brand consistency.",
-    challenge:
-      "The packaging needed to work in a competitive food retail environment while staying aligned with the brand’s visual system.",
-    role: [
-      "Packaging design",
-      "Artwork preparation",
-      "Brand application",
-      "Layout design",
-      "Production awareness",
-    ],
-    outcome:
-      "The project added mainstream commercial packaging experience to a wider portfolio spanning print, branding and digital design.",
-  },
+
+intro:
+"Large-scale packaging design and production supporting hundreds of products across multiple food ranges and sub-brands.",
+
+overview:
+"Urban Eat became one of the largest packaging programmes I have worked on. What started as packaging design quickly evolved into creating systems capable of supporting hundreds of products across multiple ranges and sub-brands.",
+
+challenge:
+"The challenge wasn't creating a single package. The challenge was creating a system that could scale consistently across hundreds of products while maintaining quality, efficiency and brand consistency.",
+
+approach:
+"I worked across concept development, packaging design, artwork production, brand application and workflow optimisation. Alongside the packaging work itself, I developed processes that helped speed up approvals and improve communication across projects.",
+
+solution:
+"More than 20 product ranges and over 400 SKUs were developed through a structured packaging system. I also introduced 3D visualisation workflows that allowed concepts to be reviewed and approved more efficiently before production.",
+
+role: [
+"Packaging Design",
+"Brand Application",
+"Artwork Production",
+"3D Visualisation",
+"Workflow Development",
+],
+
+outcome:
+"The project demonstrated how strong systems can support large-scale packaging programmes. By combining design, production knowledge and workflow improvements, it became possible to deliver hundreds of products efficiently while maintaining a high standard of quality.",
+},
+
 ];
