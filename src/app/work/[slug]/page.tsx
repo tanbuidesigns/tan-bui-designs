@@ -48,6 +48,30 @@ export default async function ProjectPage({
         </div>
       </section>
 
+      {project.gallery && (
+        <section className="max-w-6xl mx-auto px-8 py-24">
+          <h2 className="text-4xl font-bold mb-12">
+            Project Gallery
+          </h2>
+
+          <div className="grid gap-8">
+            {project.gallery.map((image) => (
+              <div
+                key={image}
+                className="relative aspect-[16/9] bg-gray-100"
+              >
+                <Image
+                  src={image}
+                  alt={project.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section className="max-w-6xl mx-auto px-8 py-24 grid md:grid-cols-3 gap-16">
         <div>
           <p className="text-sm uppercase tracking-wide text-gray-500 mb-2">
@@ -67,6 +91,7 @@ export default async function ProjectPage({
           <p className="text-sm uppercase tracking-wide text-gray-500 mb-2">
             Role
           </p>
+
           <ul className="space-y-2 text-xl">
             {project.role?.map((item) => (
               <li key={item}>{item}</li>
@@ -76,12 +101,18 @@ export default async function ProjectPage({
       </section>
 
       <section className="max-w-4xl mx-auto px-8 pb-24">
-        <h2 className="text-4xl font-bold mb-8">The challenge</h2>
+        <h2 className="text-4xl font-bold mb-8">
+          The challenge
+        </h2>
+
         <p className="text-xl text-gray-600 leading-relaxed">
           {project.challenge}
         </p>
 
-        <h2 className="text-4xl font-bold mt-20 mb-8">The outcome</h2>
+        <h2 className="text-4xl font-bold mt-20 mb-8">
+          The outcome
+        </h2>
+
         <p className="text-xl text-gray-600 leading-relaxed">
           {project.outcome}
         </p>
@@ -101,7 +132,9 @@ export default async function ProjectPage({
               {previousProject.title}
             </h3>
 
-            <p className="text-gray-600">{previousProject.category}</p>
+            <p className="text-gray-600">
+              {previousProject.category}
+            </p>
           </Link>
 
           <Link
@@ -116,7 +149,9 @@ export default async function ProjectPage({
               {nextProject.title}
             </h3>
 
-            <p className="text-gray-600">{nextProject.category}</p>
+            <p className="text-gray-600">
+              {nextProject.category}
+            </p>
           </Link>
         </div>
       </section>

@@ -6,6 +6,11 @@ export const projects = [
     client: "White Thread Press",
     result: "80,000 copies sold",
     image: "/projects/healthy-muslim-marriage/cover.jpg",
+    gallery: [
+  "/projects/healthy-muslim-marriage/cover.jpg",
+  "/projects/healthy-muslim-marriage/cover.jpg",
+  "/projects/healthy-muslim-marriage/cover.jpg",
+],
     intro:
       "Book cover design, visual branding and print-ready artwork for one of White Thread Press’s bestselling Islamic publications.",
     challenge:
