@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { projects } from "@/data/projects";
 import { notFound } from "next/navigation";
 
@@ -8,11 +9,17 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = projects.find((item) => item.slug === slug);
+  const projectIndex = projects.findIndex((item) => item.slug === slug);
+  const project = projects[projectIndex];
 
   if (!project) {
     notFound();
   }
+
+  const previousProject =
+    projects[(projectIndex - 1 + projects.length) % projects.length];
+
+  const nextProject = projects[(projectIndex + 1) % projects.length];
 
   return (
     <main className="bg-white text-black">
@@ -78,6 +85,40 @@ export default async function ProjectPage({
         <p className="text-xl text-gray-600 leading-relaxed">
           {project.outcome}
         </p>
+      </section>
+
+      <section className="max-w-6xl mx-auto px-8 pb-24">
+        <div className="grid md:grid-cols-2 gap-6 border-t border-gray-100 pt-12">
+          <Link
+            href={`/work/${previousProject.slug}`}
+            className="group border border-gray-200 p-8 hover:border-black transition"
+          >
+            <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-4">
+              Previous Project
+            </p>
+
+            <h3 className="text-2xl font-semibold mb-3 group-hover:underline underline-offset-8">
+              {previousProject.title}
+            </h3>
+
+            <p className="text-gray-600">{previousProject.category}</p>
+          </Link>
+
+          <Link
+            href={`/work/${nextProject.slug}`}
+            className="group border border-gray-200 p-8 hover:border-black transition text-left md:text-right"
+          >
+            <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-4">
+              Next Project
+            </p>
+
+            <h3 className="text-2xl font-semibold mb-3 group-hover:underline underline-offset-8">
+              {nextProject.title}
+            </h3>
+
+            <p className="text-gray-600">{nextProject.category}</p>
+          </Link>
+        </div>
       </section>
     </main>
   );
