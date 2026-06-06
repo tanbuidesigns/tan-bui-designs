@@ -3,6 +3,24 @@ import Link from "next/link";
 import { projects } from "@/data/projects";
 import { notFound } from "next/navigation";
 
+type Project = {
+  title: string;
+  slug: string;
+  category: string;
+  client: string;
+  result: string;
+  image: string;
+  intro: string;
+  overview: string;
+  challenge: string;
+  approach: string;
+  solution: string;
+  outcome: string;
+  role: string[];
+  gallery: string[];
+  services: string[];
+};
+
 export default async function ProjectPage({
   params,
 }: {
@@ -10,7 +28,7 @@ export default async function ProjectPage({
 }) {
   const { slug } = await params;
   const projectIndex = projects.findIndex((item) => item.slug === slug);
-  const project = projects[projectIndex];
+  const project = projects[projectIndex] as Project;
 
   if (!project) {
     notFound();
@@ -150,11 +168,11 @@ export default async function ProjectPage({
           </h2>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {project.gallery.map((image) => (
-              <div
-                key={image}
-                className="relative aspect-square bg-gray-100 overflow-hidden cursor-pointer"
-              >
+            {project.gallery.map((image, index) => (
+  <div
+    key={`${image}-${index}`}
+    className="relative aspect-square bg-gray-100 overflow-hidden cursor-pointer"
+  >
                 <Image
                   src={image}
                   alt={project.title}
