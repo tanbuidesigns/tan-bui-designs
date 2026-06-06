@@ -138,39 +138,54 @@ outcome:
 },
 
   {
-    title: "Islamiya Series Books",
-    slug: "islamiya-series-books",
-    category: "Educational Design",
-    client: "Madressa Islamiya",
-    result: "Extended into web and mobile app",
-    image: "/projects/islamiya-series/cover.jpg",
-    gallery: [
-  "/projects/islamiya-series/cover.jpg",
-  "/projects/islamiya-series/cover.jpg",
-  "/projects/islamiya-series/cover.jpg",
+title: "Islamiya Series Books",
+slug: "islamiya-series-books",
+category: "Educational Design",
+client: "Madressa Islamiya",
+result: "12+ publications and digital expansion",
+image: "/projects/islamiya-series/cover.jpg",
+
+gallery: [
+"/projects/islamiya-series/cover.jpg",
+"/projects/islamiya-series/cover.jpg",
+"/projects/islamiya-series/cover.jpg",
 ],
 
 services: [
-  "Branding",
-  "Book Design",
-  "Illustration",
-  "Educational Design",
-  "Creative Direction",
+"Branding",
+"Book Design",
+"Illustration",
+"Educational Design",
+"Creative Direction",
 ],
-    intro:
-      "A branded educational book series helping children learn Qur’an reading, Islamic teachings and life skills.",
-    challenge:
-      "The series needed to be clear, engaging and structured for children while supporting educational goals for teachers and parents.",
-    role: [
-      "Brand system",
-      "Book design",
-      "Illustration",
-      "Writing support",
-      "Educational design direction",
-    ],
-    outcome:
-      "The series became a complete educational system, with one book later developed into an interactive web and mobile app experience.",
-  },
+
+intro:
+"A connected educational publishing system supporting Islamic learning for thousands of students.",
+
+overview:
+"The Islamiya Series wasn't a single book. It was a complete educational system designed to help children learn Qur'an, Islamic studies and everyday Islamic life through a consistent and engaging learning experience.",
+
+challenge:
+"The challenge was creating a connected learning system across multiple publications while keeping the content engaging, easy to follow and visually consistent for both students and teachers.",
+
+approach:
+"Rather than treating each publication as a separate project, I approached the series as a complete educational ecosystem. This involved branding, illustration, educational design, writing support and visual development across multiple titles.",
+
+solution:
+"A consistent visual language was created across the entire series, allowing students to progress naturally through the curriculum. Design decisions were made with education, usability and long-term scalability in mind.",
+
+role: [
+"Book Design",
+"Illustration",
+"Brand Development",
+"Educational Design",
+"Content Support",
+],
+
+outcome:
+"The series expanded to more than 12 publications and helped support the learning journey of thousands of students. One title, Ahsanul Qawaaid, later evolved into an interactive website and mobile application, helping modernise how Islamic educational content could be delivered.",
+},
+
   {
     title: "Al Furqaan School",
     slug: "al-furqaan-school",
