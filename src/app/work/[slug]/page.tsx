@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { projects } from "@/data/projects";
 import { notFound } from "next/navigation";
-
+import LightboxGallery from "@/components/LightboxGallery";
 
 export default async function ProjectPage({
   params,
@@ -144,29 +144,18 @@ export default async function ProjectPage({
 
       {/* GALLERY */}
 
-      {project.gallery && (
-        <section className="max-w-6xl mx-auto px-8 pb-24">
-          <h2 className="text-4xl font-bold mb-12">
-            Project Gallery
-          </h2>
+{project.gallery && (
+  <section className="max-w-6xl mx-auto px-8 pb-24">
+    <h2 className="text-4xl font-bold mb-12">
+      Project Gallery
+    </h2>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {project.gallery.map((image, index) => (
-  <div
-    key={`${image}-${index}`}
-    className="relative aspect-square bg-gray-100 overflow-hidden cursor-pointer"
-  >
-                <Image
-                  src={image}
-                  alt={project.title}
-                  fill
-                  className="object-cover hover:scale-105 transition duration-500"
-                />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+    <LightboxGallery
+      images={project.gallery}
+      title={project.title}
+    />
+  </section>
+)}
 
 {/* SERVICES */}
 
