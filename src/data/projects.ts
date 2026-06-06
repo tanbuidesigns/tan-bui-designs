@@ -21,7 +21,7 @@ export const projects: Project[] = [
     slug: "healthy-muslim-marriage-handbook",
     category: "Publication Design & Branding",
     client: "White Thread Press",
-    result: "80,000 copies sold",
+    result: "Over 80,000 copies sold",
     image: "/projects/healthy-muslim-marriage/cover.jpg",
     gallery: [
   "/projects/healthy-muslim-marriage/cover.jpg",
