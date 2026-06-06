@@ -2,6 +2,7 @@ import HeroSection from "@/components/HeroSection";
 import CredibilitySection from "@/components/CredibilitySection";
 import FeaturedWorkSection from "@/components/FeaturedWorkSection";
 import AboutPreviewSection from "@/components/AboutPreviewSection";
+import ContactCTASection from "@/components/ContactCTASection";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       <CredibilitySection />
       <FeaturedWorkSection />
       <AboutPreviewSection />
+      <ContactCTASection />
     </main>
   );
 }
