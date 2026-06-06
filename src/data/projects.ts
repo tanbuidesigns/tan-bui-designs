@@ -13,7 +13,15 @@ export const projects = [
 ],
     intro:
       "Book cover design, visual branding and print-ready artwork for one of White Thread Press’s bestselling Islamic publications.",
-    challenge:
+    overview:
+  "Healthy Muslim Marriage Handbook is one of the most recognised Islamic relationship books in the UK market. The goal was to create a cover and visual identity that balanced professionalism, warmth and trust while appealing to a broad Muslim audience.",
+
+approach:
+  "Research was carried out into competing titles, Islamic publishing conventions and audience expectations. Multiple design directions were explored before developing a visual language that felt timeless, trustworthy and commercially viable.",
+
+solution:
+  "The final design combined strong typography, considered composition and a refined visual hierarchy to create a cover capable of standing out both online and on physical bookstore shelves.",
+      challenge:
       "The cover needed to communicate trust, professionalism and warmth while appealing to a broad Muslim audience across bookshops and online platforms.",
     role: [
       "Research and visual direction",

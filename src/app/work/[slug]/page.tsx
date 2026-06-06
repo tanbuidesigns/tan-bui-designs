@@ -92,7 +92,7 @@ export default async function ProjectPage({
       {/* HERO IMAGE */}
 
       <section className="max-w-6xl mx-auto px-8">
-        <div className="relative aspect-[16/10] bg-gray-100">
+        <div className="relative aspect-[21/9] bg-gray-100">
           <Image
             src={project.image}
             alt={project.title}
@@ -134,25 +134,61 @@ export default async function ProjectPage({
         </div>
       </section>
 
-      {/* CHALLENGE & OUTCOME */}
+      {/* CASE STUDY STORY */}
 
-      <section className="max-w-4xl mx-auto px-8 pb-24">
-        <h2 className="text-4xl font-bold mb-8">
-          The challenge
-        </h2>
+<section className="max-w-4xl mx-auto px-8 pb-24">
+  {project.overview && (
+    <>
+      <h2 className="text-4xl font-bold mb-8">
+        Overview
+      </h2>
 
-        <p className="text-xl text-gray-600 leading-relaxed">
-          {project.challenge}
-        </p>
+      <p className="text-xl text-gray-600 leading-relaxed mb-20">
+        {project.overview}
+      </p>
+    </>
+  )}
 
-        <h2 className="text-4xl font-bold mt-20 mb-8">
-          The outcome
-        </h2>
+  <h2 className="text-4xl font-bold mb-8">
+    Challenge
+  </h2>
 
-        <p className="text-xl text-gray-600 leading-relaxed">
-          {project.outcome}
-        </p>
-      </section>
+  <p className="text-xl text-gray-600 leading-relaxed mb-20">
+    {project.challenge}
+  </p>
+
+  {project.approach && (
+    <>
+      <h2 className="text-4xl font-bold mb-8">
+        Approach
+      </h2>
+
+      <p className="text-xl text-gray-600 leading-relaxed mb-20">
+        {project.approach}
+      </p>
+    </>
+  )}
+
+  {project.solution && (
+    <>
+      <h2 className="text-4xl font-bold mb-8">
+        Solution
+      </h2>
+
+      <p className="text-xl text-gray-600 leading-relaxed mb-20">
+        {project.solution}
+      </p>
+    </>
+  )}
+
+  <h2 className="text-4xl font-bold mb-8">
+    Outcome
+  </h2>
+
+  <p className="text-xl text-gray-600 leading-relaxed">
+    {project.outcome}
+  </p>
+</section>
 
       {/* GALLERY */}
 
@@ -180,24 +216,24 @@ export default async function ProjectPage({
         </section>
       )}
 
-      {/* SERVICES */}
+{/* SERVICES */}
 
-      <section className="max-w-6xl mx-auto px-8 pb-24">
-        <h2 className="text-4xl font-bold mb-12">
-          Services Used
-        </h2>
+<section className="max-w-6xl mx-auto px-8 pb-24">
+  <h2 className="text-4xl font-bold mb-12">
+    Services Used
+  </h2>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {services.map((service) => (
-            <div
-              key={service}
-              className="border border-gray-200 p-6"
-            >
-              ✓ {service}
-            </div>
-          ))}
-        </div>
-      </section>
+  <div className="flex flex-wrap gap-4">
+    {services.map((service) => (
+      <div
+        key={service}
+        className="px-5 py-3 border border-gray-200 rounded-full text-sm"
+      >
+        {service}
+      </div>
+    ))}
+  </div>
+</section>
 
       {/* CTA */}
 
