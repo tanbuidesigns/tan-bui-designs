@@ -1,4 +1,21 @@
-export const projects = [
+export type Project = {
+  title: string;
+  slug: string;
+  category: string;
+  client: string;
+  result: string;
+  image: string;
+  intro: string;
+  overview: string;
+  challenge: string;
+  approach: string;
+  solution: string;
+  outcome: string;
+  role: string[];
+  gallery: string[];
+  services: string[];
+};
+export const projects: Project[] = [
   {
     title: "Healthy Muslim Marriage Handbook",
     slug: "healthy-muslim-marriage-handbook",
@@ -21,15 +38,15 @@ services: [
     intro:
       "Book cover design, visual branding and print-ready artwork for one of White Thread Press’s bestselling Islamic publications.",
     overview:
-  "Healthy Muslim Marriage Handbook is one of the most recognised Islamic relationship books in the UK market. The goal was to create a cover and visual identity that balanced professionalism, warmth and trust while appealing to a broad Muslim audience.",
+  "What started as a book cover project turned into something much bigger. Today the Healthy Muslim Marriage Handbook has sold more than 80,000 copies and become one of the most recognised Muslim marriage books in the UK.",
 
 approach:
-  "Research was carried out into competing titles, Islamic publishing conventions and audience expectations. Multiple design directions were explored before developing a visual language that felt timeless, trustworthy and commercially viable.",
+  "Before opening any design software, I spent time researching the audience, studying competing publications and understanding how similar books were positioned. Every design decision was made around a simple question: would someone feel confident enough to buy this book?",
 
 solution:
-  "The final design combined strong typography, considered composition and a refined visual hierarchy to create a cover capable of standing out both online and on physical bookstore shelves.",
+  "The final design focused on clarity, trust and longevity. Typography, layout, hierarchy and presentation were carefully considered to create a cover capable of standing out both online and on physical bookstore shelves.",
       challenge:
-      "The cover needed to communicate trust, professionalism and warmth while appealing to a broad Muslim audience across bookshops and online platforms.",
+  "The challenge wasn't simply designing a cover. The challenge was creating something people would trust enough to pick up, buy and recommend in a crowded publishing market.",
     role: [
       "Research and visual direction",
       "Cover design",
@@ -38,7 +55,7 @@ solution:
       "Print-ready artwork",
     ],
     outcome:
-      "The book became a bestseller, selling nearly 80,000 copies and becoming a recognised title across Islamic bookstores in the UK.",
+  "The book has sold over 80,000 copies and become one of the most recognised Muslim marriage titles in the UK. More importantly, it continues to be recommended, shared and trusted by readers years after publication.",
   },
 {
 title: "Colonis Exhibition",

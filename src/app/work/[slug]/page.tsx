@@ -3,23 +3,6 @@ import Link from "next/link";
 import { projects } from "@/data/projects";
 import { notFound } from "next/navigation";
 
-type Project = {
-  title: string;
-  slug: string;
-  category: string;
-  client: string;
-  result: string;
-  image: string;
-  intro: string;
-  overview: string;
-  challenge: string;
-  approach: string;
-  solution: string;
-  outcome: string;
-  role: string[];
-  gallery: string[];
-  services: string[];
-};
 
 export default async function ProjectPage({
   params,
@@ -28,7 +11,7 @@ export default async function ProjectPage({
 }) {
   const { slug } = await params;
   const projectIndex = projects.findIndex((item) => item.slug === slug);
-  const project = projects[projectIndex] as Project;
+  const project = projects[projectIndex];
 
   if (!project) {
     notFound();
