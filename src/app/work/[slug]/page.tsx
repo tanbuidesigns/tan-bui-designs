@@ -56,35 +56,64 @@ export default async function ProjectPage({
 
       {/* PROJECT INFO */}
 
-      <section className="max-w-6xl mx-auto px-8 py-24 grid md:grid-cols-3 gap-16">
-        <div>
-          <p className="text-sm uppercase tracking-wide text-gray-500 mb-2">
-            Client
-          </p>
+<section className="max-w-6xl mx-auto px-8 py-24">
+  <div className="grid md:grid-cols-3 gap-16">
+    <div>
+      <p className="text-sm uppercase tracking-wide text-gray-500 mb-2">
+        Client
+      </p>
 
-          <p className="text-xl">{project.client}</p>
+      <p className="text-xl">
+        {project.client}
+      </p>
+    </div>
+
+    <div>
+      <p className="text-sm uppercase tracking-wide text-gray-500 mb-2">
+        Result
+      </p>
+
+      <p className="text-xl">
+        {project.result}
+      </p>
+    </div>
+
+    <div>
+      <p className="text-sm uppercase tracking-wide text-gray-500 mb-2">
+        Role
+      </p>
+
+      <ul className="space-y-2 text-xl">
+        {project.role?.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  {project.metrics && (
+  <section className="mt-24 border-t border-gray-200 pt-16">
+    <div className="grid md:grid-cols-3 gap-12">
+      {project.metrics.map((metric) => (
+        <div
+          key={metric.label}
+          className="group transition-all duration-300"
+        >
+          <div className="text-6xl md:text-7xl font-bold tracking-tight leading-none transition-transform duration-300 group-hover:scale-105">
+            {metric.value}
+          </div>
+
+          <div className="w-12 h-px bg-black my-6"></div>
+
+          <div className="uppercase tracking-[0.25em] text-xs text-gray-500">
+            {metric.label}
+          </div>
         </div>
-
-        <div>
-          <p className="text-sm uppercase tracking-wide text-gray-500 mb-2">
-            Result
-          </p>
-
-          <p className="text-xl">{project.result}</p>
-        </div>
-
-        <div>
-          <p className="text-sm uppercase tracking-wide text-gray-500 mb-2">
-            Role
-          </p>
-
-          <ul className="space-y-2 text-xl">
-            {project.role?.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      ))}
+    </div>
+  </section>
+)}
+</section>
 
       {/* CASE STUDY STORY */}
 

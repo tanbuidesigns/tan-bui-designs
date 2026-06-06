@@ -14,6 +14,10 @@ export type Project = {
   role: string[];
   gallery: string[];
   services: string[];
+  metrics?: {
+  value: string;
+  label: string;
+}[];
 };
 export const projects: Project[] = [
   {
@@ -34,6 +38,20 @@ services: [
   "Typography",
   "Print Production",
   "Creative Direction",
+],
+metrics: [
+  {
+    value: "80,000+",
+    label: "Books Sold",
+  },
+  {
+    value: "UK Wide",
+    label: "Distribution",
+  },
+  {
+    value: "Bestselling",
+    label: "Marriage Guide",
+  },
 ],
     intro:
       "Book cover design, visual branding and print-ready artwork for one of White Thread Press’s bestselling Islamic publications.",
@@ -78,7 +96,20 @@ services: [
 "Brand Application",
 "Artwork Production",
 ],
-
+metrics: [
+  {
+    value: "3 Days",
+    label: "Delivery Time",
+  },
+  {
+    value: "1st Concept",
+    label: "Approved",
+  },
+  {
+    value: "Pharma",
+    label: "Exhibition Project",
+  },
+],
 intro:
 "A pharmaceutical exhibition concept developed and delivered from brief to print in just three days.",
 
@@ -126,7 +157,20 @@ services: [
 "Exhibition Design",
 "Presentation Design",
 ],
-
+metrics: [
+  {
+    value: "3D",
+    label: "Visualisation",
+  },
+  {
+    value: "Pitch",
+    label: "Presentation",
+  },
+  {
+    value: "Healthcare",
+    label: "Brand Experience",
+  },
+],
 intro:
 "An exhibition pitch that helped showcase capabilities, generate recognition and create further opportunities.",
 
@@ -175,7 +219,20 @@ services: [
 "Educational Design",
 "Creative Direction",
 ],
-
+metrics: [
+  {
+    value: "12+",
+    label: "Books Designed",
+  },
+  {
+    value: "1000s",
+    label: "Students Reached",
+  },
+  {
+    value: "Web + App",
+    label: "Extended Platform",
+  },
+],
 intro:
 "A connected educational publishing system supporting Islamic learning for thousands of students.",
 
@@ -224,7 +281,20 @@ services: [
 "SEO",
 "Creative Direction",
 ],
-
+metrics: [
+  {
+    value: "100%",
+    label: "Brand System",
+  },
+  {
+    value: "Custom",
+    label: "WordPress Build",
+  },
+  {
+    value: "SEO",
+    label: "Integrated",
+  },
+],
 intro:
 "A complete identity and website system designed to support the growth of a modern Islamic primary school.",
 
@@ -273,7 +343,20 @@ services: [
 "Print Design",
 "3D Visualisation",
 ],
-
+metrics: [
+  {
+    value: "400+",
+    label: "SKUs Created",
+  },
+  {
+    value: "20+",
+    label: "Product Ranges",
+  },
+  {
+    value: "A-Z",
+    label: "Ownership",
+  },
+],
 intro:
 "Large-scale packaging design and production supporting hundreds of products across multiple food ranges and sub-brands.",
 

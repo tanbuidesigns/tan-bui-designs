@@ -1,19 +1,42 @@
 export default function HeroSection() {
   return (
     <section className="max-w-6xl mx-auto px-8 py-32">
-      <p className="uppercase tracking-[0.3em] text-sm mb-8">
+      <p className="uppercase tracking-[0.35em] text-sm mb-12 text-gray-500">
         Tan Bui Designs
       </p>
 
-      <h1 className="text-6xl md:text-8xl font-bold leading-tight max-w-5xl">
-        Multidisciplinary design consultant with 15+ years of experience.
-      </h1>
+      <div className="w-full">
+        <h1 className="font-bold tracking-tight leading-[0.92]">
+          <span className="block text-6xl md:text-7xl">
+            Design that
+          </span>
 
-      <p className="text-xl mt-10 max-w-3xl text-gray-600">
-        From bestselling publications and educational resources to healthcare
-        exhibitions, websites and branding systems, I help organisations turn complex
-        ideas into clear, purposeful visual experiences.
-      </p>
+          <div className="flex items-center mt-2">
+  <span className="text-6xl md:text-7xl whitespace-nowrap">
+    solves problems
+  </span>
+
+  <span className="hero-line ml-4"></span>
+</div>
+
+          <span className="block text-6xl md:text-7xl text-gray-300 mt-4">
+            not just fills{" "}
+            <span className="hero-space text-black">
+              space.
+            </span>
+          </span>
+        </h1>
+
+        <p className="text-xl mt-16 max-w-3xl text-gray-600 leading-relaxed">
+          I've worked across branding, packaging, publications,
+          websites and exhibitions. Some projects ended up on
+          supermarket shelves. Some helped schools and charities
+          communicate more clearly. Others reached tens of thousands
+          of readers. Different industries. Same goal. Make
+          complicated things easier to understand.
+        </p>
+      </div>
     </section>
   );
 }
+

@@ -24,3 +24,93 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes heroUnderline {
+  0% {
+    width: 0;
+  }
+
+  30% {
+    width: 100%;
+  }
+
+  70% {
+    width: 100%;
+  }
+
+  100% {
+    width: 0;
+  }
+}
+
+
+.hero-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.hero-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  height: 2px;
+  background: black;
+  animation: heroUnderline 6s ease-in-out infinite;
+}
+
+
+.hero-line {
+  height: 1px;
+  background: black;
+
+  flex: 1;
+
+  transform-origin: left center;
+
+  animation: heroLineGrow 7s ease-in-out infinite;
+}
+
+@keyframes heroSpace {
+  0% {
+    opacity: 0.5;
+    transform: translateY(8px);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0.5;
+    transform: translateY(8px);
+  }
+}
+
+.hero-space {
+  display: inline-block;
+  animation: heroSpace 4s ease-in-out infinite;
+}
+
+@keyframes heroLineGrow {
+  0% {
+    transform: scaleX(0);
+    opacity: 0.25;
+  }
+
+  45% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+
+  80% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scaleX(0);
+    opacity: 0.25;
+  }
+}
