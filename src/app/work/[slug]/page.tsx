@@ -21,8 +21,60 @@ export default async function ProjectPage({
 
   const nextProject = projects[(projectIndex + 1) % projects.length];
 
+  const servicesMap: Record<string, string[]> = {
+    "healthy-muslim-marriage-handbook": [
+      "Branding",
+      "Publication Design",
+      "Typography",
+      "Print Production",
+      "Creative Direction",
+    ],
+
+    "colonis-exhibition": [
+      "Creative Direction",
+      "Exhibition Design",
+      "3D Visualisation",
+      "Brand Application",
+      "Artwork Production",
+    ],
+
+    "menarini-healthcare-exhibition": [
+      "Concept Development",
+      "3D Visualisation",
+      "Exhibition Design",
+      "Presentation Design",
+    ],
+
+    "islamiya-series-books": [
+      "Branding",
+      "Book Design",
+      "Illustration",
+      "Educational Design",
+      "Creative Direction",
+    ],
+
+    "al-furqaan-school": [
+      "Brand Identity",
+      "Website Design",
+      "WordPress Development",
+      "SEO",
+      "Creative Direction",
+    ],
+
+    "urban-eat": [
+      "Packaging Design",
+      "Artwork Production",
+      "Brand Application",
+      "Print Design",
+    ],
+  };
+
+  const services = servicesMap[project.slug] || [];
+
   return (
     <main className="bg-white text-black">
+      {/* HERO */}
+
       <section className="max-w-6xl mx-auto px-8 py-24">
         <p className="uppercase tracking-[0.3em] text-sm text-gray-500 mb-6">
           {project.category}
@@ -37,6 +89,8 @@ export default async function ProjectPage({
         </p>
       </section>
 
+      {/* HERO IMAGE */}
+
       <section className="max-w-6xl mx-auto px-8">
         <div className="relative aspect-[16/10] bg-gray-100">
           <Image
@@ -48,35 +102,14 @@ export default async function ProjectPage({
         </div>
       </section>
 
-      {project.gallery && (
-        <section className="max-w-6xl mx-auto px-8 py-24">
-          <h2 className="text-4xl font-bold mb-12">
-            Project Gallery
-          </h2>
-
-          <div className="grid gap-8">
-            {project.gallery.map((image) => (
-              <div
-                key={image}
-                className="relative aspect-[16/9] bg-gray-100"
-              >
-                <Image
-                  src={image}
-                  alt={project.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* PROJECT INFO */}
 
       <section className="max-w-6xl mx-auto px-8 py-24 grid md:grid-cols-3 gap-16">
         <div>
           <p className="text-sm uppercase tracking-wide text-gray-500 mb-2">
             Client
           </p>
+
           <p className="text-xl">{project.client}</p>
         </div>
 
@@ -84,6 +117,7 @@ export default async function ProjectPage({
           <p className="text-sm uppercase tracking-wide text-gray-500 mb-2">
             Result
           </p>
+
           <p className="text-xl">{project.result}</p>
         </div>
 
@@ -99,6 +133,8 @@ export default async function ProjectPage({
           </ul>
         </div>
       </section>
+
+      {/* CHALLENGE & OUTCOME */}
 
       <section className="max-w-4xl mx-auto px-8 pb-24">
         <h2 className="text-4xl font-bold mb-8">
@@ -118,6 +154,80 @@ export default async function ProjectPage({
         </p>
       </section>
 
+      {/* GALLERY */}
+
+      {project.gallery && (
+        <section className="max-w-6xl mx-auto px-8 pb-24">
+          <h2 className="text-4xl font-bold mb-12">
+            Project Gallery
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {project.gallery.map((image) => (
+              <div
+                key={image}
+                className="relative aspect-square bg-gray-100 overflow-hidden cursor-pointer"
+              >
+                <Image
+                  src={image}
+                  alt={project.title}
+                  fill
+                  className="object-cover hover:scale-105 transition duration-500"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* SERVICES */}
+
+      <section className="max-w-6xl mx-auto px-8 pb-24">
+        <h2 className="text-4xl font-bold mb-12">
+          Services Used
+        </h2>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {services.map((service) => (
+            <div
+              key={service}
+              className="border border-gray-200 p-6"
+            >
+              ✓ {service}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+
+      <section className="max-w-6xl mx-auto px-8 pb-24">
+        <div className="bg-black text-white p-12 md:p-16">
+          <p className="uppercase tracking-[0.3em] text-sm text-gray-400 mb-6">
+            Similar Project?
+          </p>
+
+          <h2 className="text-4xl md:text-6xl font-bold leading-tight">
+            Let's build something meaningful.
+          </h2>
+
+          <p className="text-xl text-gray-300 mt-8 max-w-3xl">
+            Whether you're planning a publication, website, exhibition,
+            brand identity or digital experience, I'd love to hear
+            about it.
+          </p>
+
+          <Link
+            href="/contact"
+            className="inline-block mt-10 bg-white text-black px-6 py-3"
+          >
+            Start a Conversation
+          </Link>
+        </div>
+      </section>
+
+      {/* PREVIOUS / NEXT */}
+
       <section className="max-w-6xl mx-auto px-8 pb-24">
         <div className="grid md:grid-cols-2 gap-6 border-t border-gray-100 pt-12">
           <Link
@@ -128,7 +238,7 @@ export default async function ProjectPage({
               Previous Project
             </p>
 
-            <h3 className="text-2xl font-semibold mb-3 group-hover:underline underline-offset-8">
+            <h3 className="text-2xl font-semibold mb-3">
               {previousProject.title}
             </h3>
 
@@ -145,7 +255,7 @@ export default async function ProjectPage({
               Next Project
             </p>
 
-            <h3 className="text-2xl font-semibold mb-3 group-hover:underline underline-offset-8">
+            <h3 className="text-2xl font-semibold mb-3">
               {nextProject.title}
             </h3>
 
