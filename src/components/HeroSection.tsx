@@ -1,9 +1,22 @@
+import ScrollHighlightText from "./ScrollHighlightText";
 export default function HeroSection() {
   return (
     <section className="max-w-6xl mx-auto px-8 py-32">
-      <p className="uppercase tracking-[0.35em] text-sm mb-12 text-gray-500">
-        Tan Bui Designs
-      </p>
+      <div className="hero-brand mb-12">
+  {"TAN BUI DESIGNS".split("").map((letter, index) => (
+    <span
+      key={index}
+      className={`hero-letter ${
+        letter === " " ? "mx-2" : ""
+      }`}
+      style={{
+        transitionDelay: `${index * 25}ms`,
+      }}
+    >
+      {letter}
+    </span>
+  ))}
+</div>
 
       <div className="w-full">
         <h1 className="font-bold tracking-tight leading-[0.92]">
@@ -28,13 +41,13 @@ export default function HeroSection() {
         </h1>
 
         <p className="text-xl mt-16 max-w-3xl text-gray-600 leading-relaxed">
-          I've worked across branding, packaging, publications,
-          websites and exhibitions. Some projects ended up on
-          supermarket shelves. Some helped schools and charities
-          communicate more clearly. Others reached tens of thousands
-          of readers. Different industries. Same goal. Make
-          complicated things easier to understand.
-        </p>
+  I've worked across branding, packaging, publications,
+  websites and exhibitions. Some projects ended up on
+  supermarket shelves. Some helped schools and charities
+  communicate more clearly. Others reached tens of thousands
+  of readers. Different industries. Same goal.{" "}
+  <ScrollHighlightText />
+</p>
       </div>
     </section>
   );
