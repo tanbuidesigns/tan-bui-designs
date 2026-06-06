@@ -6,13 +6,13 @@ export default function HeroSection() {
       </p>
 
       <h1 className="text-6xl md:text-8xl font-bold leading-tight max-w-5xl">
-        15+ years of turning complex ideas into clear visual experiences.
+        Multidisciplinary design consultant with 15+ years of experience.
       </h1>
 
       <p className="text-xl mt-10 max-w-3xl text-gray-600">
         From bestselling publications and educational resources to healthcare
-        exhibitions, websites and branding systems, I help organisations
-        communicate with clarity, confidence and purpose.
+        exhibitions, websites and branding systems, I help organisations turn complex
+        ideas into clear, purposeful visual experiences.
       </p>
     </section>
   );
