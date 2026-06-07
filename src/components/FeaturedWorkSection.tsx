@@ -2,26 +2,42 @@
 
 import Image from "next/image";
 import Link from "next/link";
+
 import { projects } from "@/data/projects";
 
 import Reveal from "@/components/Reveal";
 import AnimatedLabel from "@/components/AnimatedLabel";
 import AnimatedHeadline from "@/components/AnimatedHeadline";
 
-export default function FeaturedWorkSection() {
-  return (
-    <section className="max-w-6xl mx-auto px-8 py-32 border-t border-gray-100">
-      <Reveal>
-        <div className="mb-16">
-          <AnimatedLabel className="mb-4">
-            SELECTED WORK
-          </AnimatedLabel>
+type FeaturedWorkSectionProps = {
+  showHeading?: boolean;
+};
 
-          <AnimatedHeadline className="text-5xl md:text-6xl font-bold leading-tight">
-            Projects with purpose.
-          </AnimatedHeadline>
-        </div>
-      </Reveal>
+export default function FeaturedWorkSection({
+  showHeading = true,
+}: FeaturedWorkSectionProps) {
+  return (
+    <section
+      className={`
+        max-w-6xl
+        mx-auto
+        px-8
+        ${showHeading ? "py-32 border-t border-gray-100" : "pb-32"}
+      `}
+    >
+      {showHeading && (
+        <Reveal>
+          <div className="mb-16">
+            <AnimatedLabel className="mb-4">
+              SELECTED WORK
+            </AnimatedLabel>
+
+            <AnimatedHeadline className="text-5xl md:text-6xl font-bold leading-tight">
+              Projects with purpose.
+            </AnimatedHeadline>
+          </div>
+        </Reveal>
+      )}
 
       <div className="grid md:grid-cols-2 gap-8">
         {projects.map((project, index) => (
@@ -32,19 +48,49 @@ export default function FeaturedWorkSection() {
           >
             <Link
               href={`/work/${project.slug}`}
-              className="group block border border-gray-200 overflow-hidden transition-all duration-500 hover:border-black hover:-translate-y-1"
+              className="
+                group
+                block
+                border
+                border-gray-200
+                overflow-hidden
+
+                transition-all
+                duration-500
+
+                hover:border-black
+                hover:-translate-y-1
+              "
             >
               <div className="relative aspect-[4/3] bg-gray-100 border-b border-gray-200 overflow-hidden">
                 <Image
                   src={project.image}
                   alt={project.title}
                   fill
-                  className="object-cover transition duration-700 group-hover:scale-105"
+                  className="
+                    object-cover
+                    transition
+                    duration-700
+                    group-hover:scale-105
+                  "
                 />
               </div>
 
               <div className="p-8">
-                <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-4 transition-colors duration-300 group-hover:text-black">
+                <p
+                  className="
+                    text-sm
+                    uppercase
+                    tracking-[0.2em]
+                    text-gray-500
+                    mb-4
+
+                    transition-colors
+                    duration-300
+
+                    group-hover:text-gray-700
+                  "
+                >
                   {project.category}
                 </p>
 
@@ -53,7 +99,18 @@ export default function FeaturedWorkSection() {
                     {project.title}
                   </h3>
 
-                  <span className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                  <span
+                    className="
+                      opacity-0
+                      -translate-x-2
+
+                      transition-all
+                      duration-300
+
+                      group-hover:opacity-100
+                      group-hover:translate-x-0
+                    "
+                  >
                     →
                   </span>
                 </div>
