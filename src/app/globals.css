@@ -25,40 +25,9 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-@keyframes heroUnderline {
-  0% {
-    width: 0;
-  }
-
-  30% {
-    width: 100%;
-  }
-
-  70% {
-    width: 100%;
-  }
-
-  100% {
-    width: 0;
-  }
-}
-
-
-.hero-underline {
-  position: relative;
-  display: inline-block;
-}
-
-.hero-underline::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -10px;
-  height: 2px;
-  background: black;
-  animation: heroUnderline 6s ease-in-out infinite;
-}
-
+/* =======================================
+   HERO LINE
+======================================= */
 
 .hero-line {
   height: 1px;
@@ -69,6 +38,45 @@ body {
   transform-origin: left center;
 
   animation: heroLineGrow 7s ease-in-out infinite;
+}
+
+@keyframes heroLineGrow {
+  0% {
+    transform: scaleX(0);
+    opacity: 0.25;
+  }
+
+  45% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+
+  80% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scaleX(0);
+    opacity: 0.25;
+  }
+}
+
+/* =======================================
+   HERO SPACE ANIMATION
+======================================= */
+
+.hero-space {
+  display: inline-block;
+
+  animation: heroSpace 8s cubic-bezier(
+    0.22,
+    1,
+    0.36,
+    1
+  ) infinite;
+
+  will-change: transform, opacity;
 }
 
 @keyframes heroSpace {
@@ -103,53 +111,44 @@ body {
   }
 }
 
-.hero-space {
-  display: inline-block;
-  animation: heroSpace 8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
-  will-change: transform, opacity;
-}
-
-@keyframes heroLineGrow {
-  0% {
-    transform: scaleX(0);
-    opacity: 0.25;
-  }
-
-  45% {
-    transform: scaleX(1);
-    opacity: 1;
-  }
-
-  80% {
-    transform: scaleX(1);
-    opacity: 1;
-  }
-
-  100% {
-    transform: scaleX(0);
-    opacity: 0.25;
-  }
-}
+/* =======================================
+   ANIMATED LABELS
+======================================= */
 
 .hero-brand {
   display: inline-flex;
+
   text-transform: uppercase;
+
   letter-spacing: 0.35em;
+
   font-size: 0.875rem;
+
   color: #6b7280;
+
   cursor: default;
 }
 
 .hero-letter {
   display: inline-block;
+
   transition:
-    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.35s cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    ),
     color 0.35s ease;
 }
 
 .hero-brand:hover .hero-letter {
   transform: translateY(-6px);
 }
+
+/* =======================================
+   HERO SCROLL HIGHLIGHT
+======================================= */
 
 .scroll-highlight {
   background-image: linear-gradient(
@@ -159,6 +158,7 @@ body {
   );
 
   background-repeat: no-repeat;
+
   background-position: left center;
 
   color: white;
@@ -167,3 +167,4 @@ body {
 
   transition: background-size 0.1s linear;
 }
+

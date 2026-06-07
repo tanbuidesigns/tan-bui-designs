@@ -1,48 +1,69 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { projects } from "@/data/projects";
 
+import Reveal from "@/components/Reveal";
+import AnimatedLabel from "@/components/AnimatedLabel";
+import AnimatedHeadline from "@/components/AnimatedHeadline";
+
 export default function FeaturedWorkSection() {
   return (
-    <section className="max-w-6xl mx-auto px-8 py-24">
-      <div className="mb-16">
-        <p className="uppercase tracking-[0.3em] text-sm text-gray-500 mb-4">
-          Selected Work
-        </p>
+    <section className="max-w-6xl mx-auto px-8 py-32 border-t border-gray-100">
+      <Reveal>
+        <div className="mb-16">
+          <AnimatedLabel className="mb-4">
+            SELECTED WORK
+          </AnimatedLabel>
 
-        <h2 className="text-4xl md:text-6xl font-bold">
-          Projects with purpose.
-        </h2>
-      </div>
+          <AnimatedHeadline className="text-5xl md:text-6xl font-bold leading-tight">
+            Projects with purpose.
+          </AnimatedHeadline>
+        </div>
+      </Reveal>
 
       <div className="grid md:grid-cols-2 gap-8">
-        {projects.map((project) => (
-          <Link
-            key={project.title}
-            href={`/work/${project.slug}`}
-            className="group block border border-gray-200 hover:border-black transition overflow-hidden"
+        {projects.map((project, index) => (
+          <Reveal
+            key={project.slug}
+            delay={index * 120}
+            once
           >
-            <div className="relative z-0 aspect-[4/3] bg-gray-100 border-b border-gray-200">
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                className="object-cover group-hover:scale-105 transition duration-500"
-              />
-            </div>
+            <Link
+              href={`/work/${project.slug}`}
+              className="group block border border-gray-200 overflow-hidden transition-all duration-500 hover:border-black hover:-translate-y-1"
+            >
+              <div className="relative aspect-[4/3] bg-gray-100 border-b border-gray-200 overflow-hidden">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover transition duration-700 group-hover:scale-105"
+                />
+              </div>
 
-            <div className="p-8">
-              <p className="text-sm uppercase tracking-wide text-gray-500 mb-4">
-                {project.category}
-              </p>
+              <div className="p-8">
+                <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-4 transition-colors duration-300 group-hover:text-black">
+                  {project.category}
+                </p>
 
-              <h3 className="text-2xl font-semibold mb-4">
-                {project.title}
-              </h3>
+                <div className="flex items-start justify-between gap-4">
+                  <h3 className="text-2xl font-semibold leading-tight">
+                    {project.title}
+                  </h3>
 
-              <p className="text-gray-600">{project.result}</p>
-            </div>
-          </Link>
+                  <span className="opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                    →
+                  </span>
+                </div>
+
+                <p className="text-gray-600 mt-4 leading-relaxed">
+                  {project.result}
+                </p>
+              </div>
+            </Link>
+          </Reveal>
         ))}
       </div>
     </section>

@@ -1,63 +1,116 @@
+"use client";
+
+import Reveal from "@/components/Reveal";
+import AnimatedLabel from "@/components/AnimatedLabel";
+import AnimatedHeadline from "@/components/AnimatedHeadline";
+import ServiceGlyph from "@/components/ServiceGlyph";
+
 export default function WhatIDoSection() {
   const services = [
     {
+      glyph: "branding" as const,
       title: "Branding",
       description:
-        "Building identities, visual systems and guidelines people actually use.",
+        "Building identities, visual systems and guidelines people actually\u00A0use.",
     },
     {
+      glyph: "packaging" as const,
       title: "Packaging",
       description:
-        "From concept to production, including hundreds of commercial SKUs.",
+        "From concept to production, including hundreds of commercial\u00A0SKUs.",
     },
     {
+      glyph: "publications" as const,
       title: "Publications",
       description:
-        "Books, educational resources and long-form content designed to be read.",
+        "Books, educational resources and long-form content designed to be\u00A0read.",
     },
     {
+      glyph: "websites" as const,
       title: "Websites",
       description:
-        "Clear, purposeful websites that explain things properly.",
+        "Websites that simplify complex information and help people find what matters.",
     },
     {
+      glyph: "exhibitions" as const,
       title: "3D & Exhibitions",
       description:
         "Exhibition concepts, environments and visualisations that bring ideas to life.",
     },
     {
+      glyph: "systems" as const,
       title: "Creative Systems",
       description:
-        "Design processes, workflows and assets that make future work easier.",
+        "Design processes, workflows and assets that make future work\u00A0easier.",
     },
   ];
 
   return (
     <section className="max-w-6xl mx-auto px-8 py-32 border-t border-gray-200">
-      <div className="mb-20">
-        <p className="uppercase tracking-[0.3em] text-sm text-gray-500 mb-6">
-          What I Do
-        </p>
+      <Reveal>
+        <div className="mb-20">
+          <AnimatedLabel className="mb-6">
+            WHAT I DO
+          </AnimatedLabel>
 
-        <h2 className="text-5xl md:text-6xl font-bold max-w-3xl">
-          A mix of creative thinking, technical execution and getting things over the line.
-        </h2>
-      </div>
+          <AnimatedHeadline className="text-5xl md:text-6xl font-bold max-w-4xl leading-[1.05]">
+            A mix of creative thinking, technical execution and getting things over the line.
+          </AnimatedHeadline>
+        </div>
+      </Reveal>
 
-      <div className="grid md:grid-cols-2 gap-12">
-        {services.map((service) => (
-          <div
+      <div className="grid md:grid-cols-2 gap-x-12 gap-y-16 items-stretch">
+        {services.map((service, index) => (
+          <Reveal
             key={service.title}
-            className="pb-8 border-b border-gray-200"
+            delay={index * 120}
+            once
           >
-            <h3 className="text-2xl font-semibold mb-4">
-              {service.title}
-            </h3>
+            <div className="group h-full">
+              <div className="flex items-start gap-5 h-full">
+                <div
+                  className="
+                    text-gray-400
+                    transition-all
+                    duration-500
+                    ease-[cubic-bezier(0.22,1,0.36,1)]
+                    group-hover:text-black
+                    group-hover:-translate-y-1
+                    flex-shrink-0
+                    mt-1
+                  "
+                >
+                  <ServiceGlyph type={service.glyph} />
+                </div>
 
-            <p className="text-gray-600 leading-relaxed">
-              {service.description}
-            </p>
-          </div>
+                <div className="flex flex-col flex-1 h-full">
+                  <h3 className="text-2xl font-semibold mb-4">
+                    {service.title}
+                  </h3>
+
+                  <p className="text-gray-600 leading-relaxed">
+                    {service.description}
+                  </p>
+
+                  <div
+                    className="
+                      w-12
+                      h-px
+                      bg-black
+                      mt-auto
+                      transition-all
+                      duration-500
+                      ease-[cubic-bezier(0.22,1,0.36,1)]
+                      group-hover:w-20
+                    "
+                    style={{
+                      marginTop: "2rem",
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </Reveal>
         ))}
       </div>
     </section>
