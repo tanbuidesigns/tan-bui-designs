@@ -1,9 +1,13 @@
 import { islamiyah } from "@/data/caseStudies/islamiyah";
 
+import ReadingProgressBar from "@/components/case-study/ReadingProgressBar";
+
 import CaseStudyHero from "@/components/case-study/CaseStudyHero";
 import CaseStudyImage from "@/components/case-study/CaseStudyImage";
 import CaseStudyOverview from "@/components/case-study/CaseStudyOverview";
 import CaseStudyPreviewStrip from "@/components/case-study/CaseStudyPreviewStrip";
+import CaseStudySectionNavigation from "@/components/case-study/CaseStudySectionNavigation";
+
 import CaseStudyMetrics from "@/components/case-study/CaseStudyMetrics";
 import CaseStudyQuote from "@/components/case-study/CaseStudyQuote";
 import CaseStudySection from "@/components/case-study/CaseStudySection";
@@ -24,11 +28,13 @@ export default function IslamiyahSeriesPage() {
   );
 
   const designSection = islamiyah.sections.find(
-    (section) => section.title === "Design System & Publications"
+    (section) =>
+      section.title === "Design System & Publications"
   );
 
   const platformSection = islamiyah.sections.find(
-    (section) => section.title === "Interactive Learning Platform"
+    (section) =>
+      section.title === "Interactive Learning Platform"
   );
 
   const outcomeSection = islamiyah.sections.find(
@@ -37,13 +43,17 @@ export default function IslamiyahSeriesPage() {
 
   return (
     <main className="bg-white text-black">
+      <ReadingProgressBar />
+
+      {/* HERO */}
+
       <CaseStudyHero
         category={islamiyah.category}
         title={islamiyah.title}
         intro={islamiyah.intro}
       />
 
-      {/* Cinematic Hero Image */}
+      {/* CINEMATIC HERO IMAGE */}
 
       <CaseStudyImage
         src={islamiyah.heroImage.src}
@@ -52,7 +62,7 @@ export default function IslamiyahSeriesPage() {
         priority
       />
 
-      {/* Project Overview */}
+      {/* PROJECT OVERVIEW */}
 
       <CaseStudyOverview
         client={islamiyah.overview.client}
@@ -61,28 +71,64 @@ export default function IslamiyahSeriesPage() {
         role={islamiyah.overview.role}
       />
 
-      {/* Preview Strip */}
+      {/* PROJECT HIGHLIGHTS */}
 
       <CaseStudyPreviewStrip
         items={islamiyah.previewImages}
       />
 
-      {/* Metrics */}
+      {/* SECTION NAVIGATION */}
+
+      <CaseStudySectionNavigation
+        sections={[
+          {
+            id: "overview",
+            label: "Overview",
+          },
+          {
+            id: "challenge",
+            label: "Challenge",
+          },
+          {
+            id: "design-system",
+            label: "Design",
+          },
+          {
+            id: "platform",
+            label: "Platform",
+          },
+          {
+            id: "results",
+            label: "Results",
+          },
+          {
+            id: "gallery",
+            label: "Gallery",
+          },
+          {
+            id: "outcome",
+            label: "Outcome",
+          },
+        ]}
+      />
+
+      {/* METRICS */}
 
       <CaseStudyMetrics
         metrics={islamiyah.metrics}
       />
 
-      {/* Quote */}
+      {/* QUOTE */}
 
       <CaseStudyQuote
         quote={islamiyah.quote}
       />
 
-      {/* Overview */}
+      {/* OVERVIEW */}
 
       {overviewSection && (
         <CaseStudySection
+          id="overview"
           title={overviewSection.title}
         >
           {overviewSection.content.map(
@@ -98,10 +144,11 @@ export default function IslamiyahSeriesPage() {
         </CaseStudySection>
       )}
 
-      {/* Challenge */}
+      {/* CHALLENGE */}
 
       {challengeSection && (
         <CaseStudySection
+          id="challenge"
           title={challengeSection.title}
         >
           {challengeSection.content.map(
@@ -117,16 +164,17 @@ export default function IslamiyahSeriesPage() {
         </CaseStudySection>
       )}
 
-      {/* Timeline */}
+      {/* TIMELINE */}
 
       <CaseStudyTimeline
         items={islamiyah.timeline}
       />
 
-      {/* Design System */}
+      {/* DESIGN SYSTEM */}
 
       {designSection && (
         <CaseStudySection
+          id="design-system"
           title={designSection.title}
         >
           {designSection.content.map(
@@ -142,18 +190,11 @@ export default function IslamiyahSeriesPage() {
         </CaseStudySection>
       )}
 
-      {/* Featured Image Placeholder */}
-
-      <CaseStudyImage
-        src="/projects/islamiyah-series/design-system.jpg"
-        alt="Islamiyah Series Publication System"
-        caption="A unified visual system spanning branding, illustrations, publications and educational content."
-      />
-
-      {/* Interactive Platform */}
+      {/* INTERACTIVE LEARNING */}
 
       {platformSection && (
         <CaseStudySection
+          id="platform"
           title={platformSection.title}
         >
           {platformSection.content.map(
@@ -169,24 +210,26 @@ export default function IslamiyahSeriesPage() {
         </CaseStudySection>
       )}
 
-      {/* Featured Image Placeholder */}
-
-      <CaseStudyImage
-        src="/projects/islamiyah-series/platform-showcase.jpg"
-        alt="Islamiyah Series Interactive Learning"
-        caption="Interactive learning tools helped extend the curriculum beyond the classroom."
-      />
-
-      {/* Results */}
+      {/* RESULTS */}
 
       <CaseStudyResults
+        id="results"
         results={islamiyah.results}
       />
 
-      {/* Outcome */}
+      {/* GALLERY */}
+
+      <CaseStudyGallery
+        id="gallery"
+        title="PROJECT GALLERY"
+        items={islamiyah.gallery}
+      />
+
+      {/* OUTCOME */}
 
       {outcomeSection && (
         <CaseStudySection
+          id="outcome"
           title={outcomeSection.title}
         >
           {outcomeSection.content.map(
@@ -202,20 +245,13 @@ export default function IslamiyahSeriesPage() {
         </CaseStudySection>
       )}
 
-      {/* Gallery */}
-
-      <CaseStudyGallery
-        title="PROJECT GALLERY"
-        items={islamiyah.gallery}
-      />
-
-      {/* Services */}
+      {/* SERVICES */}
 
       <CaseStudyServices
         services={islamiyah.services}
       />
 
-      {/* Navigation */}
+      {/* PROJECT NAVIGATION */}
 
       <CaseStudyNavigation
         previousProject={
