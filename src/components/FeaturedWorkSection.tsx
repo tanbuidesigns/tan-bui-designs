@@ -22,7 +22,11 @@ export default function FeaturedWorkSection({
         max-w-6xl
         mx-auto
         px-8
-        ${showHeading ? "py-32 border-t border-gray-100" : "pb-32"}
+        ${
+          showHeading
+            ? "py-32 border-t border-gray-100"
+            : "pb-32"
+        }
       `}
     >
       {showHeading && (
@@ -47,7 +51,7 @@ export default function FeaturedWorkSection({
             once
           >
             <Link
-              href={`/work/${project.slug}`}
+              href={project.href}
               className="
                 group
                 block
@@ -62,15 +66,27 @@ export default function FeaturedWorkSection({
                 hover:-translate-y-1
               "
             >
-              <div className="relative aspect-[4/3] bg-gray-100 border-b border-gray-200 overflow-hidden">
+              <div
+                className="
+                  relative
+                  aspect-[4/3]
+                  bg-gray-100
+                  border-b
+                  border-gray-200
+                  overflow-hidden
+                "
+              >
                 <Image
                   src={project.image}
                   alt={project.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="
                     object-cover
                     transition
                     duration-700
+                    ease-[cubic-bezier(0.22,1,0.36,1)]
+
                     group-hover:scale-105
                   "
                 />
@@ -95,14 +111,23 @@ export default function FeaturedWorkSection({
                 </p>
 
                 <div className="flex items-start justify-between gap-4">
-                  <h3 className="text-2xl font-semibold leading-tight">
+                  <h3
+                    className="
+                      text-2xl
+                      font-semibold
+                      leading-tight
+
+                      transition-colors
+                      duration-300
+                    "
+                  >
                     {project.title}
                   </h3>
 
                   <span
                     className="
                       opacity-0
-                      -translate-x-2
+                      translate-x-[-8px]
 
                       transition-all
                       duration-300
@@ -118,6 +143,22 @@ export default function FeaturedWorkSection({
                 <p className="text-gray-600 mt-4 leading-relaxed">
                   {project.result}
                 </p>
+
+                <div
+                  className="
+                    mt-6
+
+                    w-0
+                    h-px
+
+                    bg-black
+
+                    transition-all
+                    duration-500
+
+                    group-hover:w-16
+                  "
+                />
               </div>
             </Link>
           </Reveal>

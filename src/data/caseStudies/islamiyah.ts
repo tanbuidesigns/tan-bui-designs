@@ -7,9 +7,47 @@ export const islamiyah = {
   intro:
     "A comprehensive Islamic curriculum designed for children growing up in the UK. Spanning multiple subjects, publications and interactive learning experiences, the Islamiyah Series became one of the first projects of its kind to combine traditional Islamic education with modern curriculum design, engaging visual communication and digital learning tools.",
 
+  heroImage: {
+    src: "/projects/islamiyah-series/hero-cinematic.jpg",
+
+    alt: "Islamiyah Series Educational Ecosystem",
+
+    caption:
+      "A complete educational ecosystem spanning publications, curriculum design and interactive learning.",
+  },
+
+  previewImages: [
+    {
+      src: "/projects/islamiyah-series/preview-01.jpg",
+      alt: "Publication System",
+    },
+
+    {
+      src: "/projects/islamiyah-series/preview-02.jpg",
+      alt: "Book Covers",
+    },
+
+    {
+      src: "/projects/islamiyah-series/preview-03.jpg",
+      alt: "Interactive Learning Platform",
+    },
+
+    {
+      src: "/projects/islamiyah-series/preview-04.jpg",
+      alt: "Illustration System",
+    },
+
+    {
+      src: "/projects/islamiyah-series/preview-05.jpg",
+      alt: "Educational Resources",
+    },
+  ],
+
   overview: {
     client: "Islamiyah Series",
+
     industry: "Education",
+
     timeline: "3+ Years",
 
     role: [
@@ -34,8 +72,8 @@ export const islamiyah = {
     },
 
     {
-      value: "End-to-End",
-      label: "Creative Ownership",
+      value: "1000+",
+      label: "Pages Designed",
     },
   ],
 
@@ -76,6 +114,8 @@ export const islamiyah = {
         "This included branding, illustration systems, publication design, visual hierarchy, educational graphics and supporting digital assets.",
 
         "Over a period of more than three years, the series evolved into a substantial collection of resources designed to balance clarity, engagement and educational effectiveness.",
+
+        "Every publication, illustration and page layout was developed as part of a larger educational system rather than a standalone resource.",
       ],
     },
 
@@ -88,6 +128,8 @@ export const islamiyah = {
         "Alongside the books, an interactive learning platform was developed to help students engage with the material in a more dynamic and accessible way.",
 
         "At the time, this level of integration between traditional madrasah resources and digital learning tools was rarely seen within the sector.",
+
+        "The result was a richer learning experience that connected classroom teaching with independent learning and revision.",
       ],
     },
 
@@ -100,6 +142,8 @@ export const islamiyah = {
         "It established a cohesive educational brand, a structured curriculum and a digital learning environment capable of supporting students throughout their educational journey.",
 
         "The project demonstrated how thoughtful design can transform complex educational content into experiences that are engaging, accessible and meaningful for young learners.",
+
+        "More importantly, it helped set a new benchmark for how educational resources could be designed within the sector.",
       ],
     },
   ],
@@ -107,26 +151,29 @@ export const islamiyah = {
   timeline: [
     {
       year: "Phase 01",
+
       title: "Curriculum Planning",
 
       description:
-        "Development of the educational framework, learning pathways and curriculum structure.",
+        "Research, planning and development of the educational framework, learning pathways and curriculum structure.",
     },
 
     {
       year: "Phase 02",
+
       title: "Publication Design",
 
       description:
-        "Creation of the visual system, illustrations, layouts and publication standards.",
+        "Creation of the visual language, illustration systems, layouts and publication standards used throughout the series.",
     },
 
     {
       year: "Phase 03",
+
       title: "Digital Expansion",
 
       description:
-        "Extension of the learning experience through interactive digital tools and resources.",
+        "Extension of the learning experience through interactive digital tools, resources and online learning support.",
     },
   ],
 
@@ -137,7 +184,7 @@ export const islamiyah = {
       label: "Books Published",
 
       description:
-        "A growing collection of curriculum resources covering multiple Islamic subjects.",
+        "A growing collection of curriculum resources covering multiple Islamic subjects and age groups.",
     },
 
     {
@@ -146,7 +193,7 @@ export const islamiyah = {
       label: "Years Development",
 
       description:
-        "A long-term project requiring extensive planning, design and refinement.",
+        "A long-term project requiring extensive planning, design, refinement and collaboration.",
     },
 
     {
@@ -155,7 +202,7 @@ export const islamiyah = {
       label: "Educational System",
 
       description:
-        "A pioneering approach combining publications, curriculum design and interactive learning.",
+        "One of the first projects of its kind to combine curriculum design, publications and interactive learning.",
     },
   ],
 
@@ -172,7 +219,9 @@ export const islamiyah = {
   gallery: [
     {
       src: "/projects/islamiyah-series/hero.jpg",
+
       alt: "Islamiyah Series overview",
+
       featured: true,
 
       caption:
@@ -215,4 +264,18 @@ export const islamiyah = {
         "Digital learning tools extended the experience beyond the classroom.",
     },
   ],
+
+  navigation: {
+    previousProject: {
+      title: "Islamiyah Series",
+      slug: "islamiyah-series",
+      category: "Education",
+    },
+
+    nextProject: {
+      title: "Johnson & Johnson Exhibitions",
+      slug: "johnson-johnson-exhibitions",
+      category: "Exhibition Design",
+    },
+  },
 };
