@@ -1,12 +1,12 @@
 import { islamiyah } from "@/data/caseStudies/islamiyah";
 
 import ReadingProgressBar from "@/components/case-study/ReadingProgressBar";
+import CaseStudyProgressNav from "@/components/case-study/CaseStudyProgressNav";
 
 import CaseStudyHero from "@/components/case-study/CaseStudyHero";
 import CaseStudyImage from "@/components/case-study/CaseStudyImage";
 import CaseStudyOverview from "@/components/case-study/CaseStudyOverview";
 import CaseStudyPreviewStrip from "@/components/case-study/CaseStudyPreviewStrip";
-import CaseStudySectionNavigation from "@/components/case-study/CaseStudySectionNavigation";
 
 import CaseStudyMetrics from "@/components/case-study/CaseStudyMetrics";
 import CaseStudyQuote from "@/components/case-study/CaseStudyQuote";
@@ -45,41 +45,7 @@ export default function IslamiyahSeriesPage() {
     <main className="bg-white text-black">
       <ReadingProgressBar />
 
-      {/* HERO */}
-
-      <CaseStudyHero
-        category={islamiyah.category}
-        title={islamiyah.title}
-        intro={islamiyah.intro}
-      />
-
-      {/* CINEMATIC HERO IMAGE */}
-
-      <CaseStudyImage
-        src={islamiyah.heroImage.src}
-        alt={islamiyah.heroImage.alt}
-        caption={islamiyah.heroImage.caption}
-        priority
-      />
-
-      {/* PROJECT OVERVIEW */}
-
-      <CaseStudyOverview
-        client={islamiyah.overview.client}
-        industry={islamiyah.overview.industry}
-        timeline={islamiyah.overview.timeline}
-        role={islamiyah.overview.role}
-      />
-
-      {/* PROJECT HIGHLIGHTS */}
-
-      <CaseStudyPreviewStrip
-        items={islamiyah.previewImages}
-      />
-
-      {/* SECTION NAVIGATION */}
-
-      <CaseStudySectionNavigation
+      <CaseStudyProgressNav
         sections={[
           {
             id: "overview",
@@ -110,6 +76,38 @@ export default function IslamiyahSeriesPage() {
             label: "Outcome",
           },
         ]}
+      />
+
+      {/* HERO */}
+
+      <CaseStudyHero
+        category={islamiyah.category}
+        title={islamiyah.title}
+        intro={islamiyah.intro}
+      />
+
+      {/* CINEMATIC HERO IMAGE */}
+
+      <CaseStudyImage
+        src={islamiyah.heroImage.src}
+        alt={islamiyah.heroImage.alt}
+        caption={islamiyah.heroImage.caption}
+        priority
+      />
+
+      {/* OVERVIEW */}
+
+      <CaseStudyOverview
+        client={islamiyah.overview.client}
+        industry={islamiyah.overview.industry}
+        timeline={islamiyah.overview.timeline}
+        role={islamiyah.overview.role}
+      />
+
+      {/* PREVIEW STRIP */}
+
+      <CaseStudyPreviewStrip
+        items={islamiyah.previewImages}
       />
 
       {/* METRICS */}
@@ -190,7 +188,7 @@ export default function IslamiyahSeriesPage() {
         </CaseStudySection>
       )}
 
-      {/* INTERACTIVE LEARNING */}
+      {/* INTERACTIVE PLATFORM */}
 
       {platformSection && (
         <CaseStudySection
