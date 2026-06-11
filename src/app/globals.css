@@ -168,3 +168,6 @@ body {
   transition: background-size 0.1s linear;
 }
 
+html {
+  scroll-behavior: smooth;
+}

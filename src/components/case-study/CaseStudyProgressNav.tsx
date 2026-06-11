@@ -61,42 +61,60 @@ export default function CaseStudyProgressNav({
   }, [sections]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const services =
-        document.getElementById("services");
+    const overview =
+      document.getElementById("overview");
 
-      const servicesTop =
-        services?.getBoundingClientRect().top ??
-        Infinity;
+    const services =
+      document.getElementById("services");
 
-      const shouldHide =
-        servicesTop < window.innerHeight * 0.6;
+    if (!overview || !services) return;
 
-      setVisible(
-        window.scrollY > 1200 &&
-          !shouldHide
+    const overviewObserver =
+      new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            setShowLabels(true);
+
+            setTimeout(() => {
+              setShowLabels(false);
+            }, 3000);
+          }
+        },
+        {
+          rootMargin:
+            "-15% 0px -70% 0px",
+          threshold: 0,
+        }
       );
+
+    const servicesObserver =
+      new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisible(false);
+          }
+        },
+        {
+          rootMargin:
+            "-20% 0px -50% 0px",
+          threshold: 0,
+        }
+      );
+
+    overviewObserver.observe(overview);
+    servicesObserver.observe(services);
+
+    return () => {
+      overviewObserver.disconnect();
+      servicesObserver.disconnect();
     };
-
-    handleScroll();
-
-    window.addEventListener(
-      "scroll",
-      handleScroll,
-      {
-        passive: true,
-      }
-    );
-
-    return () =>
-      window.removeEventListener(
-        "scroll",
-        handleScroll
-      );
   }, []);
 
   useEffect(() => {
-    if (!showLabels) return;
+    if (!hoveredSection) return;
+
+    setShowLabels(true);
 
     const timer = setTimeout(() => {
       setShowLabels(false);
@@ -105,16 +123,30 @@ export default function CaseStudyProgressNav({
 
     return () =>
       clearTimeout(timer);
-  }, [showLabels]);
+  }, [hoveredSection]);
 
-  if (!visible) return null;
+  const scrollToSection = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    id: string
+  ) => {
+    event.preventDefault();
+
+    const element =
+      document.getElementById(id);
+
+    if (!element) return;
+
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
 
   return (
     <aside
-      className="
+      className={`
         fixed
-
-        right-6
+        right-8
         top-1/2
         -translate-y-1/2
 
@@ -124,61 +156,89 @@ export default function CaseStudyProgressNav({
         lg:flex
 
         flex-col
-        gap-4
-      "
+        gap-5
+
+        transition-all
+        duration-700
+        ease-[cubic-bezier(0.22,1,0.36,1)]
+
+        ${
+          visible
+            ? `
+              opacity-100
+              translate-x-0
+              scale-100
+              pointer-events-auto
+            `
+            : `
+              opacity-0
+              translate-x-10
+              scale-95
+              pointer-events-none
+            `
+        }
+      `}
     >
       {sections.map((section) => {
         const active =
           activeSection === section.id;
 
         const expanded =
+          showLabels ||
           hoveredSection === section.id;
 
         return (
-          <div
+          <a
             key={section.id}
-            className="relative flex items-center justify-end"
-            onMouseEnter={() => {
-              setHoveredSection(section.id);
-              setShowLabels(true);
-            }}
+            href={`#${section.id}`}
+            onClick={(event) =>
+              scrollToSection(
+                event,
+                section.id
+              )
+            }
+            onMouseEnter={() =>
+              setHoveredSection(section.id)
+            }
+            className="
+              relative
+
+              flex
+              items-center
+              justify-end
+
+              min-h-[20px]
+
+              group
+            "
+            aria-label={section.label}
           >
-            <a
-              href={`#${section.id}`}
-              className="
-                relative
-                flex
-                items-center
-                justify-center
+            <span
+              className={`
+                rounded-full
 
-                w-4
-                h-4
-              "
-            >
-              <span
-                className={`
-                  rounded-full
+                transition-all
+                duration-300
 
-                  transition-all
-                  duration-300
+                ${
+                  active
+                    ? `
+                      w-3
+                      h-3
+                      bg-black
+                      scale-110
+                    `
+                    : `
+                      w-2
+                      h-2
+                      bg-gray-300
 
-                  ${
-                    active
-                      ? `
-                        w-3
-                        h-3
-                        bg-black
-                      `
-                      : `
-                        w-2
-                        h-2
-                        bg-gray-300
-                        hover:bg-gray-600
-                      `
-                  }
-                `}
-              />
-            </a>
+                      group-hover:bg-gray-700
+                      group-hover:scale-125
+                    `
+                }
+              `}
+            />
 
             <div
               className={`
@@ -189,46 +249,66 @@ export default function CaseStudyProgressNav({
 
                 transition-all
                 duration-300
+                ease-[cubic-bezier(0.22,1,0.36,1)]
 
                 ${
-                  expanded &&
-                  showLabels
+                  expanded
                     ? `
                       opacity-100
                       translate-x-0
                     `
                     : `
                       opacity-0
-                      translate-x-3
+                      translate-x-4
                       pointer-events-none
                     `
                 }
               `}
             >
               <div
-                className="
+                className={`
                   px-4
                   py-2
 
                   rounded-full
 
-                  bg-white/70
-                  backdrop-blur-md
+                  backdrop-blur-xl
 
                   border
-                  border-white/50
 
                   shadow-lg
 
-                  text-xs
+                  text-[11px]
                   uppercase
                   tracking-[0.18em]
-                "
+
+                  transition-all
+                  duration-300
+
+                  ${
+                    active
+                      ? `
+                        bg-black
+                        text-white
+                        border-black
+                      `
+                      : `
+                        bg-white/70
+                        text-black
+                        border-white/60
+
+                        group-hover:bg-white
+                        group-hover:border-gray-300
+                        group-hover:shadow-xl
+                        group-hover:-translate-y-[1px]
+                      `
+                  }
+                `}
               >
                 {section.label}
               </div>
             </div>
-          </div>
+          </a>
         );
       })}
     </aside>
