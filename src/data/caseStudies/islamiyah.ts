@@ -7,41 +7,34 @@ export const islamiyah = {
   intro:
     "A comprehensive Islamic curriculum designed for children growing up in the UK. Spanning multiple subjects, publications and interactive learning experiences, the Islamiyah Series became one of the first projects of its kind to combine traditional Islamic education with modern curriculum design, engaging visual communication and digital learning tools.",
 
-  heroImage: {
-    src: "/projects/islamiyah-series/hero-cinematic.jpg",
+heroImage: {
+  src: "/projects/islamiyah-series/hero-banner.webp",
 
-    alt: "Islamiyah Series Educational Ecosystem",
+  alt: "Islamiyah Series educational ecosystem",
 
-    caption:
-      "A complete educational ecosystem spanning publications, curriculum design and interactive learning.",
+},
+
+previewImages: [
+  {
+    src: "/projects/islamiyah-series/preview-01-books.webp",
+    alt: "Book collection",
   },
 
-  previewImages: [
-    {
-      src: "/projects/islamiyah-series/preview-01.jpg",
-      alt: "Publication System",
-    },
+  {
+    src: "/projects/islamiyah-series/preview-02-spreads.webp",
+    alt: "Publication spreads",
+  },
 
-    {
-      src: "/projects/islamiyah-series/preview-02.jpg",
-      alt: "Book Covers",
-    },
+  {
+    src: "/projects/islamiyah-series/preview-03-brand.webp",
+    alt: "Brand system",
+  },
 
-    {
-      src: "/projects/islamiyah-series/preview-03.jpg",
-      alt: "Interactive Learning Platform",
-    },
-
-    {
-      src: "/projects/islamiyah-series/preview-04.jpg",
-      alt: "Illustration System",
-    },
-
-    {
-      src: "/projects/islamiyah-series/preview-05.jpg",
-      alt: "Educational Resources",
-    },
-  ],
+  {
+    src: "/projects/islamiyah-series/preview-04-digital.webp",
+    alt: "Digital learning platform",
+  },
+],
 
   overview: {
     client: "Islamiyah Series",
@@ -216,54 +209,67 @@ export const islamiyah = {
     "Interactive Learning",
   ],
 
-  gallery: [
-    {
-      src: "/projects/islamiyah-series/hero.jpg",
+gallery: [
+  {
+    src: "/projects/islamiyah-series/gallery/01-book-collection.webp",
+    alt: "Book collection",
+  },
 
-      alt: "Islamiyah Series overview",
+  {
+    src: "/projects/islamiyah-series/gallery/02-book-covers.webp",
+    alt: "Book covers",
+  },
 
-      featured: true,
+  {
+    src: "/projects/islamiyah-series/gallery/03-inside-spreads.webp",
+    alt: "Inside spreads",
+  },
 
-      caption:
-        "A complete educational ecosystem spanning curriculum design, publications and digital learning.",
-    },
+  {
+    src: "/projects/islamiyah-series/gallery/04-workbook-pages.webp",
+    alt: "Workbook pages",
+  },
 
-    {
-      src: "/projects/islamiyah-series/book-01.jpg",
+  {
+    src: "/projects/islamiyah-series/gallery/05-brand-system.webp",
+    alt: "Brand system",
+  },
 
-      alt: "Book cover design",
+  {
+    src: "/projects/islamiyah-series/gallery/06-illustration-style.webp",
+    alt: "Illustration style",
+  },
 
-      caption:
-        "One of the many publications developed as part of the curriculum.",
-    },
+  {
+    src: "/projects/islamiyah-series/gallery/07-character-design.webp",
+    alt: "Character design",
+  },
 
-    {
-      src: "/projects/islamiyah-series/book-02.jpg",
+  {
+    src: "/projects/islamiyah-series/gallery/08-teaching-materials.webp",
+    alt: "Teaching materials",
+  },
 
-      alt: "Publication spread",
+  {
+    src: "/projects/islamiyah-series/gallery/09-app-screens.webp",
+    alt: "App screens",
+  },
 
-      caption:
-        "Educational content designed to improve engagement and comprehension.",
-    },
+  {
+    src: "/projects/islamiyah-series/gallery/10-website-screens.webp",
+    alt: "Website screens",
+  },
 
-    {
-      src: "/projects/islamiyah-series/illustration.jpg",
+  {
+    src: "/projects/islamiyah-series/gallery/11-mobile-learning.webp",
+    alt: "Mobile learning",
+  },
 
-      alt: "Illustration system",
-
-      caption:
-        "Illustrations created to support learning and reinforce concepts.",
-    },
-
-    {
-      src: "/projects/islamiyah-series/platform.jpg",
-
-      alt: "Interactive learning platform",
-
-      caption:
-        "Digital learning tools extended the experience beyond the classroom.",
-    },
-  ],
+  {
+    src: "/projects/islamiyah-series/gallery/12-curriculum-system.webp",
+    alt: "Curriculum system",
+  },
+],
 
   navigation: {
     previousProject: {

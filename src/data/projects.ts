@@ -8,7 +8,7 @@ export const projects = [
 
     category: "Education • Publication Design",
 
-    image: "/projects/islamiyah-series/hero.jpg",
+    image: "/projects/islamiyah-series/featured-card.webp",
 
     result:
       "A pioneering curriculum system combining publications, branding and interactive learning.",
