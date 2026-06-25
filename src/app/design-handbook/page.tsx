@@ -23,14 +23,21 @@ const componentCards = [
     status: "Live",
     href: "/design-handbook/components/navbar",
     description:
-      "Glass navigation with subtle motion, pastel interaction underline and scroll-aware behaviour.",
+      "Responsive glass navigation with compact menu trigger, scroll-aware behaviour and pastel interaction states.",
+  },
+  {
+    title: "Footer",
+    status: "Live",
+    href: "/design-handbook/components/footer",
+    description:
+      "Compact responsive footer with TBDS context, plain text navigation and one accent Design Handbook action.",
   },
   {
     title: "Button System",
     status: "Live",
     href: "/design-handbook/components/buttons",
     description:
-      "Reusable button styles for primary actions, secondary actions, ghost links, CTAs and disabled states.",
+      "Reusable button styles for primary actions, secondary actions, ghost links, CTAs, arrow motion and disabled states.",
   },
   {
     title: "Layout Primitives",
@@ -59,13 +66,6 @@ const componentCards = [
     href: "#",
     description:
       "Minimal section tracker designed for long-form case studies.",
-  },
-  {
-    title: "Mobile Navigation",
-    status: "Planned",
-    href: "#",
-    description:
-      "A dedicated mobile-first navigation experience rather than a shrunk desktop nav.",
   },
 ];
 

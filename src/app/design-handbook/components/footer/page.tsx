@@ -1,14 +1,15 @@
 import Link from "next/link";
 
+import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import Section from "@/components/ui/Section";
 
 const rules = [
-  "The navbar should help users move around the site without dominating the page.",
-  "Compact and comfortable screens need a dedicated menu experience, not squeezed desktop links.",
-  "The pastel accent should support interaction, not become decoration everywhere.",
-  "The navbar can hide during scroll, but it must stay visible when the mobile menu is open.",
-  "Desktop hover effects are allowed, but mobile navigation must work without hover.",
+  "The footer should close the page calmly, not compete with the main content.",
+  "Footer links should remain plain text links, not boxed buttons.",
+  "The Design Handbook is the only footer action that needs the accent button.",
+  "The footer should stay compact and avoid repeated brand labels.",
+  "The lower row should be simple and useful.",
 ];
 
 const responsiveModes = [
@@ -16,38 +17,31 @@ const responsiveModes = [
     title: "Compact",
     range: "320px+",
     description:
-      "Logo on the left, circular menu trigger on the right. Links open inside a stacked mobile menu.",
+      "Footer content stacks vertically. Links remain easy to tap and the design system intro stays readable.",
   },
   {
     title: "Comfortable",
     range: "640px+",
     description:
-      "Still touch-first. The compact menu remains useful because tablet widths can still feel cramped.",
+      "The footer can split into left and right zones. Design system content sits left, navigation sits right.",
   },
   {
     title: "Expanded",
     range: "1024px+",
     description:
-      "Horizontal navigation appears. Links use subtle movement and a pastel gradient underline on hover.",
+      "Spacing increases slightly, but the footer stays compact. Plain links remain visually quiet.",
   },
   {
     title: "Immersive",
     range: "1440px+",
     description:
-      "The navbar stays controlled and calm. More width does not mean the navigation needs more decoration.",
+      "The footer stays controlled and balanced. More screen width does not mean more footer content.",
   },
 ];
 
-const implementationNotes = [
-  "Uses a sticky header with soft glass background.",
-  "Uses a pastel accent layer behind the glass.",
-  "Uses a circular three-line trigger on compact and comfortable screens.",
-  "The trigger animates into a close icon when the menu is open.",
-  "The scroll-hide behaviour is paused while the mobile menu is open.",
-  "Desktop links keep the accent underline hover state.",
-];
+const links = ["Home", "Work", "About", "Contact"];
 
-export default function NavbarComponentPage() {
+export default function FooterComponentPage() {
   return (
     <main className="bg-white text-black">
       <Section spacing="hero">
@@ -60,18 +54,17 @@ export default function NavbarComponentPage() {
           </Link>
 
           <p className="mb-8 text-sm uppercase tracking-[0.35em] text-gray-500">
-            Component / Navbar
+            Component / Footer
           </p>
 
           <h1 className="max-w-5xl text-5xl font-bold leading-[0.95] md:text-7xl">
-            Navigation should feel calm, responsive and easy to trust.
+            The footer should finish the page with clarity and restraint.
           </h1>
 
           <p className="mt-10 max-w-3xl text-xl leading-relaxed text-gray-600">
-            The navbar is the main orientation layer across Tan Bui Designs. It
-            uses a light glass treatment, subtle pastel accenting and a
-            responsive menu pattern that changes properly between compact,
-            comfortable, expanded and immersive experiences.
+            The TBDS footer introduces the Tan Bui Design System without
+            repeating the main brand too heavily. It keeps navigation simple,
+            uses one accent action and finishes with a compact copyright line.
           </p>
         </Container>
       </Section>
@@ -83,47 +76,47 @@ export default function NavbarComponentPage() {
           </p>
 
           <div className="border border-gray-200 bg-gray-50 p-6 md:p-10">
-            <div className="relative overflow-hidden border border-white/40 bg-white">
-              <div className="absolute inset-0 bg-[image:var(--tbds-accent-gradient)] opacity-35" />
-              <div className="absolute inset-0 bg-white/80 backdrop-blur-2xl" />
-              <div className="absolute bottom-0 left-0 right-0 h-px bg-[image:var(--tbds-accent-gradient)] opacity-70" />
+            <div className="border border-gray-100 bg-white p-6 md:p-8">
+              <div className="grid gap-10 sm:grid-cols-[minmax(0,24rem)_auto] sm:items-start sm:gap-12">
+                <div>
+                  <p className="text-[11px] uppercase tracking-[0.28em] text-gray-500 md:text-sm md:tracking-[0.34em]">
+                    TAN BUI DESIGN SYSTEM
+                  </p>
 
-              <div className="relative flex items-center px-6 py-5 md:px-8">
-                <div className="text-[11px] uppercase tracking-[0.28em] text-gray-500 md:text-sm md:tracking-[0.35em]">
-                  TAN BUI DESIGNS
+                  <p className="mt-4 max-w-sm text-sm leading-relaxed text-gray-500 sm:text-base">
+                    A living design system behind this portfolio, built around
+                    layout rules, motion principles, reusable components and
+                    responsive experience modes.
+                  </p>
+
+                  <div className="mt-6">
+                    <Button
+                      href="/design-handbook"
+                      variant="accent"
+                      size="md"
+                      expandOnHover
+                      showArrow
+                    >
+                      View Design Handbook
+                    </Button>
+                  </div>
                 </div>
 
-                <nav className="ml-auto hidden items-center gap-8 text-sm uppercase tracking-[0.15em] lg:flex">
-                  {["Work", "About", "Contact"].map((item) => (
+                <nav className="flex flex-col items-start gap-4 text-sm uppercase tracking-[0.15em] sm:items-end sm:text-right">
+                  {links.map((item) => (
                     <span
                       key={item}
-                      className="group relative text-gray-600 transition-all duration-300 hover:-translate-y-[1px] hover:text-black"
+                      className="relative inline-flex text-gray-500 after:absolute after:left-0 after:-bottom-1 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-[image:var(--tbds-accent-gradient)] after:transition-transform after:duration-300 hover:text-black hover:after:scale-x-100"
                     >
                       {item}
-
-                      <span className="absolute left-0 -bottom-1 h-px w-full origin-left scale-x-0 bg-[image:var(--tbds-accent-gradient)] transition-transform duration-300 group-hover:scale-x-100" />
                     </span>
                   ))}
                 </nav>
-
-                <div className="ml-auto flex h-11 w-11 items-center justify-center rounded-full border border-white/70 bg-white/60 shadow-sm backdrop-blur-xl lg:hidden">
-                  <div className="flex h-4 w-5 flex-col justify-between">
-                    <span className="block h-px w-full bg-black" />
-                    <span className="block h-px w-full bg-black" />
-                    <span className="block h-px w-full bg-black" />
-                  </div>
-                </div>
               </div>
 
-              <div className="border-t border-white/60 px-6 pb-6 pt-5 lg:hidden">
-                <div className="flex flex-col gap-4 text-sm uppercase tracking-[0.18em] text-gray-700">
-                  {["Work", "About", "Contact"].map((item) => (
-                    <span key={item} className="inline-flex items-center gap-3">
-                      <span>{item}</span>
-                      <span>→</span>
-                    </span>
-                  ))}
-                </div>
+              <div className="mt-10 border-t border-gray-100 pt-5 text-xs leading-relaxed text-gray-400">
+                © 2026 Tan Bui Designs - Turning complex ideas into clear visual
+                experiences.
               </div>
             </div>
           </div>
@@ -139,20 +132,20 @@ export default function NavbarComponentPage() {
               </p>
 
               <h2 className="text-4xl font-bold leading-tight">
-                Help users know where they are and where they can go next.
+                Close the experience without adding clutter.
               </h2>
             </div>
 
             <div className="space-y-6 text-xl leading-relaxed text-gray-600">
               <p>
-                The navbar is not a brand billboard. It is an orientation tool.
-                It should stay readable, useful and consistent across the site.
+                The footer is not another hero section. It should provide a
+                quiet ending, useful navigation and one intentional next step.
               </p>
 
               <p>
-                The final responsive navbar uses a proper compact menu rather
-                than forcing desktop links into small widths. This keeps mobile
-                and tablet navigation clean and touch-friendly.
+                The Design Handbook is treated as the main footer action because
+                it gives visitors context for how the website has been built and
+                how the design system works.
               </p>
             </div>
           </div>
@@ -206,15 +199,27 @@ export default function NavbarComponentPage() {
       <Section spacing="standard" borderTop>
         <Container size="lg">
           <p className="mb-10 text-xs uppercase tracking-[0.3em] text-gray-500">
-            Implementation Notes
+            Interaction Pattern
           </p>
 
           <div className="grid gap-6 md:grid-cols-2">
-            {implementationNotes.map((note) => (
-              <div key={note} className="border border-gray-200 p-6">
-                <p className="text-xl leading-relaxed text-gray-700">{note}</p>
-              </div>
-            ))}
+            <div className="border border-gray-200 p-6">
+              <h3 className="mb-4 text-2xl font-semibold">Plain links</h3>
+
+              <p className="leading-relaxed text-gray-600">
+                Home, Work, About and Contact remain simple text links with a
+                gradient underline on hover. They are not boxed buttons.
+              </p>
+            </div>
+
+            <div className="border border-gray-200 p-6">
+              <h3 className="mb-4 text-2xl font-semibold">Accent action</h3>
+
+              <p className="leading-relaxed text-gray-600">
+                View Design Handbook uses the accent button because it is the
+                key footer action and connects visitors to the TBDS system.
+              </p>
+            </div>
           </div>
         </Container>
       </Section>
@@ -232,7 +237,7 @@ export default function NavbarComponentPage() {
                   Current Version
                 </p>
 
-                <h2 className="text-3xl font-bold">Navbar v1.2</h2>
+                <h2 className="text-3xl font-bold">Footer v1.0</h2>
               </div>
 
               <span className="rounded-full border border-gray-200 px-4 py-2 text-xs uppercase tracking-[0.18em] text-gray-500">
@@ -241,10 +246,9 @@ export default function NavbarComponentPage() {
             </div>
 
             <p className="mt-8 max-w-3xl text-xl leading-relaxed text-gray-600">
-              The navbar now supports compact, comfortable, expanded and
-              immersive experiences. Mobile uses a circular menu trigger and
-              stacked menu links, while desktop uses calm horizontal navigation
-              with subtle accent interaction.
+              The footer now follows the responsive experience system. It keeps
+              the Design Handbook visible, keeps navigation lightweight and
+              avoids unnecessary footer content.
             </p>
           </div>
         </Container>
