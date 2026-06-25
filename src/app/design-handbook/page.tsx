@@ -7,12 +7,13 @@ const sections = [
   { id: "introduction", number: "00", title: "Introduction" },
   { id: "philosophy", number: "01", title: "Philosophy" },
   { id: "visual-language", number: "02", title: "Visual Language" },
-  { id: "motion", number: "03", title: "Motion System" },
-  { id: "responsive", number: "04", title: "Responsive Experience" },
-  { id: "components", number: "05", title: "Component Playground" },
-  { id: "roadmap", number: "06", title: "Product Roadmap" },
-  { id: "accessibility", number: "07", title: "Accessibility" },
-  { id: "changelog", number: "08", title: "Changelog" },
+  { id: "design-tokens", number: "03", title: "Design Tokens" },
+  { id: "motion", number: "04", title: "Motion System" },
+  { id: "responsive", number: "05", title: "Responsive Experience" },
+  { id: "components", number: "06", title: "Component Playground" },
+  { id: "roadmap", number: "07", title: "Product Roadmap" },
+  { id: "accessibility", number: "08", title: "Accessibility" },
+  { id: "changelog", number: "09", title: "Changelog" },
 ];
 
 const componentCards = [
@@ -44,13 +45,13 @@ const componentCards = [
     description:
       "Minimal section tracker designed for long-form case studies.",
   },
-{
-  title: "Button System",
-  status: "Live",
-  href: "/design-handbook/components/buttons",
-  description:
-    "Reusable button styles for primary actions, secondary actions, ghost links, CTAs and disabled states.",
-},
+  {
+    title: "Button System",
+    status: "Live",
+    href: "/design-handbook/components/buttons",
+    description:
+      "Reusable button styles for primary actions, secondary actions, ghost links, CTAs and disabled states.",
+  },
   {
     title: "Mobile Navigation",
     status: "Planned",
@@ -75,18 +76,30 @@ const roadmapItems = [
   },
   {
     version: "v1.1",
-    title: "Component Standards",
-    status: "Next",
+    title: "Style Foundation",
+    status: "Complete",
     items: [
-      "Button system",
-      "Card system",
-      "Gallery standards",
-      "CTA standards",
-      "Typography rules",
+      "Global CSS simplified",
+      "Design tokens added",
+      "Animations separated",
+      "Utilities separated",
+      "Button system connected to tokens",
     ],
   },
   {
     version: "v1.2",
+    title: "Component Standards",
+    status: "Next",
+    items: [
+      "Card system",
+      "Gallery standards",
+      "CTA standards",
+      "Typography rules",
+      "Reusable layout primitives",
+    ],
+  },
+  {
+    version: "v1.3",
     title: "Responsive Experience",
     status: "Planned",
     items: [
@@ -107,6 +120,55 @@ const roadmapItems = [
       "Design decisions",
       "Search",
       "CMS integration",
+    ],
+  },
+];
+
+const tokenGroups = [
+  {
+    title: "Colour",
+    description:
+      "The core palette is intentionally restrained: white, black and greys form the foundation.",
+    tokens: [
+      "--tbds-color-background",
+      "--tbds-color-foreground",
+      "--tbds-color-gray-100",
+      "--tbds-color-gray-500",
+      "--tbds-color-gray-700",
+    ],
+  },
+  {
+    title: "Accent",
+    description:
+      "The pastel gradient is reserved for interaction, progress, focus and selected states.",
+    tokens: [
+      "--tbds-accent-indigo",
+      "--tbds-accent-rose",
+      "--tbds-accent-yellow",
+      "--tbds-accent-gradient",
+    ],
+  },
+  {
+    title: "Motion",
+    description:
+      "Motion uses one consistent easing curve so the interface feels calm and connected.",
+    tokens: [
+      "--tbds-ease",
+      "--tbds-duration-fast",
+      "--tbds-duration-base",
+      "--tbds-duration-slow",
+      "--tbds-duration-reveal",
+    ],
+  },
+  {
+    title: "Layout",
+    description:
+      "Layout tokens keep spacing and container behaviour consistent across pages.",
+    tokens: [
+      "--tbds-container",
+      "--tbds-page-padding",
+      "--tbds-border-light",
+      "--tbds-border-default",
     ],
   },
 ];
@@ -147,7 +209,7 @@ export default function DesignHandbookPage() {
     <main className="bg-white text-black">
       <section className="max-w-6xl mx-auto px-8 py-32">
         <p className="uppercase tracking-[0.35em] text-sm text-gray-500 mb-8">
-          TBDS v1.0
+          TBDS v1.1
         </p>
 
         <h1 className="text-5xl md:text-7xl font-bold leading-[0.95] max-w-5xl">
@@ -264,12 +326,53 @@ export default function DesignHandbookPage() {
                 for interaction, progress, focus and selection.
               </p>
 
-              <div className="mt-10 h-2 w-full bg-[linear-gradient(to_right,rgb(199,210,254),rgb(254,202,202),rgb(254,249,195))]" />
+              <div className="mt-10 h-2 w-full bg-[image:var(--tbds-accent-gradient)]" />
+            </HandbookSection>
+
+            <HandbookSection
+              id="design-tokens"
+              eyebrow="03 Design Tokens"
+              title="Design decisions should live in one place."
+            >
+              <p>
+                TBDS uses design tokens to keep colour, motion, layout and
+                interaction values consistent. The goal is not to create a huge
+                enterprise system. The goal is to stop repeating the same design
+                decisions across the project.
+              </p>
+
+              <p>
+                Tokens live in <code className="text-black">src/styles/tokens.css</code>.
+                Animations live in <code className="text-black">src/styles/animations.css</code>.
+                Small reusable utilities live in{" "}
+                <code className="text-black">src/styles/utilities.css</code>.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-6 mt-10">
+                {tokenGroups.map((group) => (
+                  <TokenGroupCard
+                    key={group.title}
+                    title={group.title}
+                    description={group.description}
+                    tokens={group.tokens}
+                  />
+                ))}
+              </div>
+
+              <div className="mt-10 border border-gray-200 bg-gray-50 p-6">
+                <p className="uppercase tracking-[0.25em] text-xs text-gray-500 mb-4">
+                  Example
+                </p>
+
+                <pre className="overflow-x-auto bg-black text-white p-6 text-sm leading-relaxed">
+                  <code>{`className="bg-[image:var(--tbds-accent-gradient)]"`}</code>
+                </pre>
+              </div>
             </HandbookSection>
 
             <HandbookSection
               id="motion"
-              eyebrow="03 Motion System"
+              eyebrow="04 Motion System"
               title="Motion should explain, not entertain."
             >
               <p>
@@ -292,7 +395,7 @@ export default function DesignHandbookPage() {
 
             <HandbookSection
               id="responsive"
-              eyebrow="04 Responsive Experience"
+              eyebrow="05 Responsive Experience"
               title="Desktop, tablet and mobile are separate experiences."
             >
               <p>
@@ -316,7 +419,7 @@ export default function DesignHandbookPage() {
 
             <HandbookSection
               id="components"
-              eyebrow="05 Component Playground"
+              eyebrow="06 Component Playground"
               title="Reusable components are designed before they are coded."
             >
               <p>
@@ -339,7 +442,7 @@ export default function DesignHandbookPage() {
 
             <HandbookSection
               id="roadmap"
-              eyebrow="06 Product Roadmap"
+              eyebrow="07 Product Roadmap"
               title="The system evolves like a product."
             >
               <p>
@@ -363,7 +466,7 @@ export default function DesignHandbookPage() {
 
             <HandbookSection
               id="accessibility"
-              eyebrow="07 Accessibility"
+              eyebrow="08 Accessibility"
               title="Premium means usable."
             >
               <p>
@@ -375,7 +478,7 @@ export default function DesignHandbookPage() {
 
             <HandbookSection
               id="changelog"
-              eyebrow="08 Changelog"
+              eyebrow="09 Changelog"
               title="Every system needs memory."
             >
               <p>
@@ -383,16 +486,18 @@ export default function DesignHandbookPage() {
                 responsive behaviours are introduced.
               </p>
 
-              <div className="mt-10 border border-gray-200 p-6">
-                <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-3">
-                  v1.0
-                </p>
+              <div className="space-y-6 mt-10">
+                <ChangelogCard
+                  version="v1.1"
+                  title="Style foundation added"
+                  text="Global CSS was split into tokens, animations and utilities. The Button component now uses the shared accent gradient token."
+                />
 
-                <p className="text-gray-600">
-                  Initial handbook shell created. Component Playground and
-                  Product Roadmap added as the foundation for future design
-                  system development.
-                </p>
+                <ChangelogCard
+                  version="v1.0"
+                  title="Handbook foundation created"
+                  text="Initial handbook shell created. Component Playground and Product Roadmap added as the foundation for future design system development."
+                />
               </div>
             </HandbookSection>
           </div>
@@ -443,7 +548,7 @@ function PrincipleGrid({ items }: { items: string[] }) {
         >
           <p className="text-black font-medium">{item}</p>
 
-          <div className="mt-4 h-px w-10 bg-[linear-gradient(to_right,rgb(199,210,254),rgb(254,202,202),rgb(254,249,195))] transition-all duration-500 group-hover:w-20" />
+          <div className="mt-4 h-px w-10 bg-[image:var(--tbds-accent-gradient)] transition-all duration-500 group-hover:w-20" />
         </div>
       ))}
     </div>
@@ -455,6 +560,41 @@ function DeviceCard({ title, text }: { title: string; text: string }) {
     <div className="border border-gray-200 p-6">
       <h3 className="text-xl font-semibold mb-3">{title}</h3>
       <p className="text-gray-600 leading-relaxed">{text}</p>
+    </div>
+  );
+}
+
+function TokenGroupCard({
+  title,
+  description,
+  tokens,
+}: {
+  title: string;
+  description: string;
+  tokens: string[];
+}) {
+  return (
+    <div className="border border-gray-200 p-6">
+      <h3 className="text-2xl font-semibold text-black mb-4">
+        {title}
+      </h3>
+
+      <p className="text-base text-gray-600 leading-relaxed mb-6">
+        {description}
+      </p>
+
+      <ul className="space-y-2">
+        {tokens.map((token) => (
+          <li
+            key={token}
+            className="font-mono text-sm text-gray-500"
+          >
+            {token}
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-8 h-px w-12 bg-[image:var(--tbds-accent-gradient)]" />
     </div>
   );
 }
@@ -498,7 +638,7 @@ function ComponentCard({
       <div className="mt-8 flex items-center justify-between gap-6">
         <div
           className={`
-            h-px w-12 bg-[linear-gradient(to_right,rgb(199,210,254),rgb(254,202,202),rgb(254,249,195))]
+            h-px w-12 bg-[image:var(--tbds-accent-gradient)]
             transition-all duration-500
             ${isClickable ? "group-hover:w-24" : ""}
           `}
@@ -554,6 +694,32 @@ function RoadmapCard({
           </li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+function ChangelogCard({
+  version,
+  title,
+  text,
+}: {
+  version: string;
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="border border-gray-200 p-6">
+      <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-3">
+        {version}
+      </p>
+
+      <h3 className="text-2xl font-semibold text-black mb-4">
+        {title}
+      </h3>
+
+      <p className="text-gray-600 leading-relaxed">
+        {text}
+      </p>
     </div>
   );
 }

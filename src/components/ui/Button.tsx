@@ -144,10 +144,7 @@ export default function Button({
             bottom-0
             h-[3px]
 
-            bg-gradient-to-r
-            from-indigo-300
-            via-rose-300
-            to-yellow-200
+            bg-[image:var(--tbds-accent-gradient)]
 
             transition-all
             duration-300
@@ -174,10 +171,7 @@ export default function Button({
             origin-left
             scale-x-0
 
-            bg-gradient-to-r
-            from-indigo-300
-            via-rose-300
-            to-yellow-200
+            bg-[image:var(--tbds-accent-gradient)]
 
             transition-transform
             duration-300
