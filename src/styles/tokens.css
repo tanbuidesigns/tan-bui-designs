@@ -4,7 +4,10 @@
 ======================================= */
 
 :root {
-  /* Core colours */
+  /* =======================================
+     CORE COLOURS
+  ======================================= */
+
   --tbds-color-background: #ffffff;
   --tbds-color-foreground: #171717;
 
@@ -20,7 +23,12 @@
   --tbds-color-gray-600: #4b5563;
   --tbds-color-gray-700: #374151;
 
-  /* Accent system */
+  /* =======================================
+     ACCENT SYSTEM
+     Used for interaction, progress, focus
+     and selected states only.
+  ======================================= */
+
   --tbds-accent-indigo: rgb(199 210 254);
   --tbds-accent-rose: rgb(254 202 202);
   --tbds-accent-yellow: rgb(254 249 195);
@@ -39,18 +47,81 @@
     var(--tbds-accent-yellow)
   );
 
-  /* Motion */
+  /* =======================================
+     MOTION
+  ======================================= */
+
   --tbds-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
   --tbds-duration-fast: 200ms;
   --tbds-duration-base: 300ms;
   --tbds-duration-slow: 500ms;
   --tbds-duration-reveal: 700ms;
 
-  /* Layout */
-  --tbds-container: 72rem;
-  --tbds-page-padding: 2rem;
+  /* =======================================
+     RESPONSIVE EXPERIENCE MODES
 
-  /* Border */
+     Compact:
+     Small phones and narrow screens.
+
+     Comfortable:
+     Large phones and small tablets.
+
+     Expanded:
+     Tablets, small laptops and desktop entry.
+
+     Immersive:
+     Large desktop and editorial layouts.
+  ======================================= */
+
+  --tbds-breakpoint-compact: 320px;
+  --tbds-breakpoint-comfortable: 640px;
+  --tbds-breakpoint-expanded: 1024px;
+  --tbds-breakpoint-immersive: 1440px;
+
+  /* =======================================
+     PAGE PADDING BY EXPERIENCE MODE
+  ======================================= */
+
+  --tbds-page-padding-compact: 1.25rem;
+  --tbds-page-padding-comfortable: 1.5rem;
+  --tbds-page-padding-expanded: 2rem;
+  --tbds-page-padding-immersive: 2rem;
+
+  /* =======================================
+     CONTAINER WIDTHS
+  ======================================= */
+
+  --tbds-container-sm: 48rem;
+  --tbds-container-md: 56rem;
+  --tbds-container-lg: 72rem;
+  --tbds-container-xl: 80rem;
+
+  /* =======================================
+     SECTION RHYTHM
+     These are used conceptually by the
+     Section component.
+  ======================================= */
+
+  --tbds-section-compact-sm: 3rem;
+  --tbds-section-compact-md: 4rem;
+  --tbds-section-compact-lg: 5rem;
+  --tbds-section-compact-xl: 6rem;
+
+  --tbds-section-comfortable-sm: 4rem;
+  --tbds-section-comfortable-md: 5rem;
+  --tbds-section-comfortable-lg: 6rem;
+  --tbds-section-comfortable-xl: 8rem;
+
+  --tbds-section-expanded-sm: 5rem;
+  --tbds-section-expanded-md: 6rem;
+  --tbds-section-expanded-lg: 8rem;
+  --tbds-section-expanded-xl: 10rem;
+
+  /* =======================================
+     BORDER
+  ======================================= */
+
   --tbds-border-light: #f3f4f6;
   --tbds-border-default: #e5e7eb;
 }
