@@ -9,9 +9,9 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white text-black">
       <HeroSection />
-<CredibilitySection />
-<WhatIDoSection />
-<FeaturedWorkSection />
+      <CredibilitySection />
+      <WhatIDoSection />
+      <FeaturedWorkSection />
       <AboutPreviewSection />
       <ContactCTASection />
     </main>

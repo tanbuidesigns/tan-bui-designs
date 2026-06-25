@@ -2,9 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import Container from "@/components/ui/Container";
+import GradientLine from "@/components/ui/GradientLine";
+import Section from "@/components/ui/Section";
+
 export default function CredibilitySection() {
   const [visible, setVisible] = useState(false);
-  const sectionRef = useRef<HTMLElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -14,12 +18,12 @@ export default function CredibilitySection() {
         }
       },
       {
-        threshold: 0.35,
+        threshold: 0.25,
       }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    if (contentRef.current) {
+      observer.observe(contentRef.current);
     }
 
     return () => observer.disconnect();
@@ -49,37 +53,105 @@ export default function CredibilitySection() {
   ];
 
   return (
-    <section
-      ref={sectionRef}
-      className="max-w-6xl mx-auto px-8 py-32"
-    >
-      <div className="border-t border-gray-200 pt-20">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-12">
-          {stats.map((stat, index) => (
-            <div
-              key={stat.label}
-              className={`group transition-all duration-1000 ease-out ${
-  visible
-    ? "opacity-100 translate-y-0"
-    : "opacity-0 translate-y-12"
-}`}
-style={{
-  transitionDelay: `${400 + index * 180}ms`,
-}}
-            >
-              <div className="text-6xl md:text-7xl font-bold tracking-tight leading-none transition-transform duration-300 group-hover:scale-105">
-                {stat.value}
-              </div>
+    <Section spacing="editorial">
+      <Container size="lg">
+        <div
+          ref={contentRef}
+          className="
+            border-t
+            border-gray-200
 
-              <div className="w-12 h-px bg-black my-6 transition-all duration-300 group-hover:w-20"></div>
+            pt-14
+            md:pt-16
+            lg:pt-20
+          "
+        >
+          <div
+            className="
+              grid
 
-              <div className="uppercase tracking-[0.25em] text-xs text-gray-500">
-                {stat.label}
+              grid-cols-2
+              gap-x-8
+              gap-y-14
+
+              sm:grid-cols-3
+              sm:gap-x-10
+              sm:gap-y-16
+
+              lg:grid-cols-5
+              lg:gap-12
+            "
+          >
+            {stats.map((stat, index) => (
+              <div
+                key={stat.label}
+                className={`
+                  group
+
+                  transition-all
+                  duration-1000
+                  ease-out
+
+                  ${
+                    visible
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-12"
+                  }
+                `}
+                style={{
+                  transitionDelay: `${300 + index * 140}ms`,
+                }}
+              >
+                <div
+                  className="
+                    text-5xl
+                    sm:text-6xl
+                    lg:text-7xl
+
+                    font-bold
+                    tracking-tight
+                    leading-none
+
+                    transition-transform
+                    duration-300
+
+                    group-hover:scale-105
+                  "
+                >
+                  {stat.value}
+                </div>
+
+                <GradientLine
+                  size="sm"
+                  className="
+                    my-6
+
+                    transition-all
+                    duration-300
+
+                    group-hover:w-20
+                  "
+                />
+
+                <div
+                  className="
+                    uppercase
+                    tracking-[0.22em]
+                    sm:tracking-[0.25em]
+
+                    text-[11px]
+                    sm:text-xs
+
+                    text-gray-500
+                  "
+                >
+                  {stat.label}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }
