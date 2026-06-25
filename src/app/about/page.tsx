@@ -1,9 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import AnimatedLabel from "@/components/AnimatedLabel";
 import AnimatedHeadline from "@/components/AnimatedHeadline";
+
+import Button from "@/components/ui/Button";
+import Container from "@/components/ui/Container";
+import GradientLine from "@/components/ui/GradientLine";
+import Section from "@/components/ui/Section";
 
 export default function AboutPage() {
   const timeline = [
@@ -46,176 +50,216 @@ export default function AboutPage() {
 
   return (
     <main className="bg-white text-black">
-      <section className="max-w-6xl mx-auto px-8 py-32">
-        <Reveal>
-          <AnimatedLabel className="mb-8">ABOUT</AnimatedLabel>
+      {/* HERO */}
 
-          <div className="grid md:grid-cols-2 gap-16 items-start">
-            <div>
-              <AnimatedHeadline className="text-5xl md:text-7xl font-bold leading-[0.95] max-w-5xl">
-                Fifteen years of turning complex ideas into clear visual experiences.
-              </AnimatedHeadline>
-            </div>
-
-            <div className="aspect-[4/5] bg-gray-100 flex items-center justify-center text-gray-400">
-              Headshot placeholder
-            </div>
-          </div>
-        </Reveal>
-      </section>
-
-      <section className="max-w-4xl mx-auto px-8 pb-32">
-        <Reveal>
-          <div className="space-y-8 text-xl text-gray-600 leading-relaxed">
-            <p>
-              I’m Tan Bui, a multidisciplinary designer with more than 15 years
-              of experience across print, branding, packaging, publications,
-              websites, exhibitions and digital experiences.
-            </p>
-
-            <p>
-              My path into design was not conventional. Growing up in Kansas,
-              creativity was always part of my life. I regularly won art,
-              photography and craft competitions throughout school while also
-              pursuing academic excellence, eventually graduating as valedictorian
-              and earning acceptance into medical school.
-            </p>
-
-            <p>
-              Life took me in a different direction. After moving to England in
-              2010, I started working in commercial print and reprographics. What
-              began as a practical career move became the foundation of my design
-              career.
-            </p>
-          </div>
-        </Reveal>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-8 py-32 border-t border-gray-100">
-        <Reveal>
-          <AnimatedLabel className="mb-6">JOURNEY</AnimatedLabel>
-
-          <AnimatedHeadline className="text-5xl md:text-6xl font-bold max-w-4xl leading-[1.05] mb-20">
-            A career built through craft, pressure and constant learning.
-          </AnimatedHeadline>
-        </Reveal>
-
-        <div className="space-y-16">
-          {timeline.map((item, index) => (
-            <Reveal key={item.title} delay={index * 100}>
-              <div className="grid md:grid-cols-12 gap-8 border-t border-gray-200 pt-10">
-                <div className="md:col-span-3">
-                  <p className="text-sm uppercase tracking-[0.25em] text-gray-500">
-                    {item.year}
-                  </p>
-                </div>
-
-                <div className="md:col-span-9">
-                  <h3 className="text-3xl font-semibold mb-6">
-                    {item.title}
-                  </h3>
-
-                  <p className="text-xl text-gray-600 leading-relaxed max-w-3xl">
-                    {item.text}
-                  </p>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-8 py-32 border-t border-gray-100">
-        <Reveal>
-          <AnimatedLabel className="mb-6">PHILOSOPHY</AnimatedLabel>
-
-          <div className="grid md:grid-cols-2 gap-16">
-            <AnimatedHeadline className="text-5xl md:text-6xl font-bold leading-[1.05]">
-              Good design combines style with craftsmanship.
-            </AnimatedHeadline>
-
-            <div className="space-y-8 text-xl text-gray-600 leading-relaxed">
-              <p>
-                A polished outcome is not just about aesthetics. It is about
-                understanding the problem, paying attention to details and
-                creating something that works in the real world.
-              </p>
-
-              <p>
-                My background in production taught me that quality comes from
-                care, consistency and experience. The strongest designers are the
-                ones who understand the craft deeply enough to make difficult
-                things look effortless.
-              </p>
-
-              <p>
-                Nearly two decades into my career, I am still learning, refining
-                and exploring new ways of working. The tools change. The
-                principles do not.
-              </p>
-            </div>
-          </div>
-        </Reveal>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-8 py-32 border-t border-gray-100">
-        <Reveal>
-          <AnimatedLabel className="mb-6">WHAT I BRING</AnimatedLabel>
-
-          <div className="max-w-4xl space-y-8 text-xl text-gray-600 leading-relaxed">
-            <p>
-              Print taught me precision. Branding taught me systems. Packaging
-              taught me commercial thinking. Publications taught me structure and
-              readability. Web design taught me clarity. Exhibitions taught me
-              how people move through physical spaces. Motion and 3D taught me
-              how ideas can be experienced rather than simply viewed.
-            </p>
-
-            <p>
-              The result is a broad perspective that allows me to move between
-              print, digital and physical environments while keeping the same
-              standard of craftsmanship and attention to detail.
-            </p>
-
-            <p className="text-black font-medium">
-              Different mediums. Same principles.
-            </p>
-          </div>
-        </Reveal>
-      </section>
-
-      <section className="max-w-6xl mx-auto px-8 py-32 border-t border-gray-100">
-        <Reveal>
-          <div className="bg-black text-white px-8 py-16 md:p-20">
-            <AnimatedLabel className="mb-6 text-gray-500">
-              LOOKING FORWARD
+      <Section spacing="hero">
+        <Container size="lg">
+          <Reveal>
+            <AnimatedLabel className="mb-8">
+              ABOUT
             </AnimatedLabel>
 
-            <AnimatedHeadline className="text-5xl md:text-6xl font-bold leading-[1.05] max-w-4xl">
-              The work continues. The learning continues.
-            </AnimatedHeadline>
+            <div className="grid gap-12 md:grid-cols-2 md:gap-16 items-start">
+              <div>
+                <AnimatedHeadline className="text-5xl md:text-7xl font-bold leading-[0.95] max-w-5xl">
+                  Fifteen years of turning complex ideas into clear visual
+                  experiences.
+                </AnimatedHeadline>
+              </div>
 
-            <p className="text-xl text-gray-300 mt-10 max-w-3xl leading-relaxed">
-              Tan Bui Designs is my long-term creative home. A place to create
-              meaningful work, explore new ideas and help organisations
-              communicate more clearly.
-            </p>
-
-            <div className="mt-12">
-              <Link
-                href="/contact"
-                className="group inline-flex items-center gap-4 bg-white text-black px-8 py-4 text-sm font-medium transition-all duration-300 hover:px-10"
+              <div
+                className="
+                  aspect-[4/5]
+                  bg-gray-100
+                  flex
+                  items-center
+                  justify-center
+                  text-gray-400
+                "
               >
-                <span>Start a Conversation</span>
-
-                <span className="transition-transform duration-300 group-hover:translate-x-2">
-                  →
-                </span>
-              </Link>
+                Headshot placeholder
+              </div>
             </div>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* INTRO COPY */}
+
+      <Section spacing="editorial">
+        <Container size="md">
+          <Reveal>
+            <div className="space-y-8 text-xl text-gray-600 leading-relaxed">
+              <p>
+                I’m Tan Bui, a multidisciplinary designer with more than 15
+                years of experience across print, branding, packaging,
+                publications, websites, exhibitions and digital experiences.
+              </p>
+
+              <p>
+                My path into design was not conventional. Growing up in Kansas,
+                creativity was always part of my life. I regularly won art,
+                photography and craft competitions throughout school while also
+                pursuing academic excellence, eventually graduating as
+                valedictorian and earning acceptance into medical school.
+              </p>
+
+              <p>
+                Life took me in a different direction. After moving to England
+                in 2010, I started working in commercial print and reprographics.
+                What began as a practical career move became the foundation of
+                my design career.
+              </p>
+            </div>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* JOURNEY */}
+
+      <Section spacing="editorial" borderTop>
+        <Container size="lg">
+          <Reveal>
+            <AnimatedLabel className="mb-6">
+              JOURNEY
+            </AnimatedLabel>
+
+            <AnimatedHeadline className="text-5xl md:text-6xl font-bold max-w-4xl leading-[1.05] mb-20">
+              A career built through craft, pressure and constant learning.
+            </AnimatedHeadline>
+          </Reveal>
+
+          <div className="space-y-16">
+            {timeline.map((item, index) => (
+              <Reveal key={item.title} delay={index * 100}>
+                <div className="grid md:grid-cols-12 gap-8 border-t border-gray-200 pt-10">
+                  <div className="md:col-span-3">
+                    <p className="text-sm uppercase tracking-[0.25em] text-gray-500">
+                      {item.year}
+                    </p>
+                  </div>
+
+                  <div className="md:col-span-9">
+                    <h3 className="text-3xl font-semibold mb-6">
+                      {item.title}
+                    </h3>
+
+                    <p className="text-xl text-gray-600 leading-relaxed max-w-3xl">
+                      {item.text}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
           </div>
-        </Reveal>
-      </section>
+        </Container>
+      </Section>
+
+      {/* PHILOSOPHY */}
+
+      <Section spacing="editorial" borderTop>
+        <Container size="lg">
+          <Reveal>
+            <AnimatedLabel className="mb-6">
+              PHILOSOPHY
+            </AnimatedLabel>
+
+            <div className="grid gap-12 md:grid-cols-2 md:gap-16">
+              <AnimatedHeadline className="text-5xl md:text-6xl font-bold leading-[1.05]">
+                Good design combines style with craftsmanship.
+              </AnimatedHeadline>
+
+              <div className="space-y-8 text-xl text-gray-600 leading-relaxed">
+                <p>
+                  A polished outcome is not just about aesthetics. It is about
+                  understanding the problem, paying attention to details and
+                  creating something that works in the real world.
+                </p>
+
+                <p>
+                  My background in production taught me that quality comes from
+                  care, consistency and experience. The strongest designers are
+                  the ones who understand the craft deeply enough to make
+                  difficult things look effortless.
+                </p>
+
+                <p>
+                  Nearly two decades into my career, I am still learning,
+                  refining and exploring new ways of working. The tools change.
+                  The principles do not.
+                </p>
+              </div>
+            </div>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* WHAT I BRING */}
+
+      <Section spacing="editorial" borderTop>
+        <Container size="lg">
+          <Reveal>
+            <AnimatedLabel className="mb-6">
+              WHAT I BRING
+            </AnimatedLabel>
+
+            <div className="max-w-4xl space-y-8 text-xl text-gray-600 leading-relaxed">
+              <p>
+                Print taught me precision. Branding taught me systems. Packaging
+                taught me commercial thinking. Publications taught me structure
+                and readability. Web design taught me clarity. Exhibitions
+                taught me how people move through physical spaces. Motion and 3D
+                taught me how ideas can be experienced rather than simply
+                viewed.
+              </p>
+
+              <p>
+                The result is a broad perspective that allows me to move between
+                print, digital and physical environments while keeping the same
+                standard of craftsmanship and attention to detail.
+              </p>
+
+              <div>
+                <p className="text-black font-medium">
+                  Different mediums. Same principles.
+                </p>
+
+                <GradientLine size="md" className="mt-8" />
+              </div>
+            </div>
+          </Reveal>
+        </Container>
+      </Section>
+
+      {/* LOOKING FORWARD CTA */}
+
+      <Section spacing="editorial" borderTop>
+        <Container size="lg">
+          <Reveal>
+            <div className="bg-black text-white px-6 py-14 sm:px-8 sm:py-16 md:p-20">
+              <AnimatedLabel className="mb-6 text-gray-500">
+                LOOKING FORWARD
+              </AnimatedLabel>
+
+              <AnimatedHeadline className="text-5xl md:text-6xl font-bold leading-[1.05] max-w-4xl">
+                The work continues. The learning continues.
+              </AnimatedHeadline>
+
+              <p className="text-xl text-gray-300 mt-10 max-w-3xl leading-relaxed">
+                Tan Bui Designs is my long-term creative home. A place to
+                create meaningful work, explore new ideas and help organisations
+                communicate more clearly.
+              </p>
+
+              <div className="mt-12">
+                <Button href="/contact" variant="secondary" size="lg">
+                  Start a Conversation →
+                </Button>
+              </div>
+            </div>
+          </Reveal>
+        </Container>
+      </Section>
     </main>
   );
 }
