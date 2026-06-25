@@ -1,17 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 import AnimatedLabel from "@/components/AnimatedLabel";
+import Container from "@/components/ui/Container";
 
 export default function Navbar() {
   const [hidden, setHidden] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const menuOpenRef = useRef(false);
+
+  useEffect(() => {
+    menuOpenRef.current = menuOpen;
+
+    if (menuOpen) {
+      setHidden(false);
+    }
+  }, [menuOpen]);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
 
     const handleScroll = () => {
+      if (menuOpenRef.current) {
+        setHidden(false);
+        return;
+      }
+
       setHidden(true);
 
       clearTimeout(timeout);
@@ -27,7 +44,6 @@ export default function Navbar() {
 
     return () => {
       clearTimeout(timeout);
-
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
@@ -81,10 +97,7 @@ export default function Navbar() {
 
           pointer-events-none
 
-          bg-gradient-to-r
-          from-indigo-200
-          via-rose-200
-          to-yellow-100
+          bg-[image:var(--tbds-accent-gradient)]
 
           opacity-35
         "
@@ -114,10 +127,7 @@ export default function Navbar() {
 
           h-px
 
-          bg-gradient-to-r
-          from-indigo-200
-          via-rose-200
-          to-yellow-100
+          bg-[image:var(--tbds-accent-gradient)]
 
           opacity-70
         "
@@ -125,60 +135,305 @@ export default function Navbar() {
 
       {/* CONTENT */}
 
-      <div className="relative max-w-6xl mx-auto px-6 md:px-8 py-5 flex items-center">
-        <Link
-          href="/"
-          className="inline-block flex-shrink-0"
-          aria-label="Go to homepage"
-        >
-          <AnimatedLabel>
-            TAN BUI DESIGNS
-          </AnimatedLabel>
-        </Link>
+      <Container size="lg" className="relative">
+        <div
+          className="
+            flex
+            items-center
 
-        <nav className="ml-auto flex items-center gap-5 md:gap-8 text-xs md:text-sm uppercase tracking-[0.15em]">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
+            py-5
+          "
+        >
+          <Link
+            href="/"
+            className="inline-block flex-shrink-0"
+            aria-label="Go to homepage"
+            onClick={() => setMenuOpen(false)}
+          >
+            <AnimatedLabel
+              className="
+                text-[10px]
+                min-[360px]:text-[11px]
+                sm:text-xs
+                md:text-sm
+
+                tracking-[0.22em]
+                min-[360px]:tracking-[0.26em]
+                sm:tracking-[0.3em]
+                md:tracking-[0.35em]
+              "
+            >
+              TAN BUI DESIGNS
+            </AnimatedLabel>
+          </Link>
+
+          {/* EXPANDED / IMMERSIVE NAV */}
+
+          <nav
+            className="
+              ml-auto
+
+              hidden
+              lg:flex
+
+              items-center
+
+              gap-8
+
+              text-sm
+              uppercase
+              tracking-[0.15em]
+            "
+            aria-label="Primary navigation"
+          >
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="
+                  relative
+
+                  text-gray-600
+
+                  transition-all
+                  duration-300
+                  ease-[cubic-bezier(0.22,1,0.36,1)]
+
+                  hover:text-black
+                  hover:-translate-y-[1px]
+
+                  after:absolute
+                  after:left-0
+                  after:-bottom-1
+
+                  after:h-px
+                  after:w-full
+
+                  after:bg-[image:var(--tbds-accent-gradient)]
+
+                  after:origin-left
+                  after:scale-x-0
+
+                  after:transition-transform
+                  after:duration-300
+
+                  hover:after:scale-x-100
+                "
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* COMPACT / COMFORTABLE MENU BUTTON */}
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen((current) => !current)}
+            className="
+              group
+
+              ml-auto
+
+              lg:hidden
+
+              relative
+
+              flex
+              h-11
+              w-11
+              items-center
+              justify-center
+
+              rounded-full
+
+              border
+              border-white/70
+
+              bg-white/60
+
+              shadow-sm
+              backdrop-blur-xl
+
+              transition-all
+              duration-300
+              ease-[cubic-bezier(0.22,1,0.36,1)]
+
+              hover:bg-white
+              hover:shadow-md
+            "
+            aria-label="Toggle navigation menu"
+            aria-expanded={menuOpen}
+          >
+            <span
+              className="
+                absolute
+                inset-0
+
+                rounded-full
+
+                bg-[image:var(--tbds-accent-gradient)]
+
+                opacity-0
+
+                transition-opacity
+                duration-300
+
+                group-hover:opacity-25
+              "
+            />
+
+            <span
               className="
                 relative
 
-                text-gray-600
-
-                transition-all
-                duration-300
-                ease-[cubic-bezier(0.22,1,0.36,1)]
-
-                hover:text-black
-                hover:-translate-y-[1px]
-
-                after:absolute
-                after:left-0
-                after:-bottom-1
-
-                after:h-px
-                after:w-full
-
-                after:bg-gradient-to-r
-                after:from-indigo-300
-                after:via-rose-300
-                after:to-yellow-200
-
-                after:origin-left
-                after:scale-x-0
-
-                after:transition-transform
-                after:duration-300
-
-                hover:after:scale-x-100
+                flex
+                h-4
+                w-5
+                flex-col
+                justify-between
               "
             >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-      </div>
+              <span
+                className={`
+                  block
+                  h-px
+                  w-full
+
+                  bg-black
+
+                  transition-transform
+                  duration-300
+                  ease-[cubic-bezier(0.22,1,0.36,1)]
+
+                  ${
+                    menuOpen
+                      ? "translate-y-[7px] rotate-45"
+                      : "translate-y-0 rotate-0"
+                  }
+                `}
+              />
+
+              <span
+                className={`
+                  block
+                  h-px
+                  w-full
+
+                  bg-black
+
+                  transition-opacity
+                  duration-200
+
+                  ${menuOpen ? "opacity-0" : "opacity-100"}
+                `}
+              />
+
+              <span
+                className={`
+                  block
+                  h-px
+                  w-full
+
+                  bg-black
+
+                  transition-transform
+                  duration-300
+                  ease-[cubic-bezier(0.22,1,0.36,1)]
+
+                  ${
+                    menuOpen
+                      ? "-translate-y-[7px] -rotate-45"
+                      : "translate-y-0 rotate-0"
+                  }
+                `}
+              />
+            </span>
+          </button>
+        </div>
+
+        {/* COMPACT / COMFORTABLE MOBILE MENU */}
+
+        <div
+          className={`
+            lg:hidden
+
+            overflow-hidden
+
+            transition-all
+            duration-500
+            ease-[cubic-bezier(0.22,1,0.36,1)]
+
+            ${
+              menuOpen
+                ? "max-h-96 opacity-100 pb-7"
+                : "max-h-0 opacity-0 pb-0"
+            }
+          `}
+        >
+          <nav
+            className="
+              border-t
+              border-white/60
+
+              pt-6
+
+              flex
+              flex-col
+              gap-1
+            "
+            aria-label="Mobile navigation"
+          >
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className="
+                  group
+
+                  flex
+                  items-center
+
+                  py-4
+
+                  text-sm
+                  uppercase
+                  tracking-[0.18em]
+                  text-gray-700
+
+                  transition-colors
+                  duration-300
+
+                  hover:text-black
+                "
+              >
+                <span
+                  className="
+                    inline-flex
+                    items-center
+                    gap-3
+                  "
+                >
+                  <span>{link.label}</span>
+
+                  <span
+                    className="
+                      transition-transform
+                      duration-300
+                      ease-[cubic-bezier(0.22,1,0.36,1)]
+
+                      group-hover:translate-x-2
+                    "
+                  >
+                    →
+                  </span>
+                </span>
+              </Link>
+            ))}
+          </nav>
+        </div>
+      </Container>
     </header>
   );
 }

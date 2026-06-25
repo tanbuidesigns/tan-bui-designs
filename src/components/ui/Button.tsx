@@ -1,16 +1,9 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type ButtonVariant =
-  | "primary"
-  | "secondary"
-  | "ghost"
-  | "accent";
+type ButtonVariant = "primary" | "secondary" | "ghost" | "accent";
 
-type ButtonSize =
-  | "sm"
-  | "md"
-  | "lg";
+type ButtonSize = "sm" | "md" | "lg";
 
 type ButtonProps = {
   children: ReactNode;
@@ -19,6 +12,8 @@ type ButtonProps = {
   size?: ButtonSize;
   fullWidth?: boolean;
   disabled?: boolean;
+  expandOnHover?: boolean;
+  showArrow?: boolean;
   className?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
@@ -58,6 +53,18 @@ const sizeClasses: Record<ButtonSize, string> = {
     px-8
     py-4
     text-base
+  `,
+};
+
+const expandClasses: Record<ButtonSize, string> = {
+  sm: `
+    hover:px-5
+  `,
+  md: `
+    hover:px-8
+  `,
+  lg: `
+    hover:px-10
   `,
 };
 
@@ -122,6 +129,8 @@ export default function Button({
   size = "md",
   fullWidth = false,
   disabled = false,
+  expandOnHover = false,
+  showArrow = false,
   className = "",
   type = "button",
   ...props
@@ -130,6 +139,7 @@ export default function Button({
     ${baseClasses}
     ${sizeClasses[size]}
     ${disabled ? disabledClasses : variantClasses[variant]}
+    ${expandOnHover && !disabled ? expandClasses[size] : ""}
     ${fullWidth ? "w-full" : ""}
     ${className}
   `;
@@ -150,13 +160,34 @@ export default function Button({
             duration-300
 
             group-hover:h-full
-            group-hover:opacity-30
+            group-hover:opacity-25
           "
         />
       )}
 
-      <span className="relative">
-        {children}
+      <span
+        className={`
+          relative
+          inline-flex
+          items-center
+          ${showArrow ? "gap-4" : ""}
+        `}
+      >
+        <span>{children}</span>
+
+        {showArrow && (
+          <span
+            className="
+              transition-transform
+              duration-300
+              ease-[cubic-bezier(0.22,1,0.36,1)]
+
+              group-hover:translate-x-2
+            "
+          >
+            →
+          </span>
+        )}
       </span>
 
       {variant === "ghost" && !disabled && (
@@ -193,10 +224,7 @@ export default function Button({
 
   if (href && disabled) {
     return (
-      <span
-        className={classes}
-        aria-disabled="true"
-      >
+      <span className={classes} aria-disabled="true">
         {content}
       </span>
     );

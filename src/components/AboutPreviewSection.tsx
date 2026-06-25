@@ -1,37 +1,103 @@
 "use client";
 
-import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import AnimatedLabel from "@/components/AnimatedLabel";
 import AnimatedHeadline from "@/components/AnimatedHeadline";
 
+import Button from "@/components/ui/Button";
+import Container from "@/components/ui/Container";
+import Section from "@/components/ui/Section";
+
 export default function AboutPreviewSection() {
   return (
-    <section className="max-w-6xl mx-auto px-8 py-32 border-t border-gray-100">
-      <Reveal>
-        <AnimatedLabel className="mb-6">
-          ABOUT
-        </AnimatedLabel>
+    <Section spacing="editorial" borderTop>
+      <Container size="lg">
+        <Reveal>
+          <div
+            className="
+              grid
+              gap-12
 
-        <AnimatedHeadline className="text-5xl md:text-6xl font-bold leading-tight max-w-4xl mb-10">
-          From print shop floor to multidisciplinary design consultant.
-        </AnimatedHeadline>
+              lg:grid-cols-[0.85fr_1.15fr]
+              lg:gap-20
+              lg:items-start
+            "
+          >
+            {/* LEFT SIDE */}
 
-        <p className="text-xl text-gray-600 max-w-3xl leading-relaxed mb-12">
-        My career began in commercial printing and reprographics, where I learned the craft behind production, layout and visual communication. Since then I've worked across branding, packaging, publications, websites, exhibitions, video and 3D visualisation, combining technical expertise with creative thinking. Being self-taught has allowed me to build a broad perspective across multiple disciplines, but the goal has always stayed the same: creating work that is clear, purposeful and useful.
-        </p>
+            <div>
+              <AnimatedLabel className="mb-6">
+                ABOUT
+              </AnimatedLabel>
 
-        <Link
-          href="/about"
-          className="group inline-flex items-center gap-3 text-lg font-medium"
-        >
-          <span>Read My Story</span>
+              <AnimatedHeadline
+                className="
+                  text-5xl
+                  md:text-6xl
 
-          <span className="transition-transform duration-300 group-hover:translate-x-2">
-            →
-          </span>
-        </Link>
-      </Reveal>
-    </section>
+                  font-bold
+                  leading-[1.02]
+
+                  max-w-3xl
+                "
+              >
+                From print shop floor to digital design systems.
+              </AnimatedHeadline>
+            </div>
+
+            {/* RIGHT SIDE */}
+
+            <div
+              className="
+                max-w-3xl
+
+                lg:pt-8
+              "
+            >
+              <div
+                className="
+                  space-y-6
+
+                  text-xl
+                  text-gray-600
+                  leading-relaxed
+                "
+              >
+                <p>
+                  My career began in commercial printing and reprographics,
+                  where I learned the craft behind production, layout and visual
+                  communication.
+                </p>
+
+                <p>
+                  Since then I&apos;ve worked across branding, packaging,
+                  publications, websites, exhibitions, video and 3D
+                  visualisation, combining technical expertise with creative
+                  thinking.
+                </p>
+
+                <p>
+                  That mix of hands-on production knowledge and digital design
+                  experience gives me a practical understanding of how ideas
+                  move from concept to finished work.
+                </p>
+              </div>
+
+              <div className="mt-12">
+                <Button
+                  href="/about"
+                  variant="accent"
+                  size="lg"
+                  expandOnHover
+                  showArrow
+                >
+                  Read My Story
+                </Button>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </Container>
+    </Section>
   );
 }
