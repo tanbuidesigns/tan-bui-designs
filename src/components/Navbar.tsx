@@ -28,10 +28,7 @@ export default function Navbar() {
     return () => {
       clearTimeout(timeout);
 
-      window.removeEventListener(
-        "scroll",
-        handleScroll
-      );
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -56,13 +53,18 @@ export default function Navbar() {
         sticky
         top-0
         z-50
+
+        overflow-hidden
+
         border-b
-        border-gray-100
-        bg-white/90
-        backdrop-blur-md
+        border-white/40
+
+        backdrop-blur-xl
+
         transition-all
         duration-500
         ease-[cubic-bezier(0.22,1,0.36,1)]
+
         ${
           hidden
             ? "-translate-y-full opacity-0"
@@ -70,7 +72,60 @@ export default function Navbar() {
         }
       `}
     >
-      <div className="max-w-6xl mx-auto px-6 md:px-8 py-5 flex items-center">
+      {/* SOFT PASTEL CHROMA BEHIND GLASS */}
+
+      <div
+        className="
+          absolute
+          inset-0
+
+          pointer-events-none
+
+          bg-gradient-to-r
+          from-indigo-200
+          via-rose-200
+          to-yellow-100
+
+          opacity-35
+        "
+      />
+
+      {/* WHITE GLASS OVERLAY */}
+
+      <div
+        className="
+          absolute
+          inset-0
+
+          bg-white/80
+
+          backdrop-blur-2xl
+        "
+      />
+
+      {/* VERY SUBTLE ACCENT LINE */}
+
+      <div
+        className="
+          absolute
+          bottom-0
+          left-0
+          right-0
+
+          h-px
+
+          bg-gradient-to-r
+          from-indigo-200
+          via-rose-200
+          to-yellow-100
+
+          opacity-70
+        "
+      />
+
+      {/* CONTENT */}
+
+      <div className="relative max-w-6xl mx-auto px-6 md:px-8 py-5 flex items-center">
         <Link
           href="/"
           className="inline-block flex-shrink-0"
@@ -88,26 +143,33 @@ export default function Navbar() {
               href={link.href}
               className="
                 relative
-                text-gray-500
+
+                text-gray-600
+
                 transition-all
                 duration-300
                 ease-[cubic-bezier(0.22,1,0.36,1)]
-                hover:text-gray-700
+
+                hover:text-black
                 hover:-translate-y-[1px]
 
                 after:absolute
                 after:left-0
                 after:-bottom-1
+
                 after:h-px
                 after:w-full
-                after:bg-gray-300
+
+                after:bg-gradient-to-r
+                after:from-indigo-300
+                after:via-rose-300
+                after:to-yellow-200
 
                 after:origin-left
                 after:scale-x-0
 
                 after:transition-transform
                 after:duration-300
-                after:ease-[cubic-bezier(0.22,1,0.36,1)]
 
                 hover:after:scale-x-100
               "

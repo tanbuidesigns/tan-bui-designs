@@ -16,23 +16,38 @@ heroImage: {
 
 previewImages: [
   {
-    src: "/projects/islamiyah-series/preview-01-books.webp",
-    alt: "Book collection",
+    src: "/projects/islamiyah-series/preview-01.webp",
+    alt: "Islamiyah Books",
   },
 
   {
-    src: "/projects/islamiyah-series/preview-02-spreads.webp",
-    alt: "Publication spreads",
+    src: "/projects/islamiyah-series/preview-02.webp",
+    alt: "Islamiyah Books",
   },
 
   {
-    src: "/projects/islamiyah-series/preview-03-brand.webp",
-    alt: "Brand system",
+    src: "/projects/islamiyah-series/preview-03.webp",
+    alt: "Islamiyah Books",
   },
 
-  {
-    src: "/projects/islamiyah-series/preview-04-digital.webp",
-    alt: "Digital learning platform",
+    {
+    src: "/projects/islamiyah-series/preview-04.webp",
+    alt: "Islamiyah Books",
+  },
+
+    {
+    src: "/projects/islamiyah-series/preview-05.webp",
+    alt: "Islamiyah Books",
+  },
+
+    {
+    src: "/projects/islamiyah-series/preview-06.webp",
+    alt: "Islamiyah Books",
+  },
+
+    {
+    src: "/projects/islamiyah-series/preview-07.webp",
+    alt: "Islamiyah Books",
   },
 ],
 

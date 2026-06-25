@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
 import Reveal from "@/components/Reveal";
 import AnimatedLabel from "@/components/AnimatedLabel";
@@ -19,90 +20,240 @@ export default function CaseStudyPreviewStrip({
   title = "PROJECT HIGHLIGHTS",
   items,
 }: CaseStudyPreviewStripProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollPosition = useRef(0);
+
+  const [isDragging, setIsDragging] =
+    useState(false);
+
+  const dragStartX = useRef(0);
+
+  const dragStartScroll = useRef(0);
+
+  useEffect(() => {
+    const container = scrollRef.current;
+
+    if (!container) return;
+
+    let frame: number;
+
+    const speed = 0.25;
+
+    const animate = () => {
+      if (!isDragging) {
+        const halfway =
+          container.scrollWidth / 2;
+
+        if (halfway > 0) {
+          scrollPosition.current += speed;
+
+          if (
+            scrollPosition.current >=
+            halfway
+          ) {
+            scrollPosition.current = 0;
+          }
+
+          container.scrollLeft =
+            scrollPosition.current;
+        }
+      }
+
+      frame =
+        requestAnimationFrame(
+          animate
+        );
+    };
+
+    frame =
+      requestAnimationFrame(
+        animate
+      );
+
+    return () =>
+      cancelAnimationFrame(frame);
+  }, [isDragging]);
+
+  const handleMouseDown = (
+    e: React.MouseEvent<HTMLDivElement>
+  ) => {
+    const container =
+      scrollRef.current;
+
+    if (!container) return;
+
+    setIsDragging(true);
+
+    dragStartX.current = e.pageX;
+
+    dragStartScroll.current =
+      container.scrollLeft;
+  };
+
+  const handleMouseMove = (
+    e: React.MouseEvent<HTMLDivElement>
+  ) => {
+    const container =
+      scrollRef.current;
+
+    if (
+      !container ||
+      !isDragging
+    )
+      return;
+
+    const distance =
+      e.pageX -
+      dragStartX.current;
+
+    container.scrollLeft =
+      dragStartScroll.current -
+      distance;
+
+    scrollPosition.current =
+      container.scrollLeft;
+  };
+
+  const stopDragging = () => {
+    setIsDragging(false);
+  };
+
   if (!items.length) return null;
+
+  const loopItems = [
+    ...items,
+    ...items,
+  ];
 
   return (
     <Reveal>
-      <section className="max-w-6xl mx-auto px-8 py-16">
-        <div className="mb-8">
+      <section className="max-w-6xl mx-auto py-24">
+        <div className="px-8 mb-10">
           <AnimatedLabel>
             {title}
           </AnimatedLabel>
         </div>
 
-        <div
-          className="
-            flex
-            gap-4
+        <div className="relative">
+          <div
+            className="
+              absolute
+              left-0
+              top-0
+              bottom-0
+              w-24
+              z-20
+              pointer-events-none
 
-            overflow-x-auto
+              bg-gradient-to-r
+              from-white
+              to-transparent
+            "
+          />
 
-            snap-x
-            snap-mandatory
+          <div
+            className="
+              absolute
+              right-0
+              top-0
+              bottom-0
+              w-24
+              z-20
+              pointer-events-none
 
-            pb-4
+              bg-gradient-to-l
+              from-white
+              to-transparent
+            "
+          />
 
-            [scrollbar-width:none]
-            [-ms-overflow-style:none]
+          <div
+            ref={scrollRef}
+            onMouseDown={
+              handleMouseDown
+            }
+            onMouseMove={
+              handleMouseMove
+            }
+            onMouseUp={stopDragging}
+            onMouseLeave={
+              stopDragging
+            }
+            className="
+              flex
+              gap-8
 
-            [&::-webkit-scrollbar]:hidden
-          "
-        >
-          {items.map((item, index) => (
-            <div
-              key={`${item.src}-${index}`}
-              className="
-                group
+              overflow-x-auto
 
-                relative
+              px-8
+              py-4
 
-                w-[220px]
-                md:w-[280px]
+              select-none
 
-                aspect-[4/3]
+              cursor-default
 
-                flex-shrink-0
+              [scrollbar-width:none]
+              [-ms-overflow-style:none]
+              [&::-webkit-scrollbar]:hidden
+            "
+          >
+            {loopItems.map(
+              (
+                item,
+                index
+              ) => (
+                <div
+                  key={`${item.src}-${index}`}
+                  className="
+                    relative
 
-                snap-start
+                    w-[260px]
+                    md:w-[340px]
 
-                overflow-hidden
+                    aspect-[3/4]
 
-                bg-gray-100
+                    flex-shrink-0
 
-                cursor-pointer
-              "
-            >
-              <Image
-                src={item.src}
-                alt={item.alt}
-                fill
-                sizes="(max-width:768px) 220px, 280px"
-                className="
-                  object-cover
+                    rounded-2xl
 
-                  transition
-                  duration-700
-                  ease-[cubic-bezier(0.22,1,0.36,1)]
+                    bg-gray-50
 
-                  group-hover:scale-105
-                "
-              />
+                    border
+                    border-gray-100
 
-              <div
-                className="
-                  absolute
-                  inset-0
+                    transition-all
+                    duration-700
+                    ease-[cubic-bezier(0.22,1,0.36,1)]
 
-                  bg-black/0
+                    hover:border-gray-200
+                    hover:shadow-lg
+                  "
+                >
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    fill
+                    sizes="
+                      (max-width:768px) 260px,
+                      340px
+                    "
+                    className="
+                      object-contain
 
-                  transition-all
-                  duration-300
+                      p-4
 
-                  group-hover:bg-black/10
-                "
-              />
-            </div>
-          ))}
+                      transition-transform
+                      duration-700
+
+                      hover:scale-[1.03]
+                    "
+                    draggable={false}
+                  />
+                </div>
+              )
+            )}
+          </div>
         </div>
       </section>
     </Reveal>
