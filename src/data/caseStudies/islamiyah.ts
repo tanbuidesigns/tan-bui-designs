@@ -1,6 +1,6 @@
 export const islamiyah = {
   category:
-    "Education • Publication Design • Digital Learning",
+    "Creative System Design",
 
   title: "Islamiyah Series",
 

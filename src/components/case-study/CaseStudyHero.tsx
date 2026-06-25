@@ -4,6 +4,9 @@ import Reveal from "@/components/Reveal";
 import AnimatedLabel from "@/components/AnimatedLabel";
 import AnimatedHeadline from "@/components/AnimatedHeadline";
 
+import Container from "@/components/ui/Container";
+import Section from "@/components/ui/Section";
+
 type CaseStudyHeroProps = {
   category: string;
   title: string;
@@ -16,20 +19,42 @@ export default function CaseStudyHero({
   intro,
 }: CaseStudyHeroProps) {
   return (
-    <section className="max-w-6xl mx-auto px-8 py-32">
-      <Reveal>
-        <AnimatedLabel className="mb-8">
-          {category}
-        </AnimatedLabel>
+    <Section spacing="hero">
+      <Container size="lg">
+        <Reveal>
+          <AnimatedLabel className="mb-8">
+            {category}
+          </AnimatedLabel>
 
-        <AnimatedHeadline className="text-5xl md:text-7xl font-bold leading-[0.95] max-w-5xl">
-          {title}
-        </AnimatedHeadline>
+          <AnimatedHeadline
+            className="
+              max-w-5xl
 
-        <p className="text-xl text-gray-600 mt-12 max-w-3xl leading-relaxed">
-          {intro}
-        </p>
-      </Reveal>
-    </section>
+              text-5xl
+              md:text-7xl
+
+              font-bold
+              leading-[0.95]
+            "
+          >
+            {title}
+          </AnimatedHeadline>
+
+          <p
+            className="
+              mt-12
+
+              max-w-3xl
+
+              text-xl
+              text-gray-600
+              leading-relaxed
+            "
+          >
+            {intro}
+          </p>
+        </Reveal>
+      </Container>
+    </Section>
   );
 }
