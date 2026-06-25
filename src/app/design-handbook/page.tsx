@@ -2,14 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
 
 const sections = [
   { id: "introduction", number: "00", title: "Introduction" },
   { id: "philosophy", number: "01", title: "Philosophy" },
   { id: "visual-language", number: "02", title: "Visual Language" },
   { id: "design-tokens", number: "03", title: "Design Tokens" },
-  { id: "motion", number: "04", title: "Motion System" },
-  { id: "responsive", number: "05", title: "Responsive Experience" },
+  { id: "responsive-system", number: "04", title: "Responsive System" },
+  { id: "motion", number: "05", title: "Motion System" },
   { id: "components", number: "06", title: "Component Playground" },
   { id: "roadmap", number: "07", title: "Product Roadmap" },
   { id: "accessibility", number: "08", title: "Accessibility" },
@@ -23,6 +24,20 @@ const componentCards = [
     href: "/design-handbook/components/navbar",
     description:
       "Glass navigation with subtle motion, pastel interaction underline and scroll-aware behaviour.",
+  },
+  {
+    title: "Button System",
+    status: "Live",
+    href: "/design-handbook/components/buttons",
+    description:
+      "Reusable button styles for primary actions, secondary actions, ghost links, CTAs and disabled states.",
+  },
+  {
+    title: "Layout Primitives",
+    status: "Live",
+    href: "/design-handbook/components/layout-primitives",
+    description:
+      "Responsive-aware primitives for containers, sections and official TBDS accent lines.",
   },
   {
     title: "Case Study Gallery",
@@ -44,13 +59,6 @@ const componentCards = [
     href: "#",
     description:
       "Minimal section tracker designed for long-form case studies.",
-  },
-  {
-    title: "Button System",
-    status: "Live",
-    href: "/design-handbook/components/buttons",
-    description:
-      "Reusable button styles for primary actions, secondary actions, ghost links, CTAs and disabled states.",
   },
   {
     title: "Mobile Navigation",
@@ -88,6 +96,18 @@ const roadmapItems = [
   },
   {
     version: "v1.2",
+    title: "Responsive Foundation",
+    status: "Complete",
+    items: [
+      "Experience modes defined",
+      "Responsive padding tokens added",
+      "Responsive-aware Container created",
+      "Responsive-aware Section created",
+      "GradientLine primitive created",
+    ],
+  },
+  {
+    version: "v1.3",
     title: "Component Standards",
     status: "Next",
     items: [
@@ -95,19 +115,7 @@ const roadmapItems = [
       "Gallery standards",
       "CTA standards",
       "Typography rules",
-      "Reusable layout primitives",
-    ],
-  },
-  {
-    version: "v1.3",
-    title: "Responsive Experience",
-    status: "Planned",
-    items: [
-      "Tablet layouts",
-      "Mobile layouts",
-      "Mobile navigation",
-      "Touch interaction rules",
-      "Reduced motion rules",
+      "Reusable layout migration",
     ],
   },
   {
@@ -163,12 +171,64 @@ const tokenGroups = [
   {
     title: "Layout",
     description:
-      "Layout tokens keep spacing and container behaviour consistent across pages.",
+      "Layout tokens keep spacing, padding and container behaviour consistent across pages.",
     tokens: [
-      "--tbds-container",
-      "--tbds-page-padding",
-      "--tbds-border-light",
-      "--tbds-border-default",
+      "--tbds-page-padding-compact",
+      "--tbds-page-padding-comfortable",
+      "--tbds-page-padding-expanded",
+      "--tbds-container-lg",
+      "--tbds-container-xl",
+    ],
+  },
+];
+
+const responsiveModes = [
+  {
+    mode: "Compact",
+    range: "320px+",
+    purpose: "Small phones and narrow screens.",
+    rules: [
+      "Single-column layouts",
+      "Large tap targets",
+      "No hover dependency",
+      "Reduced horizontal spacing",
+      "Buttons may become full width",
+    ],
+  },
+  {
+    mode: "Comfortable",
+    range: "640px+",
+    purpose: "Large phones and small tablets.",
+    rules: [
+      "Touch-first layout",
+      "More breathing room",
+      "Selective two-column content",
+      "Swipe-first galleries",
+      "Navigation still needs touch thinking",
+    ],
+  },
+  {
+    mode: "Expanded",
+    range: "1024px+",
+    purpose: "Tablets, laptops and desktop entry.",
+    rules: [
+      "Side navigation can appear",
+      "Long-form reading layouts improve",
+      "Grid systems can expand",
+      "Hover can support interaction",
+      "Case study navigation can become visible",
+    ],
+  },
+  {
+    mode: "Immersive",
+    range: "1440px+",
+    purpose: "Large desktop and editorial layouts.",
+    rules: [
+      "More whitespace",
+      "More atmospheric motion",
+      "Horizontal browsing can be richer",
+      "Floating navigation can work",
+      "Hero sections can feel more cinematic",
     ],
   },
 ];
@@ -207,9 +267,9 @@ export default function DesignHandbookPage() {
 
   return (
     <main className="bg-white text-black">
-      <section className="max-w-6xl mx-auto px-8 py-32">
+      <section className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 py-24 md:py-32 lg:py-40">
         <p className="uppercase tracking-[0.35em] text-sm text-gray-500 mb-8">
-          TBDS v1.1
+          TBDS v1.2
         </p>
 
         <h1 className="text-5xl md:text-7xl font-bold leading-[0.95] max-w-5xl">
@@ -218,12 +278,12 @@ export default function DesignHandbookPage() {
 
         <p className="text-xl text-gray-600 mt-10 max-w-3xl leading-relaxed">
           A living design system documenting the philosophy, visual language,
-          motion rules, responsive thinking and component standards behind every
+          responsive thinking, motion rules and component standards behind every
           digital experience.
         </p>
       </section>
 
-      <section className="max-w-6xl mx-auto px-8 pb-32">
+      <section className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 pb-32">
         <div className="grid lg:grid-cols-[260px_1fr] gap-16 border-t border-gray-100 pt-16">
           <aside className="hidden lg:block">
             <div className="sticky top-28">
@@ -342,8 +402,10 @@ export default function DesignHandbookPage() {
               </p>
 
               <p>
-                Tokens live in <code className="text-black">src/styles/tokens.css</code>.
-                Animations live in <code className="text-black">src/styles/animations.css</code>.
+                Tokens live in{" "}
+                <code className="text-black">src/styles/tokens.css</code>.
+                Animations live in{" "}
+                <code className="text-black">src/styles/animations.css</code>.
                 Small reusable utilities live in{" "}
                 <code className="text-black">src/styles/utilities.css</code>.
               </p>
@@ -358,21 +420,40 @@ export default function DesignHandbookPage() {
                   />
                 ))}
               </div>
+            </HandbookSection>
 
-              <div className="mt-10 border border-gray-200 bg-gray-50 p-6">
-                <p className="uppercase tracking-[0.25em] text-xs text-gray-500 mb-4">
-                  Example
-                </p>
+            <HandbookSection
+              id="responsive-system"
+              eyebrow="04 Responsive System"
+              title="Responsive design is not shrinking. It is redesigning."
+            >
+              <p>
+                TBDS uses experience modes instead of thinking only in
+                breakpoints. Each mode has its own behaviour, spacing,
+                interaction model and content rhythm.
+              </p>
 
-                <pre className="overflow-x-auto bg-black text-white p-6 text-sm leading-relaxed">
-                  <code>{`className="bg-[image:var(--tbds-accent-gradient)]"`}</code>
-                </pre>
+              <p>
+                Every page and component should explain how it behaves across
+                Compact, Comfortable, Expanded and Immersive experiences.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-6 mt-10">
+                {responsiveModes.map((mode) => (
+                  <ResponsiveModeCard
+                    key={mode.mode}
+                    mode={mode.mode}
+                    range={mode.range}
+                    purpose={mode.purpose}
+                    rules={mode.rules}
+                  />
+                ))}
               </div>
             </HandbookSection>
 
             <HandbookSection
               id="motion"
-              eyebrow="04 Motion System"
+              eyebrow="05 Motion System"
               title="Motion should explain, not entertain."
             >
               <p>
@@ -391,30 +472,6 @@ export default function DesignHandbookPage() {
                   "Transition",
                 ]}
               />
-            </HandbookSection>
-
-            <HandbookSection
-              id="responsive"
-              eyebrow="05 Responsive Experience"
-              title="Desktop, tablet and mobile are separate experiences."
-            >
-              <p>
-                TBDS does not treat responsive design as shrinking desktop
-                layouts. Each device size requires its own hierarchy, spacing,
-                navigation and interaction model.
-              </p>
-
-              <div className="grid md:grid-cols-3 gap-6 mt-10">
-                <DeviceCard
-                  title="Desktop"
-                  text="Hover, precision, exploration."
-                />
-                <DeviceCard title="Tablet" text="Touch, comfort, browsing." />
-                <DeviceCard
-                  title="Mobile"
-                  text="Thumb-first, fast, vertical."
-                />
-              </div>
             </HandbookSection>
 
             <HandbookSection
@@ -488,6 +545,12 @@ export default function DesignHandbookPage() {
 
               <div className="space-y-6 mt-10">
                 <ChangelogCard
+                  version="v1.2"
+                  title="Responsive foundation added"
+                  text="Experience modes were defined and responsive-aware layout primitives were introduced for Container, Section and GradientLine."
+                />
+
+                <ChangelogCard
                   version="v1.1"
                   title="Style foundation added"
                   text="Global CSS was split into tokens, animations and utilities. The Button component now uses the shared accent gradient token."
@@ -516,7 +579,7 @@ function HandbookSection({
   id: string;
   eyebrow: string;
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <section id={id} className="scroll-mt-32">
@@ -555,15 +618,6 @@ function PrincipleGrid({ items }: { items: string[] }) {
   );
 }
 
-function DeviceCard({ title, text }: { title: string; text: string }) {
-  return (
-    <div className="border border-gray-200 p-6">
-      <h3 className="text-xl font-semibold mb-3">{title}</h3>
-      <p className="text-gray-600 leading-relaxed">{text}</p>
-    </div>
-  );
-}
-
 function TokenGroupCard({
   title,
   description,
@@ -585,11 +639,53 @@ function TokenGroupCard({
 
       <ul className="space-y-2">
         {tokens.map((token) => (
-          <li
-            key={token}
-            className="font-mono text-sm text-gray-500"
-          >
+          <li key={token} className="font-mono text-sm text-gray-500">
             {token}
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-8 h-px w-12 bg-[image:var(--tbds-accent-gradient)]" />
+    </div>
+  );
+}
+
+function ResponsiveModeCard({
+  mode,
+  range,
+  purpose,
+  rules,
+}: {
+  mode: string;
+  range: string;
+  purpose: string;
+  rules: string[];
+}) {
+  return (
+    <div className="border border-gray-200 p-6">
+      <div className="flex items-start justify-between gap-6 mb-6">
+        <div>
+          <p className="font-mono text-sm text-gray-400 mb-2">
+            {range}
+          </p>
+
+          <h3 className="text-2xl font-semibold text-black">
+            {mode}
+          </h3>
+        </div>
+
+        <span className="h-3 w-3 rounded-full bg-[image:var(--tbds-accent-gradient)]" />
+      </div>
+
+      <p className="text-base text-gray-600 leading-relaxed mb-6">
+        {purpose}
+      </p>
+
+      <ul className="space-y-3">
+        {rules.map((rule) => (
+          <li key={rule} className="flex gap-3 text-sm text-gray-600">
+            <span className="mt-[0.55em] h-1.5 w-1.5 rounded-full bg-black flex-shrink-0" />
+            <span>{rule}</span>
           </li>
         ))}
       </ul>
