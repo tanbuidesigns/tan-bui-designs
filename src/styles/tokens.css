@@ -1,0 +1,56 @@
+/* =======================================
+   TBDS DESIGN TOKENS
+   Tan Bui Design System
+======================================= */
+
+:root {
+  /* Core colours */
+  --tbds-color-background: #ffffff;
+  --tbds-color-foreground: #171717;
+
+  --tbds-color-black: #000000;
+  --tbds-color-white: #ffffff;
+
+  --tbds-color-gray-50: #f9fafb;
+  --tbds-color-gray-100: #f3f4f6;
+  --tbds-color-gray-200: #e5e7eb;
+  --tbds-color-gray-300: #d1d5db;
+  --tbds-color-gray-400: #9ca3af;
+  --tbds-color-gray-500: #6b7280;
+  --tbds-color-gray-600: #4b5563;
+  --tbds-color-gray-700: #374151;
+
+  /* Accent system */
+  --tbds-accent-indigo: rgb(199 210 254);
+  --tbds-accent-rose: rgb(254 202 202);
+  --tbds-accent-yellow: rgb(254 249 195);
+
+  --tbds-accent-gradient: linear-gradient(
+    90deg,
+    var(--tbds-accent-indigo),
+    var(--tbds-accent-rose),
+    var(--tbds-accent-yellow)
+  );
+
+  --tbds-accent-gradient-vertical: linear-gradient(
+    180deg,
+    var(--tbds-accent-indigo),
+    var(--tbds-accent-rose),
+    var(--tbds-accent-yellow)
+  );
+
+  /* Motion */
+  --tbds-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tbds-duration-fast: 200ms;
+  --tbds-duration-base: 300ms;
+  --tbds-duration-slow: 500ms;
+  --tbds-duration-reveal: 700ms;
+
+  /* Layout */
+  --tbds-container: 72rem;
+  --tbds-page-padding: 2rem;
+
+  /* Border */
+  --tbds-border-light: #f3f4f6;
+  --tbds-border-default: #e5e7eb;
+}

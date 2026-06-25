@@ -1,0 +1,136 @@
+/* =======================================
+   TBDS ANIMATION SYSTEM
+======================================= */
+
+/* =======================================
+   HERO LINE
+======================================= */
+
+.hero-line {
+  height: 1px;
+  background: black;
+
+  flex: 1;
+
+  transform-origin: left center;
+
+  animation: heroLineGrow 7s ease-in-out infinite;
+}
+
+@keyframes heroLineGrow {
+  0% {
+    transform: scaleX(0);
+    opacity: 0.25;
+  }
+
+  45% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+
+  80% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scaleX(0);
+    opacity: 0.25;
+  }
+}
+
+/* =======================================
+   HERO SPACE ANIMATION
+======================================= */
+
+.hero-space {
+  display: inline-block;
+
+  animation: heroSpace 8s var(--tbds-ease) infinite;
+
+  will-change: transform, opacity;
+}
+
+@keyframes heroSpace {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    color: #ffffff;
+  }
+
+  25% {
+    opacity: 0;
+    transform: translateY(20px);
+    color: #ffffff;
+  }
+
+  40% {
+    opacity: 1;
+    transform: translateY(0);
+    color: #000000;
+  }
+
+  75% {
+    opacity: 1;
+    transform: translateY(0);
+    color: #000000;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+    color: #ffffff;
+  }
+}
+
+/* =======================================
+   ANIMATED LABELS
+======================================= */
+
+.hero-brand {
+  display: inline-flex;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.35em;
+
+  font-size: 0.875rem;
+
+  color: var(--tbds-color-gray-500);
+
+  cursor: default;
+}
+
+.hero-letter {
+  display: inline-block;
+
+  transition:
+    transform 0.35s var(--tbds-ease),
+    color 0.35s ease;
+}
+
+.hero-brand:hover .hero-letter {
+  transform: translateY(-6px);
+}
+
+/* =======================================
+   HERO SCROLL HIGHLIGHT
+======================================= */
+
+.scroll-highlight {
+  background-image: linear-gradient(
+    to right,
+    #000000,
+    #000000
+  );
+
+  background-repeat: no-repeat;
+
+  background-position: left center;
+
+  color: white;
+
+  padding: 0 4px;
+
+  transition: background-size 0.1s linear;
+}

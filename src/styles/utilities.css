@@ -1,0 +1,31 @@
+/* =======================================
+   TBDS UTILITIES
+   Keep this file small.
+   Use Tailwind first. Use utilities only when
+   a value becomes part of the design system.
+======================================= */
+
+.tbds-gradient-line {
+  background-image: var(--tbds-accent-gradient);
+}
+
+.tbds-gradient-line-vertical {
+  background-image: var(--tbds-accent-gradient-vertical);
+}
+
+.tbds-focus-ring {
+  outline: none;
+}
+
+.tbds-focus-ring:focus-visible {
+  outline: 2px solid var(--tbds-color-black);
+  outline-offset: 4px;
+}
+
+.tbds-container {
+  max-width: var(--tbds-container);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--tbds-page-padding);
+  padding-right: var(--tbds-page-padding);
+}
