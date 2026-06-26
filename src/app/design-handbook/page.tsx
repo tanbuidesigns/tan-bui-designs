@@ -11,10 +11,11 @@ const sections = [
   { id: "design-tokens", number: "03", title: "Design Tokens" },
   { id: "responsive-system", number: "04", title: "Responsive System" },
   { id: "motion", number: "05", title: "Motion System" },
-  { id: "components", number: "06", title: "Component Playground" },
-  { id: "roadmap", number: "07", title: "Product Roadmap" },
-  { id: "accessibility", number: "08", title: "Accessibility" },
-  { id: "changelog", number: "09", title: "Changelog" },
+  { id: "case-study-system", number: "06", title: "Case Study System" },
+  { id: "components", number: "07", title: "Component Playground" },
+  { id: "roadmap", number: "08", title: "Product Roadmap" },
+  { id: "accessibility", number: "09", title: "Accessibility" },
+  { id: "changelog", number: "10", title: "Changelog" },
 ];
 
 const componentCards = [
@@ -47,25 +48,11 @@ const componentCards = [
       "Responsive-aware primitives for containers, sections and official TBDS accent lines.",
   },
   {
-    title: "Case Study Gallery",
+    title: "Component Lab",
     status: "Live",
-    href: "#",
+    href: "/design-handbook/components/component-lab",
     description:
-      "Flexible image system for mixed ratios, horizontal browsing and lightbox viewing.",
-  },
-  {
-    title: "Quote Block",
-    status: "Live",
-    href: "#",
-    description:
-      "Editorial quote treatment with subtle motion and premium spacing.",
-  },
-  {
-    title: "Progress Navigation",
-    status: "Live",
-    href: "#",
-    description:
-      "Minimal section tracker designed for long-form case studies.",
+      "Private testing ground for raw visual experiments before patterns are promoted into the real system.",
   },
 ];
 
@@ -108,6 +95,20 @@ const roadmapItems = [
   },
   {
     version: "v1.3",
+    title: "Case Study Motion System",
+    status: "Complete",
+    items: [
+      "Islamiyah case study custom route refined",
+      "CaseStudyOverview responsive grid areas added",
+      "ReadingProgressBar connected to TBDS gradient",
+      "CaseStudyProgressNav active gradient state added",
+      "CaseStudyQuote gradient strokes stabilised",
+      "CaseStudyNavigation centre-out gradient motion added",
+      "Component Lab used to test visual primitives safely",
+    ],
+  },
+  {
+    version: "v1.4",
     title: "Component Standards",
     status: "Next",
     items: [
@@ -115,7 +116,7 @@ const roadmapItems = [
       "Gallery standards",
       "CTA standards",
       "Typography rules",
-      "Reusable layout migration",
+      "Reusable case study component documentation",
     ],
   },
   {
@@ -233,6 +234,92 @@ const responsiveModes = [
   },
 ];
 
+const caseStudyUpdates = [
+  {
+    component: "Islamiyah data",
+    file: "src/data/caseStudies/islamiyah.ts",
+    update:
+      "The long animated category label was simplified to Creative System so the hero hierarchy stays clean.",
+  },
+  {
+    component: "CaseStudyOverview",
+    file: "src/components/case-study/CaseStudyOverview.tsx",
+    update:
+      "Uses CSS grid areas so compact and comfortable screens group Client, Timeline and Industry while Role sits separately.",
+  },
+  {
+    component: "ReadingProgressBar",
+    file: "src/components/case-study/ReadingProgressBar.tsx",
+    update:
+      "The reading progress indicator now uses the TBDS accent gradient instead of a plain black bar.",
+  },
+  {
+    component: "CaseStudyProgressNav",
+    file: "src/components/case-study/CaseStudyProgressNav.tsx",
+    update:
+      "Active states now use the TBDS gradient while keeping black text for better readability.",
+  },
+  {
+    component: "CaseStudyQuote",
+    file: "src/components/case-study/CaseStudyQuote.tsx",
+    update:
+      "Quote motion now uses AnimatedHeadline with subtle TBDS gradient strokes controlled by hover state.",
+  },
+  {
+    component: "AnimatedStroke",
+    file: "src/components/ui/AnimatedStroke.tsx",
+    update:
+      "Reusable visual primitive for animated gradient strokes, kept in ui because it acts like a visual building block.",
+  },
+  {
+    component: "CaseStudyNavigation",
+    file: "src/components/case-study/CaseStudyNavigation.tsx",
+    update:
+      "Previous and next project cards now share centre-out gradient motion with directional arrow movement.",
+  },
+  {
+    component: "Component Lab",
+    file: "src/app/design-handbook/components/component-lab/page.tsx",
+    update:
+      "Used as a raw testing area to prove gradient strokes worked before applying them to production components.",
+  },
+];
+
+const motionRules = [
+  {
+    title: "Gradient is an accent, not a habit",
+    text: "The TBDS gradient should appear in progress, focus, selection and carefully chosen motion moments. It should not become decoration on every component.",
+  },
+  {
+    title: "Motion should explain direction",
+    text: "Previous arrows move left. Next arrows move right. The motion must match the meaning of the action.",
+  },
+  {
+    title: "Paired cards need balanced motion",
+    text: "Previous and next project cards use the same centre-out gradient stroke so the pair feels consistent.",
+  },
+  {
+    title: "React hover state can be cleaner than group-hover",
+    text: "When mirrored motion becomes fragile, local hover state gives more predictable control.",
+  },
+  {
+    title: "Test raw visuals before systemising them",
+    text: "The Component Lab proved the gradient, stroke thickness and animation behaviour before the quote component was rebuilt.",
+  },
+  {
+    title: "Do not abstract too early",
+    text: "First make the behaviour work. Then promote it into a reusable primitive when the pattern is stable.",
+  },
+];
+
+const caseStudyPrinciples = [
+  "Case studies can use reusable blocks without forcing every project into the same template.",
+  "Content hierarchy can solve layout problems better than extra component logic.",
+  "Do not change typography to fix a layout issue unless the typography is actually the problem.",
+  "Use CSS grid areas when content relationships change across responsive experience modes.",
+  "A responsive layout is not a squeezed desktop. Each experience size needs its own logic.",
+];
+
 export default function DesignHandbookPage() {
   const [activeSection, setActiveSection] = useState("introduction");
 
@@ -269,7 +356,7 @@ export default function DesignHandbookPage() {
     <main className="bg-white text-black">
       <section className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 py-24 md:py-32 lg:py-40">
         <p className="uppercase tracking-[0.35em] text-sm text-gray-500 mb-8">
-          TBDS v1.2
+          TBDS v1.3
         </p>
 
         <h1 className="text-5xl md:text-7xl font-bold leading-[0.95] max-w-5xl">
@@ -278,8 +365,8 @@ export default function DesignHandbookPage() {
 
         <p className="text-xl text-gray-600 mt-10 max-w-3xl leading-relaxed">
           A living design system documenting the philosophy, visual language,
-          responsive thinking, motion rules and component standards behind every
-          digital experience.
+          responsive thinking, motion rules, case study system and component
+          standards behind every digital experience.
         </p>
       </section>
 
@@ -313,7 +400,7 @@ export default function DesignHandbookPage() {
                           h-2 w-2 rounded-full transition-all duration-300
                           ${
                             active
-                              ? "bg-black scale-125"
+                              ? "scale-125 bg-[image:var(--tbds-accent-gradient)]"
                               : "bg-gray-300 group-hover:bg-black"
                           }
                         `}
@@ -384,6 +471,13 @@ export default function DesignHandbookPage() {
                 The visual system is intentionally restrained: black, white and
                 grey form the foundation. Pastel gradient accents are reserved
                 for interaction, progress, focus and selection.
+              </p>
+
+              <p>
+                The gradient should feel like a system signal. It can show
+                reading progress, active states, selected labels and subtle
+                motion strokes. It should not become a decorative border slapped
+                on everything.
               </p>
 
               <div className="mt-10 h-2 w-full bg-[image:var(--tbds-accent-gradient)]" />
@@ -472,34 +566,87 @@ export default function DesignHandbookPage() {
                   "Transition",
                 ]}
               />
-            </HandbookSection>
-
-            <HandbookSection
-              id="components"
-              eyebrow="06 Component Playground"
-              title="Reusable components are designed before they are coded."
-            >
-              <p>
-                The playground is where TBDS components are defined, tested and
-                refined before they are used across the public website.
-              </p>
 
               <div className="grid md:grid-cols-2 gap-6 mt-10">
-                {componentCards.map((component) => (
-                  <ComponentCard
-                    key={component.title}
-                    title={component.title}
-                    status={component.status}
-                    href={component.href}
-                    description={component.description}
+                {motionRules.map((rule) => (
+                  <RuleCard
+                    key={rule.title}
+                    title={rule.title}
+                    text={rule.text}
                   />
                 ))}
               </div>
             </HandbookSection>
 
             <HandbookSection
+              id="case-study-system"
+              eyebrow="06 Case Study System"
+              title="Case studies need flexible structure, not one rigid template."
+            >
+              <p>
+                The Islamiyah case study proved how TBDS should handle long-form
+                project pages. The system uses reusable components, but each
+                project can still have its own composition and storytelling
+                rhythm.
+              </p>
+
+              <p>
+                The biggest lesson is that layout, content hierarchy and motion
+                must work together. A component is not finished just because it
+                renders. It has to behave correctly across the full experience.
+              </p>
+
+              <div className="space-y-4 mt-10">
+                {caseStudyPrinciples.map((principle) => (
+                  <PrincipleRow key={principle} text={principle} />
+                ))}
+              </div>
+
+              <div className="grid gap-6 mt-10">
+                {caseStudyUpdates.map((item) => (
+                  <CaseStudyUpdateCard
+                    key={item.component}
+                    component={item.component}
+                    file={item.file}
+                    update={item.update}
+                  />
+                ))}
+              </div>
+            </HandbookSection>
+
+            <HandbookSection
+  id="components"
+  eyebrow="07 Component Playground"
+  title="System-level components are documented separately."
+>
+  <p>
+    The Component Playground is reserved for high-level reusable parts of
+    the TBDS website system. These are the components that shape the main
+    structure, navigation, layout and interaction language of the site.
+  </p>
+
+  <p>
+    Smaller page-specific pieces, such as quote blocks, progress indicators,
+    animated strokes and case study navigation, should stay documented inside
+    the Case Study System instead of being promoted to core component status.
+  </p>
+
+  <div className="grid md:grid-cols-2 gap-6 mt-10">
+    {componentCards.map((component) => (
+      <ComponentCard
+        key={component.title}
+        title={component.title}
+        status={component.status}
+        href={component.href}
+        description={component.description}
+      />
+    ))}
+  </div>
+</HandbookSection>
+
+            <HandbookSection
               id="roadmap"
-              eyebrow="07 Product Roadmap"
+              eyebrow="08 Product Roadmap"
               title="The system evolves like a product."
             >
               <p>
@@ -523,7 +670,7 @@ export default function DesignHandbookPage() {
 
             <HandbookSection
               id="accessibility"
-              eyebrow="08 Accessibility"
+              eyebrow="09 Accessibility"
               title="Premium means usable."
             >
               <p>
@@ -531,11 +678,17 @@ export default function DesignHandbookPage() {
                 Motion, hover states and visual effects should never block
                 clarity or access.
               </p>
+
+              <p>
+                Gradient active states must still be legible. When white text on
+                gradient reduces readability, black text wins. Accessibility is
+                part of the design system, not a separate clean-up task.
+              </p>
             </HandbookSection>
 
             <HandbookSection
               id="changelog"
-              eyebrow="09 Changelog"
+              eyebrow="10 Changelog"
               title="Every system needs memory."
             >
               <p>
@@ -544,6 +697,12 @@ export default function DesignHandbookPage() {
               </p>
 
               <div className="space-y-6 mt-10">
+                <ChangelogCard
+                  version="v1.3"
+                  title="Case study motion system added"
+                  text="Islamiyah case study components were refined with responsive grid areas, TBDS gradient progress states, quote strokes, centre-out navigation motion and Component Lab testing."
+                />
+
                 <ChangelogCard
                   version="v1.2"
                   title="Responsive foundation added"
@@ -695,6 +854,68 @@ function ResponsiveModeCard({
   );
 }
 
+function RuleCard({
+  title,
+  text,
+}: {
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="border border-gray-200 p-6">
+      <h3 className="text-xl font-semibold text-black mb-4">
+        {title}
+      </h3>
+
+      <p className="text-base text-gray-600 leading-relaxed">
+        {text}
+      </p>
+
+      <div className="mt-8 h-px w-12 bg-[image:var(--tbds-accent-gradient)]" />
+    </div>
+  );
+}
+
+function PrincipleRow({ text }: { text: string }) {
+  return (
+    <div className="border-t border-gray-200 pt-4">
+      <p className="text-lg text-gray-700 leading-relaxed">
+        {text}
+      </p>
+    </div>
+  );
+}
+
+function CaseStudyUpdateCard({
+  component,
+  file,
+  update,
+}: {
+  component: string;
+  file: string;
+  update: string;
+}) {
+  return (
+    <div className="border border-gray-200 p-6">
+      <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+        <h3 className="text-2xl font-semibold text-black">
+          {component}
+        </h3>
+
+        <code className="text-xs text-gray-500 bg-gray-50 px-3 py-2">
+          {file}
+        </code>
+      </div>
+
+      <p className="text-base text-gray-600 leading-relaxed">
+        {update}
+      </p>
+
+      <div className="mt-8 h-px w-12 bg-[image:var(--tbds-accent-gradient)]" />
+    </div>
+  );
+}
+
 function ComponentCard({
   title,
   status,
@@ -741,7 +962,7 @@ function ComponentCard({
         />
 
         <span className="text-sm text-gray-500">
-          {isClickable ? "View component →" : "Coming soon"}
+          {isClickable ? "View component →" : "Documented here"}
         </span>
       </div>
     </div>
