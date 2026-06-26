@@ -226,63 +226,38 @@ previewImages: [
 
 gallery: [
   {
-    src: "/projects/islamiyah-series/gallery/01-book-collection.webp",
-    alt: "Book collection",
+    src: "/projects/islamiyah-series/gallery/gallery-01.webp",
+    alt: "Islamiyah Series book collection",
   },
 
   {
-    src: "/projects/islamiyah-series/gallery/02-book-covers.webp",
-    alt: "Book covers",
+    src: "/projects/islamiyah-series/gallery/gallery-02.webp",
+    alt: "Islamiyah Series book covers",
   },
 
   {
-    src: "/projects/islamiyah-series/gallery/03-inside-spreads.webp",
-    alt: "Inside spreads",
+    src: "/projects/islamiyah-series/gallery/gallery-03.webp",
+    alt: "Islamiyah Series inside spreads",
   },
 
   {
-    src: "/projects/islamiyah-series/gallery/04-workbook-pages.webp",
-    alt: "Workbook pages",
+    src: "/projects/islamiyah-series/gallery/gallery-04.webp",
+    alt: "Islamiyah Series workbook pages",
   },
 
   {
-    src: "/projects/islamiyah-series/gallery/05-brand-system.webp",
-    alt: "Brand system",
+    src: "/projects/islamiyah-series/gallery/gallery-05.webp",
+    alt: "Islamiyah Series brand system",
   },
 
   {
-    src: "/projects/islamiyah-series/gallery/06-illustration-style.webp",
-    alt: "Illustration style",
+    src: "/projects/islamiyah-series/gallery/gallery-06.webp",
+    alt: "Islamiyah Series illustration style",
   },
 
   {
-    src: "/projects/islamiyah-series/gallery/07-character-design.webp",
-    alt: "Character design",
-  },
-
-  {
-    src: "/projects/islamiyah-series/gallery/08-teaching-materials.webp",
-    alt: "Teaching materials",
-  },
-
-  {
-    src: "/projects/islamiyah-series/gallery/09-app-screens.webp",
-    alt: "App screens",
-  },
-
-  {
-    src: "/projects/islamiyah-series/gallery/10-website-screens.webp",
-    alt: "Website screens",
-  },
-
-  {
-    src: "/projects/islamiyah-series/gallery/11-mobile-learning.webp",
-    alt: "Mobile learning",
-  },
-
-  {
-    src: "/projects/islamiyah-series/gallery/12-curriculum-system.webp",
-    alt: "Curriculum system",
+    src: "/projects/islamiyah-series/gallery/gallery-07.webp",
+    alt: "Islamiyah Series character design",
   },
 ],
 

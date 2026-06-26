@@ -23,7 +23,7 @@ export const projects = [
 
     category: "Exhibition Design",
 
-    image: "/placeholder.jpg",
+    image: "/projects/islamiyah-series/gallery/gallery-01.webp",
 
     result:
       "Coming soon.",

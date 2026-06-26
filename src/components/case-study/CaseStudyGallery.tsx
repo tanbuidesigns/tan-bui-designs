@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import Reveal from "@/components/Reveal";
 import AnimatedLabel from "@/components/AnimatedLabel";
@@ -10,89 +10,107 @@ import CaseStudyLightbox, {
   CaseStudyGalleryItem,
 } from "@/components/case-study/CaseStudyLightbox";
 
-type ProcessedGalleryItem = CaseStudyGalleryItem & {
-  ratio: number;
-};
-
 type CaseStudyGalleryProps = {
   title?: string;
   items: CaseStudyGalleryItem[];
   id?: string;
 };
 
+const AUTO_PLAY_DELAY = 4500;
+const GALLERY_ASPECT_RATIO = "1705 / 1136";
+
 export default function CaseStudyGallery({
   title = "PROJECT GALLERY",
   items,
   id,
 }: CaseStudyGalleryProps) {
-  const [lightboxIndex, setLightboxIndex] =
-    useState<number | null>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
-  const [processedItems, setProcessedItems] =
-    useState<ProcessedGalleryItem[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  const hasMultipleItems = items.length > 1;
+
+  const scrollToIndex = useCallback(
+    (targetIndex: number) => {
+      const track = trackRef.current;
+
+      if (!track || !items.length) return;
+
+      const safeIndex =
+        ((targetIndex % items.length) + items.length) % items.length;
+
+      const target = track.children.item(safeIndex) as HTMLElement | null;
+
+      if (!target) return;
+
+      const targetLeft = target.offsetLeft - track.offsetLeft;
+
+      track.scrollTo({
+        left: targetLeft,
+        behavior: "smooth",
+      });
+
+      setActiveIndex(safeIndex);
+    },
+    [items.length]
+  );
 
   useEffect(() => {
-    let active = true;
+    const track = trackRef.current;
 
-    async function loadImageRatios() {
-      const results = await Promise.all(
-        items.map(
-          (item) =>
-            new Promise<ProcessedGalleryItem>((resolve) => {
-              const image = document.createElement("img");
+    if (!track) return;
 
-              image.src = item.src;
+    const updateActiveIndex = () => {
+      const children = Array.from(track.children) as HTMLElement[];
 
-              image.onload = () => {
-                resolve({
-                  ...item,
-                  ratio:
-                    image.naturalWidth /
-                    image.naturalHeight,
-                });
-              };
+      if (!children.length) return;
 
-              image.onerror = () => {
-                resolve({
-                  ...item,
-                  ratio: 1,
-                });
-              };
-            })
-        )
-      );
+      let closestIndex = 0;
+      let closestDistance = Infinity;
 
-      if (active) {
-        setProcessedItems(results);
-      }
-    }
+      children.forEach((child, index) => {
+        const childLeft = child.offsetLeft - track.offsetLeft;
+        const distance = Math.abs(childLeft - track.scrollLeft);
 
-    loadImageRatios();
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      setActiveIndex(closestIndex);
+    };
+
+    track.addEventListener("scroll", updateActiveIndex, {
+      passive: true,
+    });
+
+    updateActiveIndex();
 
     return () => {
-      active = false;
+      track.removeEventListener("scroll", updateActiveIndex);
     };
-  }, [items]);
+  }, [items.length]);
 
-  const getCardWidth = (ratio: number) => {
-    if (ratio < 0.75) {
-      return "w-[220px] md:w-[260px]";
-    }
+  useEffect(() => {
+    if (!hasMultipleItems || isPaused || lightboxIndex !== null) return;
 
-    if (ratio < 1) {
-      return "w-[280px] md:w-[340px]";
-    }
+    const timer = window.setInterval(() => {
+      scrollToIndex(activeIndex + 1);
+    }, AUTO_PLAY_DELAY);
 
-    if (ratio > 2) {
-      return "w-[560px] md:w-[720px]";
-    }
-
-    if (ratio > 1.45) {
-      return "w-[440px] md:w-[560px]";
-    }
-
-    return "w-[320px] md:w-[400px]";
-  };
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, [
+    activeIndex,
+    hasMultipleItems,
+    isPaused,
+    lightboxIndex,
+    scrollToIndex,
+  ]);
 
   if (!items.length) return null;
 
@@ -108,73 +126,206 @@ export default function CaseStudyGallery({
           scroll-mt-32
         "
       >
-        <div className="mb-16">
-          <AnimatedLabel>
-            {title}
-          </AnimatedLabel>
+        <div
+          className="
+            mb-10
+            flex
+            items-end
+            justify-between
+            gap-6
+          "
+        >
+          <div>
+            <AnimatedLabel>
+              {title}
+            </AnimatedLabel>
+
+            <p className="mt-5 max-w-xl text-gray-500 leading-relaxed">
+              Swipe, scroll or use the controls to browse the project images.
+              Select an image to view it full screen.
+            </p>
+          </div>
+
+          {hasMultipleItems && (
+            <div
+              className="
+                hidden
+                sm:flex
+                items-center
+                gap-2
+              "
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+            >
+              <button
+                type="button"
+                onClick={() => scrollToIndex(activeIndex - 1)}
+                className="
+                  h-11
+                  w-11
+
+                  border
+                  border-gray-200
+
+                  text-xl
+                  leading-none
+
+                  transition-all
+                  duration-300
+
+                  hover:border-black
+                  hover:-translate-x-1
+                "
+                aria-label="Previous gallery image"
+              >
+                ←
+              </button>
+
+              <button
+                type="button"
+                onClick={() => scrollToIndex(activeIndex + 1)}
+                className="
+                  h-11
+                  w-11
+
+                  border
+                  border-gray-200
+
+                  text-xl
+                  leading-none
+
+                  transition-all
+                  duration-300
+
+                  hover:border-black
+                  hover:translate-x-1
+                "
+                aria-label="Next gallery image"
+              >
+                →
+              </button>
+            </div>
+          )}
         </div>
 
         <div
-          className="
-            flex
-            gap-6
-
-            overflow-x-auto
-
-            pb-6
-
-            snap-x
-            snap-mandatory
-
-            [scrollbar-width:none]
-            [-ms-overflow-style:none]
-
-            [&::-webkit-scrollbar]:hidden
-          "
+          className="relative"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
         >
-          {processedItems.map((item, index) => (
-            <button
-              key={`${item.src}-${index}`}
-              type="button"
-              onClick={() =>
-                setLightboxIndex(index)
-              }
-              className={`
-                group
-                flex-shrink-0
-                snap-start
-                overflow-hidden
+          {/* FADED EDGES */}
 
-                ${getCardWidth(item.ratio)}
-              `}
-            >
-              <div
+          <div
+            aria-hidden="true"
+            className="
+              pointer-events-none
+              absolute
+              left-0
+              top-0
+              bottom-8
+              z-10
+
+              w-10
+              bg-gradient-to-r
+              from-white
+              to-transparent
+
+              md:w-20
+            "
+          />
+
+          <div
+            aria-hidden="true"
+            className="
+              pointer-events-none
+              absolute
+              right-0
+              top-0
+              bottom-8
+              z-10
+
+              w-10
+              bg-gradient-to-l
+              from-white
+              to-transparent
+
+              md:w-20
+            "
+          />
+
+          <div
+            ref={trackRef}
+            className="
+              flex
+              gap-4
+              sm:gap-5
+              lg:gap-6
+
+              overflow-x-auto
+
+              pb-8
+
+              snap-x
+              snap-mandatory
+              scroll-smooth
+
+              [scrollbar-width:none]
+              [-ms-overflow-style:none]
+
+              [&::-webkit-scrollbar]:hidden
+            "
+          >
+            {items.map((item, index) => (
+              <button
+                key={`${item.src}-${index}`}
+                type="button"
+                onClick={() => setLightboxIndex(index)}
+                onFocus={() => setIsPaused(true)}
+                onBlur={() => setIsPaused(false)}
                 className="
+                  group
                   relative
-                  w-full
+                  block
+                  flex-shrink-0
+
+                  w-[82vw]
+                  sm:w-[72vw]
+                  md:w-[560px]
+                  lg:w-[640px]
+                  xl:w-[720px]
+
+                  snap-center
                   overflow-hidden
                   bg-gray-100
+
+                  text-left
                 "
                 style={{
-                  aspectRatio: item.ratio,
+                  aspectRatio: GALLERY_ASPECT_RATIO,
                 }}
+                aria-label={`Open ${item.alt}`}
               >
                 <Image
-                  src={item.src}
-                  alt={item.alt}
-                  fill
-                  sizes="(max-width:768px) 80vw, 500px"
-                  loading="lazy"
-                  className="
-                    object-cover
+  src={item.src}
+  alt={item.alt}
+  fill
+  sizes="
+    (max-width: 640px) 82vw,
+    (max-width: 1024px) 72vw,
+    720px
+  "
+  loading={index === 0 ? "eager" : "lazy"}
+  fetchPriority={index === 0 ? "high" : "auto"}
+  className="
+    object-cover
 
-                    transition
-                    duration-700
-                    ease-[cubic-bezier(0.22,1,0.36,1)]
+    transition
+    duration-700
+    ease-[cubic-bezier(0.22,1,0.36,1)]
 
-                    group-hover:scale-105
-                  "
-                />
+    group-hover:scale-105
+  "
+/>
 
                 <div
                   className="
@@ -217,19 +368,47 @@ export default function CaseStudyGallery({
                 >
                   View
                 </div>
-              </div>
-            </button>
-          ))}
+              </button>
+            ))}
+          </div>
         </div>
+
+        {hasMultipleItems && (
+          <div className="mt-2 flex items-center justify-center gap-2">
+            {items.map((item, index) => {
+              const active = activeIndex === index;
+
+              return (
+                <button
+                  key={`${item.src}-dot-${index}`}
+                  type="button"
+                  onClick={() => scrollToIndex(index)}
+                  className="
+                    h-2
+                    rounded-full
+
+                    transition-all
+                    duration-300
+                  "
+                  style={{
+                    width: active ? "28px" : "8px",
+                    background: active
+                      ? "var(--tbds-accent-gradient)"
+                      : "#d1d5db",
+                  }}
+                  aria-label={`Go to gallery image ${index + 1}`}
+                />
+              );
+            })}
+          </div>
+        )}
 
         {lightboxIndex !== null && (
           <CaseStudyLightbox
             title={title}
-            items={processedItems}
+            items={items}
             startIndex={lightboxIndex}
-            onClose={() =>
-              setLightboxIndex(null)
-            }
+            onClose={() => setLightboxIndex(null)}
           />
         )}
       </section>
