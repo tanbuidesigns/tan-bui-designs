@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 
 import Reveal from "@/components/Reveal";
@@ -19,6 +20,12 @@ type CaseStudyNavigationProps = {
   };
 };
 
+type Project = {
+  title: string;
+  slug: string;
+  category: string;
+};
+
 export default function CaseStudyNavigation({
   previousProject,
   nextProject,
@@ -27,73 +34,194 @@ export default function CaseStudyNavigation({
     <Reveal>
       <section className="max-w-6xl mx-auto px-8 py-24">
         <div className="border-t border-gray-100 pt-12">
-          <div className="grid md:grid-cols-2 gap-6">
-            <Link
-              href={`/work/${previousProject.slug}`}
-              className="
-                group
-                border
-                border-gray-200
-                p-8
-                transition-all
-                duration-300
-                hover:border-black
-                hover:-translate-y-1
-              "
-            >
-              <AnimatedLabel className="mb-4">
-                PREVIOUS PROJECT
-              </AnimatedLabel>
+          <div className="grid gap-6 md:grid-cols-2">
+            <ProjectNavCard
+              project={previousProject}
+              label="PREVIOUS PROJECT"
+              direction="previous"
+            />
 
-              <h3 className="text-2xl md:text-3xl font-semibold leading-tight mb-4 transition-colors duration-300 group-hover:text-gray-700">
-                {previousProject.title}
-              </h3>
-
-              <p className="text-gray-500">
-                {previousProject.category}
-              </p>
-
-              <div className="mt-8 flex items-center gap-2 text-sm text-gray-500 transition-all duration-300 group-hover:text-black">
-                <span>←</span>
-                <span>View Project</span>
-              </div>
-            </Link>
-
-            <Link
-              href={`/work/${nextProject.slug}`}
-              className="
-                group
-                border
-                border-gray-200
-                p-8
-                transition-all
-                duration-300
-                hover:border-black
-                hover:-translate-y-1
-                text-left
-                md:text-right
-              "
-            >
-              <AnimatedLabel className="mb-4">
-                NEXT PROJECT
-              </AnimatedLabel>
-
-              <h3 className="text-2xl md:text-3xl font-semibold leading-tight mb-4 transition-colors duration-300 group-hover:text-gray-700">
-                {nextProject.title}
-              </h3>
-
-              <p className="text-gray-500">
-                {nextProject.category}
-              </p>
-
-              <div className="mt-8 flex items-center gap-2 justify-start md:justify-end text-sm text-gray-500 transition-all duration-300 group-hover:text-black">
-                <span>View Project</span>
-                <span>→</span>
-              </div>
-            </Link>
+            <ProjectNavCard
+              project={nextProject}
+              label="NEXT PROJECT"
+              direction="next"
+            />
           </div>
         </div>
       </section>
     </Reveal>
+  );
+}
+
+function ProjectNavCard({
+  project,
+  label,
+  direction,
+}: {
+  project: Project;
+  label: string;
+  direction: "previous" | "next";
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const isNext = direction === "next";
+
+  return (
+    <Link
+      href={`/work/${project.slug}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`
+        relative
+        block
+        overflow-hidden
+
+        border
+        border-gray-200
+        p-8
+
+        transition-all
+        duration-500
+        ease-[cubic-bezier(0.22,1,0.36,1)]
+
+        ${isNext ? "text-left md:text-right" : ""}
+      `}
+      style={{
+        transform: isHovered
+          ? "translateY(-4px)"
+          : "translateY(0)",
+        borderColor: isHovered ? "#d1d5db" : undefined,
+        boxShadow: isHovered
+          ? "0 18px 45px rgba(0,0,0,0.06)"
+          : undefined,
+      }}
+    >
+      {/* CENTRE-OUT GRADIENT STROKE */}
+
+      <div
+        aria-hidden="true"
+        className="
+          absolute
+          top-0
+          left-1/2
+
+          h-[3px]
+          w-full
+        "
+        style={{
+          background: "var(--tbds-accent-gradient)",
+          transform: isHovered
+            ? "translateX(-50%) scaleX(1)"
+            : "translateX(-50%) scaleX(0)",
+          transformOrigin: "center",
+          transition:
+            "transform 700ms cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+      />
+
+      <AnimatedLabel className="mb-4">
+        {label}
+      </AnimatedLabel>
+
+      <h3
+        className="
+          mb-4
+
+          text-2xl
+          font-semibold
+          leading-tight
+
+          transition-colors
+          duration-300
+
+          md:text-3xl
+        "
+        style={{
+          color: isHovered ? "#374151" : undefined,
+        }}
+      >
+        {project.title}
+      </h3>
+
+      <p className="text-gray-500">
+        {project.category}
+      </p>
+
+      <ProjectNavAction
+        direction={direction}
+        active={isHovered}
+      />
+    </Link>
+  );
+}
+
+function ProjectNavAction({
+  direction,
+  active,
+}: {
+  direction: "previous" | "next";
+  active: boolean;
+}) {
+  const isNext = direction === "next";
+
+  return (
+    <div
+      className={`
+        mt-8
+
+        flex
+        items-center
+        gap-2
+
+        text-sm
+
+        transition-colors
+        duration-300
+
+        ${isNext ? "justify-start md:justify-end" : "justify-start"}
+      `}
+      style={{
+        color: active ? "#000000" : "#6b7280",
+        transform: active
+          ? isNext
+            ? "translateX(8px)"
+            : "translateX(-8px)"
+          : "translateX(0)",
+        transition:
+          "transform 300ms cubic-bezier(0.22, 1, 0.36, 1), color 300ms ease",
+      }}
+    >
+      {!isNext && (
+        <span
+          className="inline-block"
+          style={{
+            transform: active
+              ? "translateX(-4px)"
+              : "translateX(0)",
+            transition:
+              "transform 300ms cubic-bezier(0.22, 1, 0.36, 1)",
+          }}
+        >
+          ←
+        </span>
+      )}
+
+      <span>View Project</span>
+
+      {isNext && (
+        <span
+          className="inline-block"
+          style={{
+            transform: active
+              ? "translateX(4px)"
+              : "translateX(0)",
+            transition:
+              "transform 300ms cubic-bezier(0.22, 1, 0.36, 1)",
+          }}
+        >
+          →
+        </span>
+      )}
+    </div>
   );
 }

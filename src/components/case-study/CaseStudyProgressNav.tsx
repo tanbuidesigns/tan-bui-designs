@@ -225,19 +225,26 @@ export default function CaseStudyProgressNav({
                     ? `
                       w-3
                       h-3
-                      bg-black
                       scale-110
+                      shadow-[0_0_18px_rgba(99,102,241,0.45)]
                     `
                     : `
                       w-2
                       h-2
                       bg-gray-300
 
-                      group-hover:bg-gray-700
                       group-hover:scale-125
                     `
                 }
               `}
+              style={
+                active
+                  ? {
+                      backgroundImage:
+                        "var(--tbds-accent-gradient)",
+                    }
+                  : undefined
+              }
             />
 
             <div
@@ -287,11 +294,11 @@ export default function CaseStudyProgressNav({
 
                   ${
                     active
-                      ? `
-                        bg-black
-                        text-white
-                        border-black
-                      `
+  ? `
+    text-black
+    border-transparent
+    shadow-xl
+  `
                       : `
                         bg-white/70
                         text-black
@@ -304,6 +311,14 @@ export default function CaseStudyProgressNav({
                       `
                   }
                 `}
+                style={
+                  active
+                    ? {
+                        backgroundImage:
+                          "var(--tbds-accent-gradient)",
+                      }
+                    : undefined
+                }
               >
                 {section.label}
               </div>
