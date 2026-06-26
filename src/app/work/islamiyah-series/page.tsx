@@ -89,11 +89,10 @@ export default function IslamiyahSeriesPage() {
       {/* CINEMATIC HERO IMAGE */}
 
       <CaseStudyImage
-        src={islamiyah.heroImage.src}
-        alt={islamiyah.heroImage.alt}
-        caption={islamiyah.heroImage.caption}
-        priority
-      />
+  src={islamiyah.heroImage.src}
+  alt={islamiyah.heroImage.alt}
+  priority
+/>
 
       {/* OVERVIEW */}
 
