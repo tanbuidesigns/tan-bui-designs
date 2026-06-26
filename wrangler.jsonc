@@ -1,0 +1,37 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "tan-bui-designs",
+  "compatibility_date": "2026-06-26",
+  "workers_dev": true,
+  "preview_urls": true,
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "routes": [
+    {
+      "pattern": "tanbuidesigns.com",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.tanbuidesigns.com",
+      "custom_domain": true
+    }
+  ],
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "tan-bui-designs"
+    }
+  ],
+  "images": {
+    "binding": "IMAGES"
+  },
+  "observability": {
+    "enabled": true
+  }
+}
