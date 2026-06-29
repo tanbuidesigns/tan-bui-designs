@@ -1,5 +1,6 @@
 "use client";
 
+import type { MouseEvent } from "react";
 import { useEffect, useState } from "react";
 
 type Section = {
@@ -9,13 +10,19 @@ type Section = {
 
 type Props = {
   sections: Section[];
+  startSectionId?: string;
+  endSectionId?: string;
 };
 
 export default function CaseStudyProgressNav({
   sections,
+  startSectionId,
+  endSectionId = "services",
 }: Props) {
+  const firstSectionId = sections[0]?.id ?? "";
+
   const [activeSection, setActiveSection] = useState(
-    sections[0]?.id ?? ""
+    firstSectionId
   );
 
   const [visible, setVisible] = useState(false);
@@ -43,8 +50,7 @@ export default function CaseStudyProgressNav({
           }
         },
         {
-          rootMargin:
-            "-20% 0px -65% 0px",
+          rootMargin: "-20% 0px -65% 0px",
           threshold: 0,
         }
       );
@@ -61,72 +67,86 @@ export default function CaseStudyProgressNav({
   }, [sections]);
 
   useEffect(() => {
-    const overview =
-      document.getElementById("overview");
+    const startId =
+      startSectionId ?? firstSectionId;
 
-    const services =
-      document.getElementById("services");
+    const startElement =
+      document.getElementById(startId);
 
-    if (!overview || !services) return;
+    const endElement =
+      document.getElementById(endSectionId);
 
-    const overviewObserver =
+    if (!startElement) return;
+
+    const showNav = () => {
+      setVisible(true);
+      setShowLabels(true);
+
+      window.setTimeout(() => {
+        setShowLabels(false);
+      }, 3000);
+    };
+
+    const startObserver =
       new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
-            setVisible(true);
-            setShowLabels(true);
-
-            setTimeout(() => {
-              setShowLabels(false);
-            }, 3000);
+            showNav();
           }
         },
         {
-          rootMargin:
-            "-15% 0px -70% 0px",
+          rootMargin: "-15% 0px -70% 0px",
           threshold: 0,
         }
       );
 
-    const servicesObserver =
-      new IntersectionObserver(
+    startObserver.observe(startElement);
+
+    let endObserver:
+      | IntersectionObserver
+      | undefined;
+
+    if (endElement) {
+      endObserver = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
             setVisible(false);
           }
         },
         {
-          rootMargin:
-            "-20% 0px -50% 0px",
+          rootMargin: "-20% 0px -50% 0px",
           threshold: 0,
         }
       );
 
-    overviewObserver.observe(overview);
-    servicesObserver.observe(services);
+      endObserver.observe(endElement);
+    }
 
     return () => {
-      overviewObserver.disconnect();
-      servicesObserver.disconnect();
+      startObserver.disconnect();
+      endObserver?.disconnect();
     };
-  }, []);
+  }, [
+    endSectionId,
+    firstSectionId,
+    startSectionId,
+  ]);
 
   useEffect(() => {
     if (!hoveredSection) return;
 
     setShowLabels(true);
 
-    const timer = setTimeout(() => {
+    const timer = window.setTimeout(() => {
       setShowLabels(false);
       setHoveredSection(null);
     }, 5000);
 
-    return () =>
-      clearTimeout(timer);
+    return () => window.clearTimeout(timer);
   }, [hoveredSection]);
 
   const scrollToSection = (
-    event: React.MouseEvent<HTMLAnchorElement>,
+    event: MouseEvent<HTMLAnchorElement>,
     id: string
   ) => {
     event.preventDefault();
@@ -141,6 +161,10 @@ export default function CaseStudyProgressNav({
       block: "start",
     });
   };
+
+  if (!sections.length) {
+    return null;
+  }
 
   return (
     <aside
@@ -294,11 +318,11 @@ export default function CaseStudyProgressNav({
 
                   ${
                     active
-  ? `
-    text-black
-    border-transparent
-    shadow-xl
-  `
+                      ? `
+                        text-black
+                        border-transparent
+                        shadow-xl
+                      `
                       : `
                         bg-white/70
                         text-black
