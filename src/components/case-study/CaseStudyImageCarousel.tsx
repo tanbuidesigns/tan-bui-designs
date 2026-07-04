@@ -33,6 +33,7 @@ export default function CaseStudyImageCarousel({
 }: CaseStudyImageCarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   const pointerIdRef = useRef<number | null>(null);
   const pointerStartXRef = useRef(0);
   const pointerStartYRef = useRef(0);
@@ -527,6 +528,7 @@ export default function CaseStudyImageCarousel({
                 src={item.src}
                 alt={item.alt}
                 interactive={canOpen}
+                eager={index === 0 && canOpen}
               />
             </div>
           );
@@ -539,6 +541,7 @@ export default function CaseStudyImageCarousel({
           total={items.length}
           onPrevious={goToPrevious}
           onNext={goToNext}
+          onDotClick={scrollToIndex}
         />
       )}
 
@@ -559,11 +562,13 @@ function CarouselControls({
   total,
   onPrevious,
   onNext,
+  onDotClick,
 }: {
   activeIndex: number;
   total: number;
   onPrevious: () => void;
   onNext: () => void;
+  onDotClick: (index: number) => void;
 }) {
   return (
     <div className="mt-1 flex items-center justify-between gap-4 border-t border-gray-100 pt-5">
@@ -579,35 +584,59 @@ function CarouselControls({
       <div className="flex min-w-0 flex-1 items-center justify-center gap-4">
         <div
           className="hidden items-center gap-1.5 md:flex"
-          aria-hidden="true"
+          aria-label="Carousel slide navigation"
         >
           {Array.from({ length: total }).map(
             (_, index) => {
               const active = activeIndex === index;
 
               return (
-                <span
+                <button
                   key={index}
-                  className={`
-                    h-1.5
+                  type="button"
+                  onClick={() => onDotClick(index)}
+                  className="
+                    flex
+                    h-6
+                    items-center
+                    justify-center
+
                     rounded-full
+
                     transition-all
                     duration-300
-                    ${
+
+                    focus-visible:outline
+                    focus-visible:outline-2
+                    focus-visible:outline-offset-4
+                    focus-visible:outline-black
+                  "
+                  aria-label={`Go to slide ${index + 1}`}
+                  aria-current={active ? "true" : undefined}
+                >
+                  <span
+                    className={`
+                      h-1.5
+                      rounded-full
+                      transition-all
+                      duration-300
+
+                      ${
+                        active
+                          ? "w-7 shadow-[0_0_10px_rgba(99,102,241,0.22)]"
+                          : "w-1.5 bg-gray-300 hover:bg-gray-400"
+                      }
+                    `}
+                    style={
                       active
-                        ? "w-7 shadow-[0_0_10px_rgba(99,102,241,0.22)]"
-                        : "w-1.5 bg-gray-300"
+                        ? {
+                            backgroundImage:
+                              "var(--tbds-accent-gradient)",
+                          }
+                        : undefined
                     }
-                  `}
-                  style={
-                    active
-                      ? {
-                          backgroundImage:
-                            "var(--tbds-accent-gradient)",
-                        }
-                      : undefined
-                  }
-                />
+                  />
+                </button>
               );
             }
           )}
@@ -654,6 +683,9 @@ function CarouselLightbox({
 
   const pointerStartXRef = useRef(0);
   const pointerStartYRef = useRef(0);
+  const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>(
+    []
+  );
 
   const activeItem = items[activeIndex];
 
@@ -680,6 +712,17 @@ function CarouselLightbox({
   useEffect(() => {
     setActiveIndex(startIndex);
   }, [startIndex]);
+
+  useEffect(() => {
+    const activeThumbnail =
+      thumbnailRefs.current[activeIndex];
+
+    activeThumbnail?.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+  }, [activeIndex]);
 
   useEffect(() => {
     const handleKeyDown = (
@@ -784,7 +827,31 @@ function CarouselLightbox({
           <button
             type="button"
             onClick={goToPrevious}
-            className="absolute left-4 top-1/2 z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition duration-300 hover:bg-white hover:text-black md:flex"
+            className="
+              absolute
+              left-4
+              top-1/2
+              z-30
+
+              hidden
+              h-12
+              w-12
+              -translate-y-1/2
+              items-center
+              justify-center
+
+              rounded-full
+              bg-white/10
+              text-white
+
+              transition
+              duration-300
+
+              hover:bg-white
+              hover:text-black
+
+              md:flex
+            "
             aria-label="Previous image"
           >
             ←
@@ -793,7 +860,31 @@ function CarouselLightbox({
           <button
             type="button"
             onClick={goToNext}
-            className="absolute right-4 top-1/2 z-30 hidden h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition duration-300 hover:bg-white hover:text-black md:flex"
+            className="
+              absolute
+              right-4
+              top-1/2
+              z-30
+
+              hidden
+              h-12
+              w-12
+              -translate-y-1/2
+              items-center
+              justify-center
+
+              rounded-full
+              bg-white/10
+              text-white
+
+              transition
+              duration-300
+
+              hover:bg-white
+              hover:text-black
+
+              md:flex
+            "
             aria-label="Next image"
           >
             →
@@ -804,7 +895,25 @@ function CarouselLightbox({
       <div
         onPointerDown={handleStagePointerDown}
         onPointerUp={handleStagePointerUp}
-        className="flex h-full w-full cursor-grab items-center justify-center px-4 py-24 active:cursor-grabbing md:px-16"
+        className="
+          flex
+          h-full
+          w-full
+          cursor-grab
+          items-center
+          justify-center
+
+          px-4
+          pt-24
+          pb-44
+
+          active:cursor-grabbing
+
+          sm:pb-40
+          md:px-16
+          md:pt-28
+          md:pb-36
+        "
       >
         <div className="relative h-full w-full max-w-7xl">
           <Image
@@ -819,14 +928,143 @@ function CarouselLightbox({
         </div>
       </div>
 
-      <div className="absolute bottom-5 left-1/2 z-30 flex -translate-x-1/2 items-center gap-4 rounded-full bg-white/10 px-4 py-2 text-xs text-white/70">
-        <span>
-          {activeIndex + 1} / {items.length}
-        </span>
+      <div
+        className="
+          absolute
+          bottom-4
+          left-0
+          right-0
+          z-30
 
-        <span className="hidden text-white/40 sm:inline">
-          Drag, swipe or use arrow keys
-        </span>
+          px-4
+
+          md:bottom-6
+          md:px-16
+        "
+      >
+        <div
+          className="
+            mx-auto
+            max-w-4xl
+          "
+        >
+          <div
+            className="
+              flex
+              gap-3
+              overflow-x-auto
+              px-1
+              py-2
+
+              [scrollbar-width:none]
+              [-ms-overflow-style:none]
+
+              [&::-webkit-scrollbar]:hidden
+            "
+            aria-label="Lightbox image thumbnails"
+          >
+            {items.map((item, index) => {
+              const active = activeIndex === index;
+
+              return (
+                <button
+                  key={`${item.label}-${index}`}
+                  ref={(node) => {
+                    thumbnailRefs.current[index] = node;
+                  }}
+                  type="button"
+                  onClick={() => setActiveIndex(index)}
+                  className="
+                    relative
+                    h-14
+                    w-20
+                    flex-shrink-0
+                    overflow-hidden
+
+                    rounded-full
+
+                    bg-white/10
+                    p-[2px]
+
+                    transition-all
+                    duration-300
+
+                    hover:scale-105
+                    focus-visible:outline
+                    focus-visible:outline-2
+                    focus-visible:outline-offset-4
+                    focus-visible:outline-white
+
+                    sm:h-16
+                    sm:w-24
+                    md:h-18
+                    md:w-28
+                  "
+                  style={
+                    active
+                      ? {
+                          backgroundImage:
+                            "var(--tbds-accent-gradient)",
+                        }
+                      : undefined
+                  }
+                  aria-label={`View image ${index + 1}`}
+                  aria-current={active ? "true" : undefined}
+                >
+                  <span
+                    className="
+                      relative
+                      block
+                      h-full
+                      w-full
+                      overflow-hidden
+
+                      rounded-full
+                      bg-black
+                    "
+                  >
+                    {item.src && (
+                      <Image
+                        src={item.src}
+                        alt=""
+                        fill
+                        sizes="112px"
+                        draggable={false}
+                        className={`
+                          object-cover
+
+                          transition-all
+                          duration-300
+
+                          ${
+                            active
+                              ? "opacity-100"
+                              : "opacity-55 hover:opacity-85"
+                          }
+                        `}
+                      />
+                    )}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <p
+            className="
+              mt-3
+              text-center
+              text-xs
+              text-white/45
+            "
+          >
+            {activeIndex + 1} / {items.length}
+            <span className="hidden sm:inline">
+              {" "}
+              · Swipe, use arrows, or press Esc to close
+            </span>
+          </p>
+        </div>
       </div>
     </div>,
     document.body
@@ -841,6 +1079,7 @@ function CarouselImageBlock({
   width,
   height,
   interactive = false,
+  eager = false,
 }: {
   label: string;
   ratio: "hero" | "wide" | "portrait" | "tall" | "auto";
@@ -849,6 +1088,7 @@ function CarouselImageBlock({
   width?: number;
   height?: number;
   interactive?: boolean;
+  eager?: boolean;
 }) {
   const ratioClass = {
     hero: "aspect-[16/9] w-full",
@@ -894,6 +1134,8 @@ function CarouselImageBlock({
             alt={alt ?? label}
             fill
             draggable={false}
+            loading={eager ? "eager" : "lazy"}
+            fetchPriority={eager ? "high" : "auto"}
             sizes="
               (max-width: 640px) 82vw,
               (max-width: 1024px) 58vw,

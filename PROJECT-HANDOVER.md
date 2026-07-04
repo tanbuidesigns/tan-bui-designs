@@ -104,6 +104,18 @@ src
     └── utilities.css
 ```
 
+Additional current files to remember:
+
+```text
+src/app/work/drafts/urban-eat-draft/page.tsx
+src/app/work/drafts/urban-eat-draft/UrbanEatDraftClient.tsx
+src/components/case-study/CaseStudyImageCarousel.tsx
+src/components/case-study/CaseStudyCTA.tsx
+src/components/case-study/CaseStudyProgressNav.tsx
+```
+
+The Urban Eat draft is currently the main active case study build. The reusable case study carousel is now the approved gallery component for Urban Eat and future image-led case study sections.
+
 ---
 
 # 4. Design Philosophy
@@ -704,10 +716,13 @@ Component docs include:
 * Navbar
 * Layout primitives
 
-The Design Handbook should be updated later to include the newer Button props:
+The Design Handbook should also include the newer case study work:
 
 * `expandOnHover`
 * `showArrow`
+* Accent button usage rules
+* Case study CTA direction
+* `CaseStudyImageCarousel` as the approved case study carousel/gallery component
 
 ---
 
@@ -722,6 +737,9 @@ These have been migrated to TBDS primitives or improved:
 * Footer
 * Design Handbook component docs
 * Layout primitives page
+* Urban Eat draft case study structure
+* Reusable case study image carousel
+* Full-width case study CTA
 
 Important contact page responsive behaviour:
 
@@ -759,6 +777,22 @@ Known case studies / work items:
 ## Urban Eat Packaging
 
 * Packaging design and artwork production
+* Active draft case study now lives at `src/app/work/drafts/urban-eat-draft`
+* Public framing should be legacy FMCG packaging and brand activation work
+* Avoid implying current endorsement from Urban Eat, Adelie, Samworth or Costa
+* Use a small trademark/legal note near the bottom of the page
+
+Current recommended public wording:
+
+```text
+Selected legacy FMCG packaging and brand activation work for Urban Eat.
+```
+
+Legal note:
+
+```text
+Selected legacy portfolio work. Brand names and trademarks are shown for identification only and remain the property of their respective owners.
+```
 
 ## Islamiya Series Books
 
@@ -835,6 +869,16 @@ Recent commits include work around:
 * Layout primitives
 * Homepage section migration
 * Navbar and footer responsive system
+* Urban Eat draft carousel progress
+* Reusable case study image carousel
+* Full-width case study CTA polish
+
+Useful tags/checkpoints that may exist or should be created after clean builds:
+
+```text
+urban-eat-draft-carousel-v1
+case-study-carousel-v1
+```
 
 User recently committed the navbar/footer work.
 
@@ -864,7 +908,240 @@ Continue with one section or file at a time.
 
 ---
 
-# 22. Suggested Next Steps
+# 22. Latest Approved Case Study System
+
+This section records the newest approved case study work so it can be continued quickly in a fresh chat.
+
+## Approved Carousel Component
+
+Use this as the main carousel/gallery component:
+
+```text
+src/components/case-study/CaseStudyImageCarousel.tsx
+```
+
+This component is now approved for Urban Eat and future image-led case study sections.
+
+Current features:
+
+* Desktop click-drag with smooth momentum
+* Mobile and tablet swipe gestures
+* Previous/next arrow navigation
+* Clickable progress dots with TBDS gradient active state
+* Lightbox on image click
+* Lightbox thumbnail image buttons
+* Active thumbnail auto-scrolls into view
+* Main lightbox arrows only, no duplicate arrows beside the thumbnails
+* Full image visibility using `object-contain`
+* Image ratio control using `width` and `height`
+* First visible image uses eager loading and high fetch priority for LCP
+* Keyboard navigation with Enter, Space, arrow keys and Esc
+
+Import pattern:
+
+```tsx
+import CaseStudyImageCarousel, {
+  CaseStudyCarouselItem,
+} from "@/components/case-study/CaseStudyImageCarousel";
+```
+
+Data pattern:
+
+```tsx
+const pitchItems = [
+  {
+    label: "costa-pitch-01.webp",
+    src: "/projects/urban-eat/costa-pitch/costa-pitch-01.webp",
+    alt: "Urban Eat Costa pitch presentation slide 1",
+    caption: "Costa pitch presentation slide 1",
+    width: 3508,
+    height: 2480,
+  },
+] satisfies CaseStudyCarouselItem[];
+```
+
+Usage pattern:
+
+```tsx
+<CaseStudyImageCarousel
+  title="Pitch & Presentation Design"
+  items={pitchItems}
+/>
+```
+
+Important carousel rules:
+
+* Do not replace this with a basic scroll container unless there is a strong reason.
+* Keep clickable dots.
+* Keep the lightbox thumbnail strip.
+* Keep only one set of lightbox arrows, the main side arrows.
+* Keep enough bottom padding so thumbnail buttons never cover the main image.
+* If a carousel image appears above the fold, the first image can trigger an LCP warning. The component handles this by using eager loading on the first real image.
+
+## Approved Case Study CTA
+
+Use this component:
+
+```text
+src/components/case-study/CaseStudyCTA.tsx
+```
+
+Current direction:
+
+* Full-width black section
+* Gradient top line
+* Large editorial headline
+* Human supporting copy
+* Animated prompt marquee
+* Gradient-accent button interaction
+* Button text stays black on hover
+* No boxed/cropped inner card
+* Avoid static pills unless they serve a real purpose
+
+Approved CTA copy direction:
+
+```text
+Ready to build something meaningful?
+```
+
+Supporting line direction:
+
+```text
+Got something in mind? Send me the rough idea and I'll help turn it into something clear, sharp and ready to build.
+```
+
+Avoid AI-sounding CTA lines such as:
+
+```text
+I'll help shape the next visual system.
+```
+
+## Urban Eat Draft Current State
+
+Current route:
+
+```text
+/work/drafts/urban-eat-draft
+```
+
+Files:
+
+```text
+src/app/work/drafts/urban-eat-draft/page.tsx
+src/app/work/drafts/urban-eat-draft/UrbanEatDraftClient.tsx
+```
+
+The draft page should stay noindexed.
+
+Noindex metadata pattern:
+
+```tsx
+export const metadata: Metadata = {
+  title: "Urban Eat Draft | Tan Bui Designs",
+  description: "Private draft page for the Urban Eat case study.",
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+    },
+  },
+};
+```
+
+Current progress nav sections:
+
+```tsx
+const progressSections = [
+  { id: "overview", label: "Overview" },
+  { id: "brand-craft", label: "Brand Craft" },
+  { id: "award", label: "Awards" },
+  { id: "packaging-system", label: "Packaging" },
+  { id: "roots", label: "Sub-Brand" },
+  { id: "pitch", label: "Pitching" },
+];
+```
+
+Use:
+
+```tsx
+<CaseStudyProgressNav
+  sections={progressSections}
+  startSectionId="overview"
+  endSectionId="draft-end"
+/>
+```
+
+Urban Eat page order:
+
+```text
+Overview
+01 Brand Craft System
+02 Award-Winning Campaign
+03 Packaging System
+04 Urban Eat Roots
+05 Pitch & Presentation Design
+Legal note
+Project navigation
+CTA
+```
+
+Current Costa pitch images:
+
+```text
+public/projects/urban-eat/costa-pitch/costa-pitch-01.webp
+to
+public/projects/urban-eat/costa-pitch/costa-pitch-15.webp
+```
+
+Browser path:
+
+```text
+/projects/urban-eat/costa-pitch/costa-pitch-01.webp
+```
+
+Known image size:
+
+```text
+3508 × 2480
+```
+
+Use this in carousel data:
+
+```tsx
+width: 3508,
+height: 2480,
+```
+
+Business result wording for the Costa pitch section:
+
+```text
+The presentation helped support a major Costa pitch and led to further business developing new product packaging and labels.
+```
+
+## Build and Save After These Changes
+
+After updating carousel, CTA or Urban Eat draft files, run:
+
+```powershell
+npm run build
+git status
+```
+
+Then commit if clean:
+
+```powershell
+git add -A
+git commit -m "Polish Urban Eat case study components"
+git push origin HEAD
+```
+
+---
+
+# 23. Suggested Next Steps
 
 Good next steps after this handover:
 
@@ -876,9 +1153,12 @@ Good next steps after this handover:
    * Accent button usage rules
 3. Update Navbar handbook documentation based on the final responsive navbar.
 4. Update Footer documentation or add it as a handbook component.
-5. Move on to Work page migration.
-6. Move on to case study page polish.
-7. Add a `docs` folder for project notes if needed.
+5. Add the approved `CaseStudyImageCarousel` notes into the Design Handbook route.
+6. Add the approved Case Study CTA notes into the Design Handbook route.
+7. Continue Urban Eat image sections for Brand Craft, Packaging System and Roots.
+8. Move on to Work page migration.
+9. Move on to case study page polish.
+10. Add a `docs` folder for project notes if needed.
 
 Suggested command after creating this file:
 
