@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import type {
+  CSSProperties,
   KeyboardEvent as ReactKeyboardEvent,
   PointerEvent,
 } from "react";
@@ -22,14 +23,20 @@ export type CaseStudyCarouselItem = {
   height?: number;
 };
 
+type CaseStudyCarouselVariant = "natural" | "standard";
+
 type CaseStudyImageCarouselProps = {
   title: string;
   items: CaseStudyCarouselItem[];
+  variant?: CaseStudyCarouselVariant;
+  tags?: string[];
 };
 
 export default function CaseStudyImageCarousel({
   title,
   items,
+  variant = "natural",
+  tags = [],
 }: CaseStudyImageCarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -50,10 +57,63 @@ export default function CaseStudyImageCarousel({
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isAtStart, setIsAtStart] = useState(true);
   const [lightboxIndex, setLightboxIndex] =
     useState<number | null>(null);
+  const [imageRatios, setImageRatios] = useState<
+    Record<string, number>
+  >({});
 
   const lightboxItems = items.filter((item) => item.src);
+
+  const getItemRatio = useCallback(
+    (item: CaseStudyCarouselItem) => {
+      if (item.width && item.height) {
+        return item.width / item.height;
+      }
+
+      if (item.src && imageRatios[item.src]) {
+        return imageRatios[item.src];
+      }
+
+      return 4 / 3;
+    },
+    [imageRatios]
+  );
+
+  const handleImageRatio = useCallback(
+    (item: CaseStudyCarouselItem, ratio: number) => {
+      if (!item.src || !Number.isFinite(ratio) || ratio <= 0) {
+        return;
+      }
+
+      setImageRatios((currentRatios) => {
+        if (currentRatios[item.src!] === ratio) {
+          return currentRatios;
+        }
+
+        return {
+          ...currentRatios,
+          [item.src!]: ratio,
+        };
+      });
+    },
+    []
+  );
+
+  const syncEdgeGuard = useCallback(() => {
+    const track = trackRef.current;
+
+    if (!track) return;
+
+    const nextIsAtStart = track.scrollLeft <= 4;
+
+    setIsAtStart((currentValue) =>
+      currentValue === nextIsAtStart
+        ? currentValue
+        : nextIsAtStart
+    );
+  }, []);
 
   const clampScroll = useCallback((value: number) => {
     const track = trackRef.current;
@@ -126,11 +186,12 @@ export default function CaseStudyImageCarousel({
           targetScrollLeftRef.current;
 
         syncActiveIndex();
+        syncEdgeGuard();
       }
 
       rafRef.current = null;
     });
-  }, [syncActiveIndex]);
+  }, [syncActiveIndex, syncEdgeGuard]);
 
   const startMomentum = useCallback(
     (initialVelocity: number) => {
@@ -161,6 +222,7 @@ export default function CaseStudyImageCarousel({
 
         if (Math.abs(velocity) < 0.015) {
           syncActiveIndex();
+          syncEdgeGuard();
           momentumRef.current = null;
           return;
         }
@@ -178,6 +240,7 @@ export default function CaseStudyImageCarousel({
         currentTrack.scrollLeft = nextScrollLeft;
 
         syncActiveIndex();
+        syncEdgeGuard();
 
         velocity *= Math.pow(0.92, deltaTime / 16.67);
 
@@ -192,7 +255,12 @@ export default function CaseStudyImageCarousel({
       momentumRef.current =
         window.requestAnimationFrame(step);
     },
-    [cancelMomentum, clampScroll, syncActiveIndex]
+    [
+      cancelMomentum,
+      clampScroll,
+      syncActiveIndex,
+      syncEdgeGuard,
+    ]
   );
 
   const scrollToIndex = useCallback(
@@ -224,9 +292,16 @@ export default function CaseStudyImageCarousel({
 
       window.setTimeout(() => {
         syncActiveIndex();
+        syncEdgeGuard();
       }, 420);
     },
-    [cancelMomentum, clampScroll, items.length, syncActiveIndex]
+    [
+      cancelMomentum,
+      clampScroll,
+      items.length,
+      syncActiveIndex,
+      syncEdgeGuard,
+    ]
   );
 
   const openLightboxByItem = useCallback(
@@ -256,6 +331,7 @@ export default function CaseStudyImageCarousel({
 
       frame = window.requestAnimationFrame(() => {
         syncActiveIndex();
+        syncEdgeGuard();
         frame = 0;
       });
     };
@@ -265,6 +341,7 @@ export default function CaseStudyImageCarousel({
     });
 
     syncActiveIndex();
+    syncEdgeGuard();
 
     return () => {
       track.removeEventListener(
@@ -276,7 +353,7 @@ export default function CaseStudyImageCarousel({
         window.cancelAnimationFrame(frame);
       }
     };
-  }, [items.length, syncActiveIndex]);
+  }, [items.length, syncActiveIndex, syncEdgeGuard]);
 
   useEffect(() => {
     return () => {
@@ -417,12 +494,14 @@ export default function CaseStudyImageCarousel({
 
     if (wasMoved) {
       syncActiveIndex();
+      syncEdgeGuard();
       startMomentum(velocityRef.current);
     }
 
     window.setTimeout(() => {
       movedRef.current = false;
       syncActiveIndex();
+      syncEdgeGuard();
     }, 120);
   };
 
@@ -453,86 +532,122 @@ export default function CaseStudyImageCarousel({
 
   return (
     <div className="relative">
-      <div
-        ref={trackRef}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerEnd}
-        onPointerCancel={handlePointerEnd}
-        className={`
-          flex
-          gap-5
+      <div className="-mx-6 overflow-visible sm:-mx-8">
+        <div className="relative">
+          <div
+            ref={trackRef}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerEnd}
+            onPointerCancel={handlePointerEnd}
+            className={`
+              flex
+              gap-5
 
-          overflow-x-auto
+              overflow-x-auto
 
-          pr-10
-          pt-3
-          pb-10
+              px-6
+              pr-14
+              pt-3
+              pb-12
 
-          select-none
-          touch-pan-y
+              sm:px-8
+              sm:pr-20
 
-          [scrollbar-width:none]
-          [-ms-overflow-style:none]
+              select-none
+              touch-pan-y
 
-          [&::-webkit-scrollbar]:hidden
+              [scrollbar-width:none]
+              [-ms-overflow-style:none]
 
-          ${isDragging ? "cursor-grabbing" : "cursor-grab"}
-        `}
-        style={{
-          WebkitMaskImage:
-            "linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)",
-          maskImage:
-            "linear-gradient(to right, black 0%, black calc(100% - 32px), transparent 100%)",
-        }}
-      >
-        {items.map((item, index) => {
-          const canOpen = Boolean(item.src);
+              [&::-webkit-scrollbar]:hidden
 
-          return (
-            <div
-              key={`${item.label}-${index}`}
-              ref={(node) => {
-                cardRefs.current[index] = node;
-              }}
-              data-reel-index={index}
-              role={canOpen ? "button" : undefined}
-              tabIndex={canOpen ? 0 : undefined}
-              onKeyDown={(event) =>
-                handleCardKeyDown(event, item)
-              }
-              className={`
-                group
-                relative
-                block
-                flex-shrink-0
-                text-left
-                outline-none
-                ${canOpen ? "cursor-pointer" : "cursor-grab"}
-              `}
-              aria-label={
-                canOpen ? `Open ${item.alt}` : item.alt
-              }
-            >
-              <CarouselImageBlock
-                label={item.label}
-                ratio={
-                  item.width && item.height
-                    ? "auto"
-                    : index === 0
-                      ? "tall"
-                      : "portrait"
-                }
-                width={item.width}
-                height={item.height}
-                src={item.src}
-                alt={item.alt}
-                interactive={canOpen}
-                eager={index === 0 && canOpen}
-              />
-            </div>
-          );
-        })}
+              ${isDragging ? "cursor-grabbing" : "cursor-grab"}
+            `}
+            style={{
+              WebkitMaskImage:
+                "linear-gradient(to right, black 0%, black calc(100% - 40px), transparent 100%)",
+              maskImage:
+                "linear-gradient(to right, black 0%, black calc(100% - 40px), transparent 100%)",
+            }}
+          >
+            {items.map((item, index) => {
+              const canOpen = Boolean(item.src);
+              const itemRatio = getItemRatio(item);
+
+              return (
+                <div
+                  key={`${item.label}-${index}`}
+                  ref={(node) => {
+                    cardRefs.current[index] = node;
+                  }}
+                  data-reel-index={index}
+                  role={canOpen ? "button" : undefined}
+                  tabIndex={canOpen ? 0 : undefined}
+                  onKeyDown={(event) =>
+                    handleCardKeyDown(event, item)
+                  }
+                  className={`
+                    group
+                    relative
+                    block
+                    flex-shrink-0
+                    text-left
+                    outline-none
+                    ${canOpen ? "cursor-pointer" : "cursor-grab"}
+                  `}
+                  aria-label={
+                    canOpen ? `Open ${item.alt}` : item.alt
+                  }
+                >
+                  <CarouselImageBlock
+                    label={item.label}
+                    ratio={
+                      item.width && item.height
+                        ? "auto"
+                        : index === 0
+                          ? "tall"
+                          : "portrait"
+                    }
+                    naturalRatio={itemRatio}
+                    width={item.width}
+                    height={item.height}
+                    src={item.src}
+                    alt={item.alt}
+                    interactive={canOpen}
+                    eager={index === 0 && canOpen}
+                    variant={variant}
+                    onRatioChange={(ratio) =>
+                      handleImageRatio(item, ratio)
+                    }
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+          <div
+            aria-hidden="true"
+            className={`
+              pointer-events-none
+              absolute
+              bottom-0
+              left-0
+              top-0
+              z-20
+
+              w-6
+              bg-white
+
+              transition-opacity
+              duration-300
+
+              sm:w-8
+
+              ${isAtStart ? "opacity-0" : "opacity-100"}
+            `}
+          />
+        </div>
       </div>
 
       {items.length > 1 && (
@@ -549,6 +664,7 @@ export default function CaseStudyImageCarousel({
         <CarouselLightbox
           title={title}
           items={lightboxItems}
+          tags={tags}
           startIndex={lightboxIndex}
           onClose={() => setLightboxIndex(null)}
         />
@@ -669,11 +785,13 @@ function CarouselControls({
 function CarouselLightbox({
   title,
   items,
+  tags,
   startIndex,
   onClose,
 }: {
   title: string;
   items: CaseStudyCarouselItem[];
+  tags: string[];
   startIndex: number;
   onClose: () => void;
 }) {
@@ -806,20 +924,20 @@ function CarouselLightbox({
       <button
         type="button"
         onClick={onClose}
-        className="absolute right-5 top-5 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-2xl leading-none text-white transition duration-300 hover:bg-white hover:text-black"
+        className="absolute right-5 top-5 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-2xl leading-none text-white transition duration-300 hover:bg-white hover:text-black"
         aria-label="Close lightbox"
       >
         ×
       </button>
 
-      <div className="absolute left-5 top-5 z-30 max-w-[70vw] pr-16">
+      <div className="absolute left-5 top-5 z-30 w-[calc(100vw-6.5rem)] max-w-2xl pr-4">
         <p className="text-xs uppercase tracking-[0.2em] text-white/50">
           {title}
         </p>
 
-        <p className="mt-2 text-sm text-white/80">
-          {activeItem.caption ?? activeItem.label}
-        </p>
+        {tags.length > 0 && (
+          <LightboxTagMarquee tags={tags} />
+        )}
       </div>
 
       {items.length > 1 && (
@@ -904,14 +1022,14 @@ function CarouselLightbox({
           justify-center
 
           px-4
-          pt-24
+          pt-28
           pb-44
 
           active:cursor-grabbing
 
           sm:pb-40
           md:px-16
-          md:pt-28
+          md:pt-32
           md:pb-36
         "
       >
@@ -997,7 +1115,7 @@ function CarouselLightbox({
 
                     sm:h-16
                     sm:w-24
-                    md:h-18
+                    md:h-[4.5rem]
                     md:w-28
                   "
                   style={
@@ -1066,31 +1184,116 @@ function CarouselLightbox({
           </p>
         </div>
       </div>
+
+      <style>
+        {`
+          @keyframes tbds-lightbox-tags {
+            0% {
+              transform: translateX(0);
+            }
+
+            100% {
+              transform: translateX(-50%);
+            }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            [style*="tbds-lightbox-tags"] {
+              animation: none !important;
+            }
+          }
+        `}
+      </style>
     </div>,
     document.body
+  );
+}
+
+function LightboxTagMarquee({ tags }: { tags: string[] }) {
+  const scrollingTags = [...tags, ...tags];
+
+  return (
+    <div
+      className="
+        mt-4
+        max-w-full
+        overflow-hidden
+      "
+      style={{
+        WebkitMaskImage:
+          "linear-gradient(to right, black 0%, black 82%, transparent 100%)",
+        maskImage:
+          "linear-gradient(to right, black 0%, black 82%, transparent 100%)",
+      }}
+    >
+      <div
+        className="
+          flex
+          w-max
+          gap-2
+          will-change-transform
+        "
+        style={{
+          animation:
+            "tbds-lightbox-tags 24s linear infinite",
+        }}
+      >
+        {scrollingTags.map((tag, index) => (
+          <span
+            key={`${tag}-${index}`}
+            className="
+              flex
+              min-h-8
+              flex-shrink-0
+              items-center
+
+              rounded-full
+              border
+              border-white/15
+              bg-white/[0.04]
+              px-3
+
+              text-xs
+              text-white/60
+              backdrop-blur-sm
+            "
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+    </div>
   );
 }
 
 function CarouselImageBlock({
   label,
   ratio,
+  naturalRatio,
   src,
   alt,
   width,
   height,
   interactive = false,
   eager = false,
+  variant = "natural",
+  onRatioChange,
 }: {
   label: string;
   ratio: "hero" | "wide" | "portrait" | "tall" | "auto";
+  naturalRatio: number;
   src?: string;
   alt?: string;
   width?: number;
   height?: number;
   interactive?: boolean;
   eager?: boolean;
+  variant?: CaseStudyCarouselVariant;
+  onRatioChange?: (ratio: number) => void;
 }) {
-  const ratioClass = {
+  const isNatural = variant === "natural";
+
+  const standardRatioClass = {
     hero: "aspect-[16/9] w-full",
     wide: "aspect-[16/10] w-full",
     portrait:
@@ -1101,31 +1304,55 @@ function CarouselImageBlock({
       "w-[82vw] sm:w-[58vw] md:w-[46vw] lg:w-[42vw] xl:w-[560px]",
   }[ratio];
 
-  const aspectRatio =
+  const standardAspectRatio =
     width && height ? `${width} / ${height}` : undefined;
+
+  const naturalStyle = {
+    aspectRatio: String(naturalRatio),
+  } satisfies CSSProperties;
+
+  const standardStyle = {
+    aspectRatio: standardAspectRatio,
+  } satisfies CSSProperties;
+
+  const imageFrameClass = isNatural
+    ? `
+      h-[clamp(260px,58vw,430px)]
+      rounded-[1.5rem]
+      bg-white
+      shadow-[0_10px_30px_rgba(0,0,0,0.07)]
+      ring-1
+      ring-black/5
+    `
+    : `
+      rounded-[1.5rem]
+      bg-white
+      shadow-[0_10px_30px_rgba(0,0,0,0.07)]
+      ring-1
+      ring-black/5
+      ${standardRatioClass}
+    `;
 
   return (
     <div
       className={`
         relative
         overflow-hidden
-        bg-gray-100
         transition-all
         duration-500
         ease-[cubic-bezier(0.22,1,0.36,1)]
+
         ${
           src
             ? `
-              border
-              border-gray-100
-              shadow-[0_3px_10px_rgba(0,0,0,0.025)]
-              group-hover:shadow-[0_5px_14px_rgba(0,0,0,0.04)]
+              group-hover:shadow-[0_14px_36px_rgba(0,0,0,0.09)]
             `
             : ""
         }
-        ${ratioClass}
+
+        ${imageFrameClass}
       `}
-      style={{ aspectRatio }}
+      style={isNatural ? naturalStyle : standardStyle}
     >
       {src ? (
         <>
@@ -1136,18 +1363,73 @@ function CarouselImageBlock({
             draggable={false}
             loading={eager ? "eager" : "lazy"}
             fetchPriority={eager ? "high" : "auto"}
-            sizes="
-              (max-width: 640px) 82vw,
-              (max-width: 1024px) 58vw,
-              560px
+            sizes={
+              isNatural
+                ? `
+                  (max-width: 640px) 82vw,
+                  (max-width: 1024px) 58vw,
+                  620px
+                `
+                : `
+                  (max-width: 640px) 82vw,
+                  (max-width: 1024px) 58vw,
+                  560px
+                `
+            }
+            onLoad={(event) => {
+              const image = event.currentTarget;
+
+              if (
+                image.naturalWidth &&
+                image.naturalHeight
+              ) {
+                onRatioChange?.(
+                  image.naturalWidth /
+                    image.naturalHeight
+                );
+              }
+            }}
+            className="
+              object-contain
+              transition
+              duration-700
+              ease-[cubic-bezier(0.22,1,0.36,1)]
+
+              group-hover:scale-[1.018]
             "
-            className="object-contain transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.006]"
           />
 
           {interactive && (
             <span
               aria-hidden="true"
-              className="absolute right-3 top-3 flex h-9 w-9 translate-y-1 items-center justify-center rounded-full bg-white/80 text-sm text-black opacity-0 shadow-sm backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 max-md:hidden"
+              className="
+                absolute
+                right-3
+                top-3
+                flex
+                h-9
+                w-9
+                translate-y-1
+                items-center
+                justify-center
+
+                rounded-full
+                bg-white/80
+                text-sm
+                text-black
+                opacity-0
+
+                shadow-sm
+                backdrop-blur-md
+
+                transition-all
+                duration-300
+
+                group-hover:translate-y-0
+                group-hover:opacity-100
+
+                max-md:hidden
+              "
             >
               ↗
             </span>
