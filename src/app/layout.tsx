@@ -17,6 +17,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Tan Bui Designs",
   description: "Multimedia design consultant.",
+  icons: {
+    icon: "/tbd.svg",
+    shortcut: "/tbd.svg",
+    apple: "/tbd.svg",
+  },
 };
 
 export default function RootLayout({
@@ -26,7 +31,8 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en" data-scroll-behavior="smooth"
+      lang="en"
+      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
