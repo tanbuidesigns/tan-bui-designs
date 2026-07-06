@@ -6,46 +6,61 @@ import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import AnimatedLabel from "@/components/AnimatedLabel";
 
-type CaseStudyNavigationProps = {
-  previousProject: {
-    title: string;
-    slug: string;
-    category: string;
-  };
-
-  nextProject: {
-    title: string;
-    slug: string;
-    category: string;
-  };
-};
-
 type Project = {
   title: string;
   slug: string;
   category: string;
 };
 
+type CaseStudyNavigationProps = {
+  previousProject?: Project | null;
+  nextProject?: Project | null;
+  currentSlug?: string;
+};
+
 export default function CaseStudyNavigation({
   previousProject,
   nextProject,
+  currentSlug,
 }: CaseStudyNavigationProps) {
+  const visiblePreviousProject =
+    previousProject && previousProject.slug !== currentSlug
+      ? previousProject
+      : null;
+
+  const visibleNextProject =
+    nextProject && nextProject.slug !== currentSlug
+      ? nextProject
+      : null;
+
+  if (!visiblePreviousProject && !visibleNextProject) {
+    return null;
+  }
+
   return (
     <Reveal>
       <section className="max-w-6xl mx-auto px-8 py-24">
         <div className="border-t border-gray-100 pt-12">
           <div className="grid gap-6 md:grid-cols-2">
-            <ProjectNavCard
-              project={previousProject}
-              label="PREVIOUS PROJECT"
-              direction="previous"
-            />
+            {visiblePreviousProject ? (
+              <ProjectNavCard
+                project={visiblePreviousProject}
+                label="PREVIOUS PROJECT"
+                direction="previous"
+              />
+            ) : (
+              <div className="hidden md:block" />
+            )}
 
-            <ProjectNavCard
-              project={nextProject}
-              label="NEXT PROJECT"
-              direction="next"
-            />
+            {visibleNextProject ? (
+              <ProjectNavCard
+                project={visibleNextProject}
+                label="NEXT PROJECT"
+                direction="next"
+              />
+            ) : (
+              <div className="hidden md:block" />
+            )}
           </div>
         </div>
       </section>

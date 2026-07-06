@@ -19,20 +19,21 @@ export default function CaseStudyQuote({
 
   return (
     <Reveal>
-      <section className="max-w-6xl mx-auto px-8 py-32">
+      <section className="max-w-6xl mx-auto px-8 py-16 md:py-20">
         <div
           className="
             border-t
             border-b
             border-gray-100
-            py-20
+            py-12
+            md:py-14
           "
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
           <AnimatedStroke
             active={isHovered}
-            className="mb-14"
+            className="mb-8 md:mb-10"
           />
 
           <blockquote
@@ -67,7 +68,7 @@ export default function CaseStudyQuote({
           {author && (
             <p
               className="
-                mt-10
+                mt-8
                 text-gray-500
                 text-lg
 
@@ -88,7 +89,7 @@ export default function CaseStudyQuote({
           <AnimatedStroke
             active={isHovered}
             align="right"
-            className="mt-14"
+            className="mt-8 md:mt-10"
           />
         </div>
       </section>

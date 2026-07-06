@@ -29,7 +29,14 @@ export default function CaseStudyPreviewStrip({
 
   const dragStartX = useRef(0);
 
+  const dragStartY = useRef(0);
+
   const dragStartScroll = useRef(0);
+
+  const wheelResumeTimeout =
+    useRef<ReturnType<typeof setTimeout> | null>(
+      null
+    );
 
   useEffect(() => {
     const container = scrollRef.current;
@@ -75,6 +82,16 @@ export default function CaseStudyPreviewStrip({
       cancelAnimationFrame(frame);
   }, [isDragging]);
 
+  useEffect(() => {
+    return () => {
+      if (wheelResumeTimeout.current) {
+        clearTimeout(
+          wheelResumeTimeout.current
+        );
+      }
+    };
+  }, []);
+
   const handleMouseDown = (
     e: React.MouseEvent<HTMLDivElement>
   ) => {
@@ -113,6 +130,131 @@ export default function CaseStudyPreviewStrip({
 
     scrollPosition.current =
       container.scrollLeft;
+  };
+
+  const handleTouchStart = (
+    e: React.TouchEvent<HTMLDivElement>
+  ) => {
+    const container =
+      scrollRef.current;
+
+    if (!container) return;
+
+    setIsDragging(true);
+
+    dragStartX.current =
+      e.touches[0].pageX;
+
+    dragStartY.current =
+      e.touches[0].pageY;
+
+    dragStartScroll.current =
+      container.scrollLeft;
+  };
+
+  const handleTouchMove = (
+    e: React.TouchEvent<HTMLDivElement>
+  ) => {
+    const container =
+      scrollRef.current;
+
+    if (
+      !container ||
+      !isDragging
+    )
+      return;
+
+    const distanceX =
+      e.touches[0].pageX -
+      dragStartX.current;
+
+    const distanceY =
+      e.touches[0].pageY -
+      dragStartY.current;
+
+    if (
+      Math.abs(distanceX) >
+      Math.abs(distanceY)
+    ) {
+      e.preventDefault();
+
+      container.scrollLeft =
+        dragStartScroll.current -
+        distanceX;
+
+      scrollPosition.current =
+        container.scrollLeft;
+    }
+  };
+
+  const handleWheel = (
+    e: React.WheelEvent<HTMLDivElement>
+  ) => {
+    const container =
+      scrollRef.current;
+
+    if (!container) return;
+
+    const isHorizontalScroll =
+      Math.abs(e.deltaX) >
+      Math.abs(e.deltaY);
+
+    const isShiftScroll =
+      e.shiftKey &&
+      Math.abs(e.deltaY) > 0;
+
+    if (
+      !isHorizontalScroll &&
+      !isShiftScroll
+    ) {
+      return;
+    }
+
+    e.preventDefault();
+
+    setIsDragging(true);
+
+    const scrollAmount =
+      isHorizontalScroll
+        ? e.deltaX
+        : e.deltaY;
+
+    container.scrollLeft +=
+      scrollAmount;
+
+    const halfway =
+      container.scrollWidth / 2;
+
+    if (halfway > 0) {
+      if (
+        container.scrollLeft >=
+        halfway
+      ) {
+        container.scrollLeft -=
+          halfway;
+      }
+
+      if (
+        container.scrollLeft <= 0
+      ) {
+        container.scrollLeft +=
+          halfway;
+      }
+    }
+
+    scrollPosition.current =
+      container.scrollLeft;
+
+    if (wheelResumeTimeout.current) {
+      clearTimeout(
+        wheelResumeTimeout.current
+      );
+    }
+
+    wheelResumeTimeout.current =
+      setTimeout(() => {
+        setIsDragging(false);
+      }, 700);
   };
 
   const stopDragging = () => {
@@ -179,6 +321,21 @@ export default function CaseStudyPreviewStrip({
             onMouseUp={stopDragging}
             onMouseLeave={
               stopDragging
+            }
+            onTouchStart={
+              handleTouchStart
+            }
+            onTouchMove={
+              handleTouchMove
+            }
+            onTouchEnd={
+              stopDragging
+            }
+            onTouchCancel={
+              stopDragging
+            }
+            onWheel={
+              handleWheel
             }
             className="
               flex
