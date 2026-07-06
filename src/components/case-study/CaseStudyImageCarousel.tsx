@@ -551,7 +551,7 @@ export default function CaseStudyImageCarousel({
 
               overflow-x-auto
 
-              pl-0
+              pl-8
               pr-10
               pt-3
               pb-12
@@ -1132,7 +1132,9 @@ function CarouselLightbox({
           "
         >
           <div
-            className="
+            className={`
+              tbds-lightbox-thumbnail-track
+
               flex
               gap-3
               overflow-x-auto
@@ -1143,7 +1145,9 @@ function CarouselLightbox({
               [-ms-overflow-style:none]
 
               [&::-webkit-scrollbar]:hidden
-            "
+
+              ${items.length <= 10 ? "tbds-lightbox-thumbnail-track-centerable" : ""}
+            `}
             aria-label="Lightbox image thumbnails"
           >
             {items.map((item, index) => {
@@ -1291,6 +1295,10 @@ function CarouselLightbox({
               bottom: 0.45rem !important;
               padding-left: 0.75rem !important;
               padding-right: 0.75rem !important;
+            }
+
+            .tbds-lightbox-thumbnail-track-centerable {
+              justify-content: center !important;
             }
 
             .tbds-lightbox-thumbnail {
