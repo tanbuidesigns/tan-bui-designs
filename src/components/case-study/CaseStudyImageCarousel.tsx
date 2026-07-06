@@ -436,6 +436,11 @@ export default function CaseStudyImageCarousel({
     const absX = Math.abs(distanceX);
     const absY = Math.abs(distanceY);
 
+    if (absY > 8 && absY > absX) {
+      movedRef.current = true;
+      return;
+    }
+
     if (absX > 3 && absX > absY) {
       movedRef.current = true;
       event.preventDefault();
@@ -532,7 +537,7 @@ export default function CaseStudyImageCarousel({
 
   return (
     <div className="relative">
-      <div className="-mx-6 overflow-visible sm:-mx-8">
+      <div className="-mx-8 overflow-visible sm:-mx-8">
         <div className="relative">
           <div
             ref={trackRef}
@@ -546,8 +551,8 @@ export default function CaseStudyImageCarousel({
 
               overflow-x-auto
 
-              px-6
-              pr-14
+              pl-0
+              pr-10
               pt-3
               pb-12
 
@@ -636,12 +641,13 @@ export default function CaseStudyImageCarousel({
               top-0
               z-20
 
-              w-6
+              hidden
               bg-white
 
               transition-opacity
               duration-300
 
+              sm:block
               sm:w-8
 
               ${isAtStart ? "opacity-0" : "opacity-100"}
@@ -801,6 +807,8 @@ function CarouselLightbox({
 
   const pointerStartXRef = useRef(0);
   const pointerStartYRef = useRef(0);
+  const stagePointerIdRef = useRef<number | null>(null);
+  const stageMovedRef = useRef(false);
   const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>(
     []
   );
@@ -871,6 +879,8 @@ function CarouselLightbox({
   const handleStagePointerDown = (
     event: PointerEvent<HTMLDivElement>
   ) => {
+    stagePointerIdRef.current = event.pointerId;
+    stageMovedRef.current = false;
     pointerStartXRef.current = event.clientX;
     pointerStartYRef.current = event.clientY;
 
@@ -879,9 +889,13 @@ function CarouselLightbox({
     );
   };
 
-  const handleStagePointerUp = (
+  const handleStagePointerMove = (
     event: PointerEvent<HTMLDivElement>
   ) => {
+    if (stagePointerIdRef.current !== event.pointerId) {
+      return;
+    }
+
     const distanceX =
       event.clientX - pointerStartXRef.current;
 
@@ -889,7 +903,46 @@ function CarouselLightbox({
       event.clientY - pointerStartYRef.current;
 
     if (
-      Math.abs(distanceX) > 60 &&
+      Math.abs(distanceX) > 8 &&
+      Math.abs(distanceX) > Math.abs(distanceY)
+    ) {
+      stageMovedRef.current = true;
+      event.preventDefault();
+    }
+  };
+
+  const handleStagePointerCancel = (
+    event: PointerEvent<HTMLDivElement>
+  ) => {
+    if (
+      event.currentTarget.hasPointerCapture(
+        event.pointerId
+      )
+    ) {
+      event.currentTarget.releasePointerCapture(
+        event.pointerId
+      );
+    }
+
+    stagePointerIdRef.current = null;
+    stageMovedRef.current = false;
+  };
+
+  const handleStagePointerUp = (
+    event: PointerEvent<HTMLDivElement>
+  ) => {
+    if (stagePointerIdRef.current !== event.pointerId) {
+      return;
+    }
+
+    const distanceX =
+      event.clientX - pointerStartXRef.current;
+
+    const distanceY =
+      event.clientY - pointerStartYRef.current;
+
+    if (
+      Math.abs(distanceX) > 44 &&
       Math.abs(distanceX) > Math.abs(distanceY)
     ) {
       if (distanceX > 0) {
@@ -908,6 +961,9 @@ function CarouselLightbox({
         event.pointerId
       );
     }
+
+    stagePointerIdRef.current = null;
+    stageMovedRef.current = false;
   };
 
   if (!mounted || !activeItem?.src) {
@@ -930,7 +986,7 @@ function CarouselLightbox({
         ×
       </button>
 
-      <div className="absolute left-5 top-5 z-30 w-[calc(100vw-6.5rem)] max-w-2xl pr-4">
+      <div className="tbds-lightbox-top absolute left-5 top-5 z-30 w-[calc(100vw-6.5rem)] max-w-2xl pr-4">
         <p className="text-xs uppercase tracking-[0.2em] text-white/50">
           {title}
         </p>
@@ -1012,8 +1068,12 @@ function CarouselLightbox({
 
       <div
         onPointerDown={handleStagePointerDown}
+        onPointerMove={handleStagePointerMove}
         onPointerUp={handleStagePointerUp}
+        onPointerCancel={handleStagePointerCancel}
         className="
+          tbds-lightbox-stage
+
           flex
           h-full
           w-full
@@ -1032,6 +1092,9 @@ function CarouselLightbox({
           md:pt-32
           md:pb-36
         "
+        style={{
+          touchAction: "none",
+        }}
       >
         <div className="relative h-full w-full max-w-7xl">
           <Image
@@ -1048,6 +1111,8 @@ function CarouselLightbox({
 
       <div
         className="
+          tbds-lightbox-bottom
+
           absolute
           bottom-4
           left-0
@@ -1093,6 +1158,8 @@ function CarouselLightbox({
                   type="button"
                   onClick={() => setActiveIndex(index)}
                   className="
+                    tbds-lightbox-thumbnail
+
                     relative
                     h-14
                     w-20
@@ -1170,6 +1237,8 @@ function CarouselLightbox({
 
           <p
             className="
+              tbds-lightbox-count
+
               mt-3
               text-center
               text-xs
@@ -1177,7 +1246,7 @@ function CarouselLightbox({
             "
           >
             {activeIndex + 1} / {items.length}
-            <span className="hidden sm:inline">
+            <span className="tbds-lightbox-count-instruction hidden sm:inline">
               {" "}
               · Swipe, use arrows, or press Esc to close
             </span>
@@ -1202,6 +1271,42 @@ function CarouselLightbox({
               animation: none !important;
             }
           }
+
+          @media (orientation: landscape) and (max-height: 520px) and (max-width: 950px) {
+            .tbds-lightbox-top {
+              top: 0.75rem !important;
+              left: 0.875rem !important;
+              width: calc(100vw - 4.5rem) !important;
+            }
+
+            .tbds-lightbox-tag-marquee {
+              display: none !important;
+            }
+
+            .tbds-lightbox-stage {
+              padding: 3rem 0.75rem 4.5rem !important;
+            }
+
+            .tbds-lightbox-bottom {
+              bottom: 0.45rem !important;
+              padding-left: 0.75rem !important;
+              padding-right: 0.75rem !important;
+            }
+
+            .tbds-lightbox-thumbnail {
+              height: 2.35rem !important;
+              width: 3.35rem !important;
+            }
+
+            .tbds-lightbox-count {
+              margin-top: 0.2rem !important;
+              font-size: 0.68rem !important;
+            }
+
+            .tbds-lightbox-count-instruction {
+              display: none !important;
+            }
+          }
         `}
       </style>
     </div>,
@@ -1215,6 +1320,8 @@ function LightboxTagMarquee({ tags }: { tags: string[] }) {
   return (
     <div
       className="
+        tbds-lightbox-tag-marquee
+
         mt-4
         max-w-full
         overflow-hidden
