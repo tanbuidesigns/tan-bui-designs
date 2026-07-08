@@ -1,6 +1,7 @@
 "use client";
 
-import Link from "next/link";
+import type { ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import AnimatedHeadline from "@/components/AnimatedHeadline";
 import AnimatedLabel from "@/components/AnimatedLabel";
@@ -9,8 +10,13 @@ import CaseStudyCTA from "@/components/case-study/CaseStudyCTA";
 import CaseStudyImageCarousel, {
   CaseStudyCarouselItem,
 } from "@/components/case-study/CaseStudyImageCarousel";
+import CaseStudyNavigation from "@/components/case-study/CaseStudyNavigation";
 import CaseStudyProgressNav from "@/components/case-study/CaseStudyProgressNav";
 import ReadingProgressBar from "@/components/case-study/ReadingProgressBar";
+
+import { projects } from "@/data/projects";
+
+const currentProjectSlug = "urban-eat";
 
 const progressSections = [
   { id: "overview", label: "Overview" },
@@ -182,6 +188,18 @@ const costaPitchItems: CaseStudyCarouselItem[] = Array.from(
   }
 );
 
+const otherProject =
+  projects.find((project) => project.slug !== currentProjectSlug) ??
+  null;
+
+const navigationProject = otherProject
+  ? {
+      title: otherProject.title,
+      slug: otherProject.slug,
+      category: otherProject.category,
+    }
+  : null;
+
 export default function UrbanEatClient() {
   return (
     <main className="min-h-screen bg-white text-black">
@@ -190,7 +208,7 @@ export default function UrbanEatClient() {
       <CaseStudyProgressNav
         sections={progressSections}
         startSectionId="overview"
-        endSectionId="draft-end"
+        endSectionId="case-study-end"
       />
 
       <section className="mx-auto max-w-6xl px-8 pb-24 pt-32">
@@ -226,7 +244,7 @@ export default function UrbanEatClient() {
               </AnimatedLabel>
 
               <AnimatedHeadline className="max-w-3xl text-5xl font-bold leading-[0.95] md:text-7xl">
-                A full visual world for food-to-go.
+                A full visual world for food-to-go
               </AnimatedHeadline>
             </div>
 
@@ -239,22 +257,7 @@ export default function UrbanEatClient() {
                 practical enough for a fast-moving FMCG environment.
               </p>
 
-              <div className="mt-12 grid gap-4 sm:grid-cols-2">
-                {overviewItems.map((item) => (
-                  <div
-                    key={item.label}
-                    className="border-t border-gray-100 pt-5"
-                  >
-                    <p className="text-xs uppercase tracking-[0.18em] text-gray-400">
-                      {item.label}
-                    </p>
-
-                    <p className="mt-3 text-base leading-relaxed text-black">
-                      {item.value}
-                    </p>
-                  </div>
-                ))}
-              </div>
+              <OverviewGridCaseStudy items={overviewItems} />
 
               <div className="mt-12 flex flex-wrap gap-3">
                 {serviceTags.map((tag) => (
@@ -281,7 +284,7 @@ export default function UrbanEatClient() {
           </AnimatedLabel>
 
           <AnimatedHeadline className="max-w-5xl text-5xl font-bold leading-[0.95] md:text-7xl">
-            Real food, hand crafted.
+            Real food, hand crafted
           </AnimatedHeadline>
 
           <p className="mt-12 max-w-3xl text-xl leading-relaxed text-gray-600">
@@ -312,15 +315,18 @@ export default function UrbanEatClient() {
           </AnimatedLabel>
 
           <AnimatedHeadline className="max-w-5xl text-5xl font-bold leading-[0.95] md:text-7xl">
-            Recognised campaign work.
+            Recognised campaign work
           </AnimatedHeadline>
 
           <p className="mt-12 max-w-3xl text-xl leading-relaxed text-gray-600">
             The Urban Eat campaign work was part of a wider creative
             period that helped the brand stand out in food-to-go retail.
+          </p>
+
+          <AnimatedQuote className="mt-12">
             The work was recognised with a Sammies 2016 Marketing
             Award.
-          </p>
+          </AnimatedQuote>
 
           <div className="mt-16">
             <CaseStudyImageCarousel
@@ -342,7 +348,7 @@ export default function UrbanEatClient() {
           </AnimatedLabel>
 
           <AnimatedHeadline className="max-w-5xl text-5xl font-bold leading-[0.95] md:text-7xl">
-            A-to-Z FMCG packaging process.
+            A-to-Z FMCG packaging process
           </AnimatedHeadline>
 
           <p className="mt-12 max-w-3xl text-xl leading-relaxed text-gray-600">
@@ -372,7 +378,7 @@ export default function UrbanEatClient() {
           </AnimatedLabel>
 
           <AnimatedHeadline className="max-w-5xl text-5xl font-bold leading-[0.95] md:text-7xl">
-            A softer sub-brand language for Roots.
+            A softer sub-brand language for Roots
           </AnimatedHeadline>
 
           <p className="mt-12 max-w-3xl text-xl leading-relaxed text-gray-600">
@@ -402,7 +408,7 @@ export default function UrbanEatClient() {
           </AnimatedLabel>
 
           <AnimatedHeadline className="max-w-5xl text-5xl font-bold leading-[0.95] md:text-7xl">
-            Commercial storytelling for a major pitch.
+            Commercial storytelling for a major pitch
           </AnimatedHeadline>
 
           <p className="mt-12 max-w-3xl text-xl leading-relaxed text-gray-600">
@@ -412,11 +418,11 @@ export default function UrbanEatClient() {
             messaging.
           </p>
 
-          <ResultCallout>
+          <AnimatedQuote className="mt-12">
             The presentation helped support a major Costa pitch and led
             to further business developing new product packaging and
             labels.
-          </ResultCallout>
+          </AnimatedQuote>
 
           <div className="mt-16">
             <CaseStudyImageCarousel
@@ -430,94 +436,343 @@ export default function UrbanEatClient() {
 
       <section className="mx-auto max-w-6xl border-t border-gray-100 px-8 py-12">
         <Reveal>
-          <p className="max-w-3xl text-sm leading-relaxed text-gray-400">
-            Selected legacy portfolio work. Brand names and trademarks
-            are shown for identification only and remain the property of
-            their respective owners.
-          </p>
+          <LegacyNotice />
         </Reveal>
       </section>
 
-      <div id="draft-end" />
+      <div id="case-study-end" />
 
-      <section className="mx-auto max-w-6xl border-t border-gray-100 px-8 py-16">
-        <Reveal>
-          <div className="grid gap-4 md:grid-cols-2">
-            <ProjectNavCard
-              eyebrow="Previous project"
-              title="Menarini Healthcare Exhibition"
-              href="/work/menarini-healthcare-exhibition"
-              align="left"
-            />
-
-            <ProjectNavCard
-              eyebrow="Next project"
-              title="Islamiya Series Books"
-              href="/work/islamiyah-series"
-              align="right"
-            />
-          </div>
-        </Reveal>
-      </section>
+      <CaseStudyNavigation
+        currentSlug={currentProjectSlug}
+        previousProject={navigationProject}
+        nextProject={null}
+      />
 
       <CaseStudyCTA />
+
+      <style>
+        {`
+          @keyframes tbds-animated-quote-pulse {
+            0% {
+              opacity: 0.65;
+              transform: translateY(8px);
+              box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+            }
+
+            38% {
+              opacity: 1;
+              transform: translateY(0);
+              box-shadow:
+                0 22px 70px rgba(0, 0, 0, 0.08),
+                0 0 48px rgba(99, 102, 241, 0.12);
+            }
+
+            100% {
+              opacity: 1;
+              transform: translateY(0);
+              box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+            }
+          }
+
+          @keyframes tbds-overview-grid-cell-pulse {
+            0% {
+              transform: translateY(8px);
+              box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+              border-color: rgba(229, 231, 235, 1);
+            }
+
+            42% {
+              transform: translateY(0);
+              box-shadow:
+                0 18px 50px rgba(0, 0, 0, 0.07),
+                0 0 36px rgba(99, 102, 241, 0.10);
+              border-color: rgba(209, 213, 219, 1);
+            }
+
+            100% {
+              transform: translateY(0);
+              box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+              border-color: rgba(229, 231, 235, 1);
+            }
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            .tbds-animated-quote,
+            .tbds-overview-grid-case-study-cell {
+              animation: none !important;
+            }
+          }
+        `}
+      </style>
     </main>
   );
 }
 
-function ResultCallout({
-  children,
+function OverviewGridCaseStudy({
+  items,
 }: {
-  children: React.ReactNode;
+  items: typeof overviewItems;
 }) {
+  const { ref, isPulsing } = useScrollPulse({
+    duration: 1800,
+    threshold: 0.28,
+  });
+
+  const [activeIndex, setActiveIndex] =
+    useState<number | null>(null);
+
   return (
-    <div className="mt-12 max-w-3xl border-l-2 border-black pl-6">
-      <p className="text-lg leading-relaxed text-black">
+    <div
+      ref={ref}
+      className="overview-grid-case-study mt-12 grid overflow-hidden rounded-[1.35rem] border border-gray-200 sm:grid-cols-2"
+    >
+      {items.map((item, index) => {
+        const isActive = activeIndex === index;
+
+        return (
+          <button
+            key={item.label}
+            type="button"
+            onMouseEnter={() => setActiveIndex(index)}
+            onMouseLeave={() => setActiveIndex(null)}
+            onFocus={() => setActiveIndex(index)}
+            onBlur={() => setActiveIndex(null)}
+            onClick={() =>
+              setActiveIndex((currentIndex) =>
+                currentIndex === index ? null : index
+              )
+            }
+            className={`
+              tbds-overview-grid-case-study-cell
+
+              relative
+              min-h-[8.5rem]
+              overflow-hidden
+              border-b
+              border-gray-200
+              bg-white
+              p-6
+              text-left
+
+              transition-all
+              duration-500
+              ease-[cubic-bezier(0.22,1,0.36,1)]
+
+              sm:border-r
+              [&:nth-child(even)]:sm:border-r-0
+              [&:nth-last-child(-n+2)]:sm:border-b-0
+
+              ${
+                isActive
+                  ? "z-10 -translate-y-1 shadow-[0_18px_50px_rgba(0,0,0,0.07),0_0_36px_rgba(99,102,241,0.10)]"
+                  : ""
+              }
+            `}
+            style={{
+              animation: isPulsing
+                ? "tbds-overview-grid-cell-pulse 1300ms cubic-bezier(0.22, 1, 0.36, 1) both"
+                : undefined,
+              animationDelay: isPulsing
+                ? `${index * 130}ms`
+                : undefined,
+            }}
+          >
+            <div
+              aria-hidden="true"
+              className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 transition-transform duration-500"
+              style={{
+                backgroundImage: "var(--tbds-accent-gradient)",
+                transform: isActive ? "scaleX(1)" : undefined,
+              }}
+            />
+
+            <p className="text-xs uppercase tracking-[0.18em] text-gray-400">
+              {item.label}
+            </p>
+
+            <p className="mt-4 text-base leading-relaxed text-black">
+              {item.value}
+            </p>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function AnimatedQuote({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  const { ref, isPulsing } = useScrollPulse({
+    duration: 1700,
+    threshold: 0.4,
+  });
+
+  const [isHovered, setIsHovered] = useState(false);
+  const [manualPulse, setManualPulse] = useState(false);
+
+  const isActive = isHovered || isPulsing || manualPulse;
+
+  const triggerManualPulse = () => {
+    setManualPulse(true);
+
+    window.setTimeout(() => {
+      setManualPulse(false);
+    }, 1500);
+  };
+
+  return (
+    <div
+      ref={ref}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={triggerManualPulse}
+      className={`
+        animated-quote
+        tbds-animated-quote
+
+        group
+        relative
+        max-w-3xl
+        cursor-pointer
+        overflow-hidden
+        rounded-[1.35rem]
+        border
+        border-transparent
+        bg-white
+        p-6
+        pl-7
+
+        transition-all
+        duration-500
+        ease-[cubic-bezier(0.22,1,0.36,1)]
+
+        ${className}
+
+        ${
+          isActive
+            ? "border-gray-200 shadow-[0_22px_70px_rgba(0,0,0,0.08),0_0_48px_rgba(99,102,241,0.12)]"
+            : ""
+        }
+      `}
+      style={{
+        animation: isPulsing
+          ? "tbds-animated-quote-pulse 1500ms cubic-bezier(0.22, 1, 0.36, 1) both"
+          : undefined,
+      }}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          triggerManualPulse();
+        }
+      }}
+    >
+      <div
+        aria-hidden="true"
+        className="absolute bottom-6 left-0 top-6 w-[3px] bg-black transition-all duration-500"
+        style={{
+          backgroundImage: isActive
+            ? "var(--tbds-accent-gradient)"
+            : undefined,
+          boxShadow: isActive
+            ? "0 0 24px rgba(99, 102, 241, 0.45)"
+            : undefined,
+        }}
+      />
+
+      <p className="text-lg leading-relaxed text-black md:text-xl">
         {children}
       </p>
     </div>
   );
 }
 
-function ProjectNavCard({
-  eyebrow,
-  title,
-  href,
-  align,
-}: {
-  eyebrow: string;
-  title: string;
-  href: string;
-  align: "left" | "right";
-}) {
+function LegacyNotice() {
   return (
-    <Link
-      href={href}
-      className={`
-        group
-        block
-        border
-        border-gray-100
-        p-6
-        transition-all
-        duration-300
-        hover:border-gray-300
-        hover:bg-gray-50
+    <div className="flex items-center gap-4 rounded-[1.15rem] border border-gray-200 bg-white px-5 py-4 text-gray-500">
+      <span
+        aria-hidden="true"
+        className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-gray-200 text-sm text-gray-400"
+      >
+        i
+      </span>
 
-        ${align === "right" ? "md:text-right" : ""}
-      `}
-    >
-      <p className="text-xs uppercase tracking-[0.18em] text-gray-400">
-        {eyebrow}
+      <p className="text-sm leading-relaxed md:whitespace-nowrap">
+        Selected legacy portfolio work. Brand names and trademarks are
+        shown for identification only and remain the property of their
+        respective owners.
       </p>
-
-      <p className="mt-4 text-2xl font-semibold leading-tight text-black">
-        {title}
-      </p>
-
-      <p className="mt-6 text-sm text-gray-400 transition-colors duration-300 group-hover:text-black">
-        {align === "right" ? "View next →" : "← View previous"}
-      </p>
-    </Link>
+    </div>
   );
+}
+
+function useScrollPulse({
+  duration,
+  threshold,
+}: {
+  duration: number;
+  threshold: number;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [isPulsing, setIsPulsing] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+
+    if (!node) return;
+
+    let timeout: number | undefined;
+    let wasIntersecting = false;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !wasIntersecting) {
+          wasIntersecting = true;
+          setIsPulsing(true);
+
+          if (timeout !== undefined) {
+            window.clearTimeout(timeout);
+          }
+
+          timeout = window.setTimeout(() => {
+            setIsPulsing(false);
+          }, duration);
+        }
+
+        if (!entry.isIntersecting) {
+          wasIntersecting = false;
+          setIsPulsing(false);
+
+          if (timeout !== undefined) {
+            window.clearTimeout(timeout);
+          }
+        }
+      },
+      {
+        threshold,
+        rootMargin: "0px 0px -8% 0px",
+      }
+    );
+
+    observer.observe(node);
+
+    return () => {
+      observer.disconnect();
+
+      if (timeout !== undefined) {
+        window.clearTimeout(timeout);
+      }
+    };
+  }, [duration, threshold]);
+
+  return {
+    ref,
+    isPulsing,
+  };
 }

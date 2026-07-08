@@ -35,6 +35,8 @@ type FeaturedProject = {
   result: string;
 };
 
+type GestureDirection = "horizontal" | "vertical" | null;
+
 export default function FeaturedWorkSection({
   showHeading = true,
 }: FeaturedWorkSectionProps) {
@@ -170,6 +172,8 @@ function FeaturedImageSlider({
   const startYRef = useRef(0);
   const movedRef = useRef(false);
   const interactedRef = useRef(false);
+  const gestureDirectionRef =
+    useRef<GestureDirection>(null);
 
   const safeImages = useMemo(() => {
     return images.length > 0 ? images : [];
@@ -258,6 +262,7 @@ function FeaturedImageSlider({
     startXRef.current = event.clientX;
     startYRef.current = event.clientY;
     movedRef.current = false;
+    gestureDirectionRef.current = null;
 
     setIsDragging(true);
     setDragOffset(0);
@@ -277,14 +282,30 @@ function FeaturedImageSlider({
     const distanceX = event.clientX - startXRef.current;
     const distanceY = event.clientY - startYRef.current;
 
-    if (
-      Math.abs(distanceY) > 8 &&
-      Math.abs(distanceY) > Math.abs(distanceX)
-    ) {
+    const absX = Math.abs(distanceX);
+    const absY = Math.abs(distanceY);
+
+    if (!gestureDirectionRef.current) {
+      if (absY > 8 && absY > absX) {
+        gestureDirectionRef.current = "vertical";
+        movedRef.current = true;
+        setIsDragging(false);
+        setDragOffset(0);
+        return;
+      }
+
+      if (absX > 4 && absX > absY) {
+        gestureDirectionRef.current = "horizontal";
+      }
+    }
+
+    if (gestureDirectionRef.current === "vertical") {
+      movedRef.current = true;
+      setDragOffset(0);
       return;
     }
 
-    if (Math.abs(distanceX) > 4) {
+    if (gestureDirectionRef.current === "horizontal") {
       movedRef.current = true;
       markInteracted();
       event.preventDefault();
@@ -314,6 +335,9 @@ function FeaturedImageSlider({
     const distanceX = event.clientX - startXRef.current;
     const distanceY = event.clientY - startYRef.current;
 
+    const absX = Math.abs(distanceX);
+    const absY = Math.abs(distanceY);
+
     if (
       event.currentTarget.hasPointerCapture(
         event.pointerId
@@ -324,13 +348,27 @@ function FeaturedImageSlider({
       );
     }
 
+    const gestureDirection = gestureDirectionRef.current;
+
     pointerIdRef.current = null;
+    gestureDirectionRef.current = null;
+
     setIsDragging(false);
     setDragOffset(0);
 
     const isHorizontalSwipe =
-      Math.abs(distanceX) > 48 &&
-      Math.abs(distanceX) > Math.abs(distanceY);
+      gestureDirection === "horizontal" &&
+      absX > 48 &&
+      absX > absY;
+
+    const isVerticalScroll =
+      gestureDirection === "vertical" ||
+      (absY > 8 && absY > absX);
+
+    if (isVerticalScroll) {
+      movedRef.current = false;
+      return;
+    }
 
     if (isHorizontalSwipe) {
       markInteracted();
@@ -345,7 +383,10 @@ function FeaturedImageSlider({
       return;
     }
 
-    if (!movedRef.current) {
+    const movedEnoughToCancelClick =
+      absX > 8 || absY > 8 || movedRef.current;
+
+    if (!movedEnoughToCancelClick) {
       router.push(href);
     }
 
@@ -500,7 +541,11 @@ function FeaturedImageSlider({
 function shuffleImages(images: string[]) {
   const shuffledImages = [...images];
 
-  for (let index = shuffledImages.length - 1; index > 0; index -= 1) {
+  for (
+    let index = shuffledImages.length - 1;
+    index > 0;
+    index -= 1
+  ) {
     const randomIndex = Math.floor(
       Math.random() * (index + 1)
     );
