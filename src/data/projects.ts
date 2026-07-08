@@ -8,24 +8,36 @@ export const projects = [
 
     category: "Education • Publication Design",
 
-    image: "/projects/islamiyah-series/featured-card.webp",
+    image: "/projects/islamiyah-series/featured-card-01.webp",
+
+    featuredImages: [
+      "/projects/islamiyah-series/featured-card-01.webp",
+      "/projects/islamiyah-series/featured-card-02.webp",
+      "/projects/islamiyah-series/featured-card-03.webp",
+    ],
 
     result:
       "A pioneering curriculum system combining publications, branding and interactive learning.",
   },
 
   {
-    title: "Johnson & Johnson Exhibitions",
+    title: "Urban Eat",
 
-    slug: "johnson-johnson-exhibitions",
+    slug: "urban-eat",
 
-    href: "/work/johnson-johnson-exhibitions",
+    href: "/work/urban-eat",
 
-    category: "Exhibition Design",
+    category: "FMCG • Packaging • Brand Activation",
 
-    image: "/projects/islamiyah-series/gallery/gallery-01.webp",
+    image: "/projects/urban-eat/featured-card-01.webp",
+
+    featuredImages: [
+      "/projects/urban-eat/featured-card-01.webp",
+      "/projects/urban-eat/featured-card-02.webp",
+      "/projects/urban-eat/featured-card-03.webp",
+    ],
 
     result:
-      "Coming soon.",
+      "A full food-to-go visual system covering packaging, brand craft, retail activation, sub-brand design and pitch presentation work.",
   },
 ];

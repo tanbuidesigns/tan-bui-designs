@@ -55,6 +55,27 @@ const serviceTags = [
   "Sub-brand Design",
 ];
 
+const brandCraftTags = [
+  "Brand craft",
+  "Handmade graphics",
+  "Food prints",
+  "Visual system",
+  "Illustration",
+  "Campaign visuals",
+  "Retail POS",
+  "Brand activation",
+];
+
+const awardTags = [
+  "Award-winning work",
+  "Marketing campaign",
+  "FMCG brand activation",
+  "Retail campaign",
+  "POS design",
+  "Presentation design",
+  "Brand rollout",
+];
+
 const packagingTags = [
   "Packaging",
   "Artwork production",
@@ -68,6 +89,16 @@ const packagingTags = [
   "Range design",
 ];
 
+const rootsTags = [
+  "Sub-brand design",
+  "Packaging",
+  "Natural tone",
+  "Illustration",
+  "FMCG design",
+  "Brand extension",
+  "Retail range",
+];
+
 const pitchTags = [
   "Pitch design",
   "Presentation design",
@@ -79,27 +110,36 @@ const pitchTags = [
   "Brand activation",
 ];
 
-const brandCraftItems: CaseStudyCarouselItem[] = [
-  {
-    label: "brand-craft-01",
-    alt: "Urban Eat handmade food-print brand craft example 1",
-  },
-  {
-    label: "brand-craft-02",
-    alt: "Urban Eat handmade food-print brand craft example 2",
-  },
-  {
-    label: "brand-craft-03",
-    alt: "Urban Eat handmade food-print brand craft example 3",
-  },
-  {
-    label: "brand-craft-04",
-    alt: "Urban Eat handmade food-print brand craft example 4",
-  },
-];
+const brandCraftItems: CaseStudyCarouselItem[] = Array.from(
+  { length: 24 },
+  (_, index) => {
+    const imageNumber = String(index + 1).padStart(2, "0");
+
+    return {
+      label: `brand-craft-${imageNumber}.webp`,
+      src: `/projects/urban-eat/brand-craft/brand-craft-${imageNumber}.webp`,
+      alt: `Urban Eat handmade food-print brand craft example ${index + 1}`,
+      caption: `Urban Eat brand craft example ${index + 1}`,
+    };
+  }
+);
+
+const awardItems: CaseStudyCarouselItem[] = Array.from(
+  { length: 7 },
+  (_, index) => {
+    const imageNumber = String(index + 1).padStart(2, "0");
+
+    return {
+      label: `award-${imageNumber}.webp`,
+      src: `/projects/urban-eat/award/award-${imageNumber}.webp`,
+      alt: `Urban Eat award-winning campaign visual ${index + 1}`,
+      caption: `Urban Eat award campaign visual ${index + 1}`,
+    };
+  }
+);
 
 const packagingItems: CaseStudyCarouselItem[] = Array.from(
-  { length: 37 },
+  { length: 51 },
   (_, index) => {
     const imageNumber = String(index + 1).padStart(2, "0");
 
@@ -112,24 +152,19 @@ const packagingItems: CaseStudyCarouselItem[] = Array.from(
   }
 );
 
-const rootsItems: CaseStudyCarouselItem[] = [
-  {
-    label: "roots-01",
-    alt: "Urban Eat Roots sub-brand design example 1",
-  },
-  {
-    label: "roots-02",
-    alt: "Urban Eat Roots sub-brand design example 2",
-  },
-  {
-    label: "roots-03",
-    alt: "Urban Eat Roots sub-brand design example 3",
-  },
-  {
-    label: "roots-04",
-    alt: "Urban Eat Roots sub-brand design example 4",
-  },
-];
+const rootsItems: CaseStudyCarouselItem[] = Array.from(
+  { length: 14 },
+  (_, index) => {
+    const imageNumber = String(index + 1).padStart(2, "0");
+
+    return {
+      label: `roots-${imageNumber}.webp`,
+      src: `/projects/urban-eat/roots/roots-${imageNumber}.webp`,
+      alt: `Urban Eat Roots sub-brand design example ${index + 1}`,
+      caption: `Urban Eat Roots sub-brand design example ${index + 1}`,
+    };
+  }
+);
 
 const costaPitchItems: CaseStudyCarouselItem[] = Array.from(
   { length: 15 },
@@ -261,6 +296,7 @@ export default function UrbanEatDraftClient() {
             <CaseStudyImageCarousel
               title="Brand Craft System"
               items={brandCraftItems}
+              tags={brandCraftTags}
             />
           </div>
         </Reveal>
@@ -287,7 +323,11 @@ export default function UrbanEatDraftClient() {
           </p>
 
           <div className="mt-16">
-            <PlaceholderBlock label="Award / campaign image placeholder" />
+            <CaseStudyImageCarousel
+              title="Award-Winning Campaign"
+              items={awardItems}
+              tags={awardTags}
+            />
           </div>
         </Reveal>
       </section>
@@ -316,7 +356,6 @@ export default function UrbanEatDraftClient() {
             <CaseStudyImageCarousel
               title="A-to-Z Packaging System"
               items={packagingItems}
-              variant="natural"
               tags={packagingTags}
             />
           </div>
@@ -347,6 +386,7 @@ export default function UrbanEatDraftClient() {
             <CaseStudyImageCarousel
               title="Urban Eat Roots"
               items={rootsItems}
+              tags={rootsTags}
             />
           </div>
         </Reveal>
@@ -422,22 +462,6 @@ export default function UrbanEatDraftClient() {
 
       <CaseStudyCTA />
     </main>
-  );
-}
-
-function PlaceholderBlock({ label }: { label: string }) {
-  return (
-    <div className="relative aspect-[16/9] w-full overflow-hidden bg-gray-100">
-      <div className="absolute inset-0 bg-[linear-gradient(135deg,#f3f4f6,#ffffff,#e5e7eb)]" />
-
-      <div className="absolute inset-0 flex items-center justify-center p-8 text-center">
-        <p className="max-w-sm text-sm uppercase tracking-[0.18em] text-gray-400">
-          Image placeholder
-          <br />
-          {label}
-        </p>
-      </div>
-    </div>
   );
 }
 

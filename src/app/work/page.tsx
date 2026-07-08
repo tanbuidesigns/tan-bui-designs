@@ -29,7 +29,7 @@ export default function WorkPage() {
                 leading-[0.95]
               "
             >
-              Selected projects across print, digital and physical experiences.
+              Selected case studies across brand, print, packaging and digital.
             </AnimatedHeadline>
 
             <div
@@ -52,9 +52,9 @@ export default function WorkPage() {
                   leading-relaxed
                 "
               >
-                Over the last fifteen years I&apos;ve worked across branding,
-                packaging, publications, websites, exhibitions and digital
-                experiences.
+                A focused selection of real projects showing how I think
+                through visual systems, production details and the final user
+                experience.
               </p>
 
               <p
@@ -64,9 +64,9 @@ export default function WorkPage() {
                   leading-relaxed
                 "
               >
-                Each project needed a different solution, but the objective
-                stayed the same: turn complex ideas into clear visual
-                experiences that people can understand, use and remember.
+                For now, I&apos;m keeping this section tight with completed
+                case studies only. More work will be added once each project has
+                a proper page and story behind it.
               </p>
             </div>
           </Reveal>
