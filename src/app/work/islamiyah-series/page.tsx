@@ -38,6 +38,7 @@ const islamiyahGalleryTags = [
   "Educational design",
   "UI design",
   "Interactive learning",
+  "Art direction",
 ];
 
 const galleryCarouselItems: CaseStudyCarouselItem[] =
@@ -356,8 +357,10 @@ function OverviewGridCaseStudy({
   return (
     <div className="overview-grid-case-study grid w-full max-w-full overflow-hidden rounded-[1.35rem] border border-gray-200 sm:grid-cols-2 lg:grid-cols-4">
       {items.map((item, index) => {
-        const isActive = activeIndex === index;
-        const isListValue = Array.isArray(item.value);
+       const isActive = activeIndex === index;
+const listValue = Array.isArray(item.value)
+  ? item.value
+  : null;
 
         return (
           <button
@@ -413,11 +416,11 @@ function OverviewGridCaseStudy({
               {item.label}
             </p>
 
-            {isListValue ? (
-              <div className="mt-4 flex flex-wrap gap-2">
-                {item.value.map((value) => (
-                  <span
-                    key={value}
+            {listValue ? (
+  <div className="mt-4 flex flex-wrap gap-2">
+    {listValue.map((value) => (
+      <span
+        key={value}
                     className="
                       rounded-full
                       border

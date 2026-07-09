@@ -202,7 +202,7 @@ const navigationProject = otherProject
 
 export default function UrbanEatClient() {
   return (
-    <main className="min-h-screen overflow-x-hidden bg-white text-black">
+    <main className="min-h-screen bg-white text-black [overflow-x:clip]">
       <ReadingProgressBar />
 
       <CaseStudyProgressNav

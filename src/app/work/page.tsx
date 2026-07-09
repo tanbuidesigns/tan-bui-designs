@@ -15,7 +15,7 @@ export default function WorkPage() {
         <Container size="lg">
           <Reveal>
             <AnimatedLabel className="mb-8">
-              WORK
+              FEATURED WORK
             </AnimatedLabel>
 
             <AnimatedHeadline
@@ -29,46 +29,26 @@ export default function WorkPage() {
                 leading-[0.95]
               "
             >
-              Selected case studies across brand, print, packaging and digital.
+              Case studies built around clear ideas and crafted execution
             </AnimatedHeadline>
 
-            <div
+            <p
               className="
                 mt-12
-
-                grid
-                gap-6
-
-                lg:grid-cols-[1fr_1fr]
-                lg:gap-12
-
                 max-w-5xl
+
+                text-xl
+                md:text-2xl
+
+                text-gray-600
+                leading-relaxed
               "
             >
-              <p
-                className="
-                  text-xl
-                  text-gray-600
-                  leading-relaxed
-                "
-              >
-                A focused selection of real projects showing how I think
-                through visual systems, production details and the final user
-                experience.
-              </p>
-
-              <p
-                className="
-                  text-xl
-                  text-gray-600
-                  leading-relaxed
-                "
-              >
-                For now, I&apos;m keeping this section tight with completed
-                case studies only. More work will be added once each project has
-                a proper page and story behind it.
-              </p>
-            </div>
+              A focused selection of completed projects across brand systems,
+              publication design, packaging, digital experiences and visual
+              storytelling. Each case study shows how I turn complex briefs into
+              clear, usable and memorable design work.
+            </p>
           </Reveal>
         </Container>
       </Section>
