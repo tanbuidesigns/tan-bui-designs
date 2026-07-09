@@ -202,7 +202,7 @@ const navigationProject = otherProject
 
 export default function UrbanEatClient() {
   return (
-    <main className="min-h-screen bg-white text-black">
+    <main className="min-h-screen overflow-x-hidden bg-white text-black">
       <ReadingProgressBar />
 
       <CaseStudyProgressNav
@@ -524,7 +524,7 @@ function OverviewGridCaseStudy({
   return (
     <div
       ref={ref}
-      className="overview-grid-case-study mt-12 grid overflow-hidden rounded-[1.35rem] border border-gray-200 sm:grid-cols-2"
+      className="overview-grid-case-study mt-12 grid w-full max-w-full overflow-hidden rounded-[1.35rem] border border-gray-200 sm:grid-cols-2"
     >
       {items.map((item, index) => {
         const isActive = activeIndex === index;
@@ -637,6 +637,7 @@ function AnimatedQuote({
 
         group
         relative
+        w-full
         max-w-3xl
         cursor-pointer
         overflow-hidden
@@ -695,7 +696,7 @@ function AnimatedQuote({
 
 function LegacyNotice() {
   return (
-    <div className="flex items-center gap-4 rounded-[1.15rem] border border-gray-200 bg-white px-5 py-4 text-gray-500">
+    <div className="flex max-w-full items-start gap-4 overflow-hidden rounded-[1.15rem] border border-gray-200 bg-white px-5 py-4 text-gray-500 sm:items-center">
       <span
         aria-hidden="true"
         className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-gray-200 text-sm text-gray-400"
@@ -703,7 +704,7 @@ function LegacyNotice() {
         i
       </span>
 
-      <p className="text-sm leading-relaxed md:whitespace-nowrap">
+      <p className="min-w-0 flex-1 break-words text-sm leading-relaxed xl:whitespace-nowrap">
         Selected legacy portfolio work. Brand names and trademarks are
         shown for identification only and remain the property of their
         respective owners.

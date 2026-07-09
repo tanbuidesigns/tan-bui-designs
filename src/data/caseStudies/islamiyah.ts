@@ -60,10 +60,8 @@ previewImages: [
 
     role: [
       "Brand Identity",
-      "Publication Design",
       "Illustration",
-      "Art Direction",
-      "UI Design",
+      "Publication Design",
       "Digital Learning",
     ],
   },
