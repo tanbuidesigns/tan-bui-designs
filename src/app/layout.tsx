@@ -17,11 +17,6 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Tan Bui Designs",
   description: "Multimedia design consultant.",
-  icons: {
-    icon: "/tbd.svg",
-    shortcut: "/tbd.svg",
-    apple: "/tbd.svg",
-  },
 };
 
 export default function RootLayout({
