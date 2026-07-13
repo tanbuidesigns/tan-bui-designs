@@ -430,8 +430,15 @@ export default function AboutPage() {
               </div>
 
               <div className="lg:pb-2">
-                <Button href="/contact" variant="secondary" size="lg">
-                  Start a Conversation →
+                <Button
+                  href="/contact"
+                  variant="accent"
+                  size="lg"
+                  expandOnHover
+                  showArrow
+                  className="hover:shadow-[0_18px_48px_-14px_rgba(199,210,254,0.85),0_14px_44px_-16px_rgba(254,202,202,0.75),0_22px_48px_-18px_rgba(254,249,195,0.72)]"
+                >
+                  Start a Conversation
                 </Button>
               </div>
             </div>
