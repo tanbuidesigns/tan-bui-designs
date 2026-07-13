@@ -1,0 +1,21 @@
+.stackedGallery {
+  display: none;
+}
+
+@media (max-width: 767px) and (orientation: portrait) {
+  .carousel {
+    display: none;
+  }
+
+  .stackedGallery {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .stackedImage {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 1rem;
+  }
+}

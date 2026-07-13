@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import Reveal from "@/components/Reveal";
 import AnimatedLabel from "@/components/AnimatedLabel";
@@ -21,260 +21,237 @@ export default function CaseStudyPreviewStrip({
   items,
 }: CaseStudyPreviewStripProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  const scrollPosition = useRef(0);
-
-  const [isDragging, setIsDragging] =
-    useState(false);
-
+  const animationFrameRef = useRef<number | null>(null);
+  const lastTimestampRef = useRef<number | null>(null);
+  const directionRef = useRef(1);
+  const userHasInteractedRef = useRef(false);
+  const isVisibleRef = useRef(false);
+  const reducedMotionRef = useRef(false);
+  const edgePauseUntilRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const pointerIdRef = useRef<number | null>(null);
   const dragStartX = useRef(0);
-
-  const dragStartY = useRef(0);
-
   const dragStartScroll = useRef(0);
-
-  const wheelResumeTimeout =
-    useRef<ReturnType<typeof setTimeout> | null>(
-      null
-    );
 
   useEffect(() => {
     const container = scrollRef.current;
 
     if (!container) return;
 
-    let frame: number;
+    const reducedMotionQuery = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
 
-    const speed = 0.25;
+    const stopAnimation = () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
 
-    const animate = () => {
-      if (!isDragging) {
-        const halfway =
-          container.scrollWidth / 2;
+      lastTimestampRef.current = null;
+    };
 
-        if (halfway > 0) {
-          scrollPosition.current += speed;
+    const canAnimate = () =>
+      !userHasInteractedRef.current &&
+      isVisibleRef.current &&
+      !document.hidden &&
+      !reducedMotionRef.current &&
+      container.scrollWidth > container.clientWidth;
 
-          if (
-            scrollPosition.current >=
-            halfway
-          ) {
-            scrollPosition.current = 0;
-          }
+    const animate = (timestamp: number) => {
+      animationFrameRef.current = null;
 
-          container.scrollLeft =
-            scrollPosition.current;
+      if (!canAnimate()) return;
+
+      const previousTimestamp = lastTimestampRef.current ?? timestamp;
+      const deltaSeconds = Math.min(
+        (timestamp - previousTimestamp) / 1000,
+        0.1
+      );
+      const maxScrollLeft = Math.max(
+        0,
+        container.scrollWidth - container.clientWidth
+      );
+
+      lastTimestampRef.current = timestamp;
+
+      if (timestamp >= edgePauseUntilRef.current) {
+        const nextScrollLeft =
+          container.scrollLeft +
+          directionRef.current * 40 * deltaSeconds;
+
+        if (nextScrollLeft >= maxScrollLeft) {
+          container.scrollLeft = maxScrollLeft;
+          directionRef.current = -1;
+          edgePauseUntilRef.current = timestamp + 250;
+        } else if (nextScrollLeft <= 0) {
+          container.scrollLeft = 0;
+          directionRef.current = 1;
+          edgePauseUntilRef.current = timestamp + 250;
+        } else {
+          container.scrollLeft = nextScrollLeft;
         }
       }
 
-      frame =
-        requestAnimationFrame(
-          animate
-        );
+      animationFrameRef.current = requestAnimationFrame(animate);
     };
 
-    frame =
-      requestAnimationFrame(
-        animate
-      );
-
-    return () =>
-      cancelAnimationFrame(frame);
-  }, [isDragging]);
-
-  useEffect(() => {
-    return () => {
-      if (wheelResumeTimeout.current) {
-        clearTimeout(
-          wheelResumeTimeout.current
-        );
+    const startAnimation = () => {
+      if (
+        animationFrameRef.current === null &&
+        canAnimate()
+      ) {
+        animationFrameRef.current = requestAnimationFrame(animate);
       }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopAnimation();
+      } else {
+        startAnimation();
+      }
+    };
+
+    const handleReducedMotionChange = () => {
+      reducedMotionRef.current = reducedMotionQuery.matches;
+
+      if (reducedMotionRef.current) {
+        stopAnimation();
+      } else {
+        startAnimation();
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting;
+
+        if (entry.isIntersecting) {
+          startAnimation();
+        } else {
+          stopAnimation();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const resizeObserver = new ResizeObserver(startAnimation);
+
+    reducedMotionRef.current = reducedMotionQuery.matches;
+    observer.observe(container);
+    resizeObserver.observe(container);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    reducedMotionQuery.addEventListener(
+      "change",
+      handleReducedMotionChange
+    );
+
+    return () => {
+      stopAnimation();
+      observer.disconnect();
+      resizeObserver.disconnect();
+      document.removeEventListener(
+        "visibilitychange",
+        handleVisibilityChange
+      );
+      reducedMotionQuery.removeEventListener(
+        "change",
+        handleReducedMotionChange
+      );
     };
   }, []);
 
-  const handleMouseDown = (
-    e: React.MouseEvent<HTMLDivElement>
-  ) => {
-    const container =
-      scrollRef.current;
+  const disableAutomaticScrolling = () => {
+    userHasInteractedRef.current = true;
+    lastTimestampRef.current = null;
 
-    if (!container) return;
-
-    setIsDragging(true);
-
-    dragStartX.current = e.pageX;
-
-    dragStartScroll.current =
-      container.scrollLeft;
-  };
-
-  const handleMouseMove = (
-    e: React.MouseEvent<HTMLDivElement>
-  ) => {
-    const container =
-      scrollRef.current;
-
-    if (
-      !container ||
-      !isDragging
-    )
-      return;
-
-    const distance =
-      e.pageX -
-      dragStartX.current;
-
-    container.scrollLeft =
-      dragStartScroll.current -
-      distance;
-
-    scrollPosition.current =
-      container.scrollLeft;
-  };
-
-  const handleTouchStart = (
-    e: React.TouchEvent<HTMLDivElement>
-  ) => {
-    const container =
-      scrollRef.current;
-
-    if (!container) return;
-
-    setIsDragging(true);
-
-    dragStartX.current =
-      e.touches[0].pageX;
-
-    dragStartY.current =
-      e.touches[0].pageY;
-
-    dragStartScroll.current =
-      container.scrollLeft;
-  };
-
-  const handleTouchMove = (
-    e: React.TouchEvent<HTMLDivElement>
-  ) => {
-    const container =
-      scrollRef.current;
-
-    if (
-      !container ||
-      !isDragging
-    )
-      return;
-
-    const distanceX =
-      e.touches[0].pageX -
-      dragStartX.current;
-
-    const distanceY =
-      e.touches[0].pageY -
-      dragStartY.current;
-
-    if (
-      Math.abs(distanceX) >
-      Math.abs(distanceY)
-    ) {
-      e.preventDefault();
-
-      container.scrollLeft =
-        dragStartScroll.current -
-        distanceX;
-
-      scrollPosition.current =
-        container.scrollLeft;
+    if (animationFrameRef.current !== null) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
     }
+  };
+
+  const handlePointerDown = (
+    e: React.PointerEvent<HTMLDivElement>
+  ) => {
+    const container = scrollRef.current;
+
+    if (!container) return;
+
+    disableAutomaticScrolling();
+
+    if (e.pointerType !== "mouse") return;
+
+    isDraggingRef.current = true;
+    pointerIdRef.current = e.pointerId;
+    dragStartX.current = e.pageX;
+    dragStartScroll.current = container.scrollLeft;
+    container.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (
+    e: React.PointerEvent<HTMLDivElement>
+  ) => {
+    const container = scrollRef.current;
+
+    if (
+      !container ||
+      !isDraggingRef.current ||
+      pointerIdRef.current !== e.pointerId
+    ) {
+      return;
+    }
+
+    const maxScrollLeft = Math.max(
+      0,
+      container.scrollWidth - container.clientWidth
+    );
+    const distance = e.pageX - dragStartX.current;
+
+    container.scrollLeft = Math.min(
+      maxScrollLeft,
+      Math.max(0, dragStartScroll.current - distance)
+    );
+  };
+
+  const stopDragging = (
+    e: React.PointerEvent<HTMLDivElement>
+  ) => {
+    const container = scrollRef.current;
+
+    if (
+      container &&
+      pointerIdRef.current === e.pointerId &&
+      container.hasPointerCapture(e.pointerId)
+    ) {
+      container.releasePointerCapture(e.pointerId);
+    }
+
+    isDraggingRef.current = false;
+    pointerIdRef.current = null;
   };
 
   const handleWheel = (
     e: React.WheelEvent<HTMLDivElement>
   ) => {
-    const container =
-      scrollRef.current;
-
-    if (!container) return;
-
     const isHorizontalScroll =
-      Math.abs(e.deltaX) >
-      Math.abs(e.deltaY);
-
+      Math.abs(e.deltaX) > Math.abs(e.deltaY);
     const isShiftScroll =
-      e.shiftKey &&
-      Math.abs(e.deltaY) > 0;
+      e.shiftKey && Math.abs(e.deltaY) > 0;
 
-    if (
-      !isHorizontalScroll &&
-      !isShiftScroll
-    ) {
-      return;
+    if (isHorizontalScroll || isShiftScroll) {
+      disableAutomaticScrolling();
     }
-
-    e.preventDefault();
-
-    setIsDragging(true);
-
-    const scrollAmount =
-      isHorizontalScroll
-        ? e.deltaX
-        : e.deltaY;
-
-    container.scrollLeft +=
-      scrollAmount;
-
-    const halfway =
-      container.scrollWidth / 2;
-
-    if (halfway > 0) {
-      if (
-        container.scrollLeft >=
-        halfway
-      ) {
-        container.scrollLeft -=
-          halfway;
-      }
-
-      if (
-        container.scrollLeft <= 0
-      ) {
-        container.scrollLeft +=
-          halfway;
-      }
-    }
-
-    scrollPosition.current =
-      container.scrollLeft;
-
-    if (wheelResumeTimeout.current) {
-      clearTimeout(
-        wheelResumeTimeout.current
-      );
-    }
-
-    wheelResumeTimeout.current =
-      setTimeout(() => {
-        setIsDragging(false);
-      }, 700);
-  };
-
-  const stopDragging = () => {
-    setIsDragging(false);
   };
 
   if (!items.length) return null;
-
-  const loopItems = [
-    ...items,
-    ...items,
-  ];
 
   return (
     <Reveal>
       <section className="max-w-6xl mx-auto py-24">
         <div className="px-8 mb-10">
-          <AnimatedLabel>
-            {title}
-          </AnimatedLabel>
+          <AnimatedLabel>{title}</AnimatedLabel>
         </div>
 
         <div className="relative">
@@ -312,31 +289,11 @@ export default function CaseStudyPreviewStrip({
 
           <div
             ref={scrollRef}
-            onMouseDown={
-              handleMouseDown
-            }
-            onMouseMove={
-              handleMouseMove
-            }
-            onMouseUp={stopDragging}
-            onMouseLeave={
-              stopDragging
-            }
-            onTouchStart={
-              handleTouchStart
-            }
-            onTouchMove={
-              handleTouchMove
-            }
-            onTouchEnd={
-              stopDragging
-            }
-            onTouchCancel={
-              stopDragging
-            }
-            onWheel={
-              handleWheel
-            }
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={stopDragging}
+            onPointerCancel={stopDragging}
+            onWheel={handleWheel}
             className="
               flex
               gap-8
@@ -355,61 +312,56 @@ export default function CaseStudyPreviewStrip({
               [&::-webkit-scrollbar]:hidden
             "
           >
-            {loopItems.map(
-              (
-                item,
-                index
-              ) => (
-                <div
-                  key={`${item.src}-${index}`}
-                  className="
-                    relative
+            {items.map((item) => (
+              <div
+                key={item.src}
+                className="
+                  relative
 
-                    w-[260px]
-                    md:w-[340px]
+                  w-[260px]
+                  md:w-[340px]
 
-                    aspect-[3/4]
+                  aspect-[3/4]
 
-                    flex-shrink-0
+                  flex-shrink-0
 
-                    rounded-2xl
+                  rounded-2xl
 
-                    bg-gray-50
+                  bg-gray-50
 
-                    border
-                    border-gray-100
+                  border
+                  border-gray-100
 
-                    transition-all
-                    duration-700
-                    ease-[cubic-bezier(0.22,1,0.36,1)]
+                  transition-all
+                  duration-700
+                  ease-[cubic-bezier(0.22,1,0.36,1)]
 
-                    hover:border-gray-200
-                    hover:shadow-lg
+                  hover:border-gray-200
+                  hover:shadow-lg
+                "
+              >
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  fill
+                  sizes="
+                    (max-width:768px) 260px,
+                    340px
                   "
-                >
-                  <Image
-                    src={item.src}
-                    alt={item.alt}
-                    fill
-                    sizes="
-                      (max-width:768px) 260px,
-                      340px
-                    "
-                    className="
-                      object-contain
+                  className="
+                    object-contain
 
-                      p-4
+                    p-4
 
-                      transition-transform
-                      duration-700
+                    transition-transform
+                    duration-700
 
-                      hover:scale-[1.03]
-                    "
-                    draggable={false}
-                  />
-                </div>
-              )
-            )}
+                    hover:scale-[1.03]
+                  "
+                  draggable={false}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>

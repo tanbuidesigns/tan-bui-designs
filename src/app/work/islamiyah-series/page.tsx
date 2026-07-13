@@ -2,6 +2,9 @@
 
 import type { ReactNode } from "react";
 import { useState } from "react";
+import Image from "next/image";
+
+import styles from "./IslamiyahGallery.module.css";
 
 import { islamiyah } from "@/data/caseStudies/islamiyah";
 import { projects } from "@/data/projects";
@@ -41,12 +44,23 @@ const islamiyahGalleryTags = [
   "Art direction",
 ];
 
+const islamiyahGalleryDimensions = [
+  { width: 1705, height: 1136 },
+  { width: 2800, height: 2589 },
+  { width: 2093, height: 1460 },
+  { width: 2700, height: 1570 },
+  { width: 2989, height: 1673 },
+  { width: 2800, height: 1622 },
+  { width: 2093, height: 1460 },
+] as const;
+
 const galleryCarouselItems: CaseStudyCarouselItem[] =
   islamiyah.gallery.map((item, index) => ({
     label: `gallery-${String(index + 1).padStart(2, "0")}.webp`,
     src: item.src,
     alt: item.alt,
     caption: `Islamiyah Series gallery image ${index + 1}`,
+    ...islamiyahGalleryDimensions[index],
   }));
 
 const overviewGridItems = [
@@ -335,12 +349,31 @@ function ProjectGallerySection({
         visuals created for the Islamiyah Series.
       </p>
 
-      <div className="mt-14">
+      <div className={`mt-14 ${styles.carousel}`}>
         <CaseStudyImageCarousel
           title="Islamiyah Series Gallery"
           items={items}
           tags={islamiyahGalleryTags}
         />
+      </div>
+
+      <div className={`${styles.stackedGallery} mt-14`}>
+        {items.map(
+          (item) =>
+            item.src &&
+            item.width &&
+            item.height && (
+              <Image
+                key={item.label}
+                src={item.src}
+                alt={item.alt}
+                width={item.width}
+                height={item.height}
+                sizes="(max-width: 767px) 100vw"
+                className={styles.stackedImage}
+              />
+            )
+        )}
       </div>
     </section>
   );
