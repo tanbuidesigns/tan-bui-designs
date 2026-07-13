@@ -419,7 +419,7 @@ export default function AboutPage() {
                 </AnimatedLabel>
 
                 <h2 className="max-w-5xl text-5xl font-bold leading-[0.98] tracking-[-0.05em] md:text-7xl">
-                  The work continues
+                  The work continues.
                 </h2>
 
                 <p className="mt-10 max-w-3xl text-xl leading-relaxed text-gray-300">
