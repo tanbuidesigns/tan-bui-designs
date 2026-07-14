@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-type ButtonVariant = "primary" | "secondary" | "ghost" | "accent";
+type ButtonVariant = "primary" | "secondary" | "ghost" | "accent" | "gradient";
 
 type ButtonSize = "sm" | "md" | "lg";
 
@@ -36,6 +36,9 @@ const baseClasses = `
   focus-visible:ring-2
   focus-visible:ring-black
   focus-visible:ring-offset-4
+
+  active:translate-y-0
+  motion-reduce:transition-none
 `;
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -106,6 +109,23 @@ const variantClasses: Record<ButtonVariant, string> = {
 
     hover:border-black
     hover:-translate-y-[2px]
+  `,
+
+  gradient: `
+    border
+    border-white/25
+
+    bg-[image:var(--tbds-accent-gradient)]
+    text-black
+
+    shadow-[0_14px_38px_-18px_rgba(199,210,254,0.9),0_16px_42px_-22px_rgba(254,202,202,0.8)]
+
+    hover:-translate-y-[2px]
+    hover:border-white/45
+    hover:shadow-[0_20px_48px_-18px_rgba(199,210,254,0.95),0_20px_48px_-20px_rgba(254,202,202,0.85)]
+
+    focus-visible:ring-white
+    focus-visible:ring-offset-black
   `,
 };
 

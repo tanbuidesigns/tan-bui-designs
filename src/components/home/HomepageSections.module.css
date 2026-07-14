@@ -140,9 +140,15 @@
 }
 
 .credentialValue,
+.credentialRule,
 .credentialLabel {
   position: relative;
   z-index: 1;
+}
+
+.credentialValue,
+.credentialLabel {
+  transition: transform 480ms var(--tbds-ease);
 }
 
 .credentialValue {
@@ -152,9 +158,23 @@
   line-height: 0.86;
 }
 
+.credentialRule {
+  display: block;
+  width: clamp(2.5rem, 6vw, 4.5rem);
+  height: 2px;
+  margin-top: clamp(1.4rem, 3vw, 2.4rem);
+  background-image: var(--tbds-accent-gradient);
+  background-size: 180% 100%;
+  opacity: 0.72;
+  transform-origin: left center;
+  transition:
+    opacity 420ms ease,
+    transform 520ms var(--tbds-ease);
+}
+
 .credentialLabel {
   max-width: 12rem;
-  margin-top: 2.5rem;
+  margin-top: 1rem;
   color: rgb(226 232 240 / 0.62);
   font-size: 0.72rem;
   font-weight: 600;
@@ -434,6 +454,16 @@
     opacity: 1;
   }
 
+  .credentialItem:hover .credentialRule {
+    opacity: 1;
+    transform: scaleX(1.45);
+  }
+
+  .credentialItem:hover .credentialValue,
+  .credentialItem:hover .credentialLabel {
+    transform: translateY(-2px);
+  }
+
   .serviceImage {
     filter: grayscale(1) contrast(0.94);
   }
@@ -596,6 +626,9 @@
   }
 
   .credentialItem::before,
+  .credentialValue,
+  .credentialRule,
+  .credentialLabel,
   .serviceImage {
     transition: none;
   }

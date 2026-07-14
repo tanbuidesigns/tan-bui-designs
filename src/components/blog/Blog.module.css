@@ -1,0 +1,63 @@
+.cardTitle {
+  text-wrap: balance;
+}
+
+.articleBody {
+  color: #374151;
+  font-size: clamp(1.08rem, 1.8vw, 1.22rem);
+  line-height: 1.82;
+}
+
+.articleBody > * + * {
+  margin-top: 1.55rem;
+}
+
+.articleBody h2 {
+  margin-top: clamp(3.8rem, 8vw, 6rem);
+  color: #0b0c0e;
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.articleBody h3 {
+  margin-top: 3rem;
+  color: #111827;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.12;
+}
+
+.articleBody a {
+  color: #111827;
+  text-decoration: underline;
+  text-decoration-color: rgb(17 24 39 / 0.3);
+  text-underline-offset: 0.2em;
+}
+
+.articleBody a:hover {
+  text-decoration-color: #111827;
+}
+
+.articleBody ul,
+.articleBody ol {
+  padding-left: 1.35rem;
+}
+
+.articleBody li + li {
+  margin-top: 0.65rem;
+}
+
+.articleBody blockquote {
+  margin-block: 3rem;
+  border-left: 2px solid transparent;
+  border-image: var(--tbds-accent-gradient) 1;
+  padding-left: 1.4rem;
+  color: #111827;
+  font-size: 1.2em;
+  font-weight: 600;
+  line-height: 1.5;
+}

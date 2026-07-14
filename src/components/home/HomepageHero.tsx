@@ -9,6 +9,7 @@ import styles from "@/components/home/HomepageExperience.module.css";
 
 export default function HomepageHero() {
   const heroRef = useRef<HTMLElement | null>(null);
+  const trailRef = useRef<SVGPolylineElement | null>(null);
 
   useEffect(() => {
     const hero = heroRef.current;
@@ -18,11 +19,14 @@ export default function HomepageHero() {
     const precisePointer = window.matchMedia(
       "(hover: hover) and (pointer: fine)"
     );
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let bounds = hero.getBoundingClientRect();
     let frame: number | null = null;
+    let scrollFrame: number | null = null;
     let pointerShiftX = 0;
     let pointerShiftY = 0;
     let heroInView = true;
+    let trailPoints: Array<{ x: number; y: number }> = [];
 
     const measure = () => {
       bounds = hero.getBoundingClientRect();
@@ -30,7 +34,7 @@ export default function HomepageHero() {
 
     const syncMotionState = () => {
       hero.dataset.motion =
-        heroInView && !document.hidden ? "active" : "paused";
+        heroInView && !document.hidden && !reducedMotion.matches ? "active" : "paused";
     };
 
     const applyPointerPosition = () => {
@@ -38,12 +42,21 @@ export default function HomepageHero() {
 
       hero.style.setProperty(
         "--tbds-hero-pointer-shift-x",
-        `${pointerShiftX.toFixed(2)}px`
+        `${(pointerShiftX * 0.08).toFixed(2)}px`
       );
       hero.style.setProperty(
         "--tbds-hero-pointer-shift-y",
-        `${pointerShiftY.toFixed(2)}px`
+        `${(pointerShiftY * 0.08).toFixed(2)}px`
       );
+
+      const trail = trailRef.current;
+      if (trail) {
+        trail.setAttribute(
+          "points",
+          trailPoints.map((point) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" ")
+        );
+        trail.style.opacity = trailPoints.length > 1 ? "1" : "0";
+      }
     };
 
     const queuePointerPosition = () => {
@@ -57,7 +70,13 @@ export default function HomepageHero() {
     };
 
     const handlePointerMove = (event: PointerEvent) => {
-      if (!precisePointer.matches || bounds.width === 0 || bounds.height === 0) {
+      if (
+        !precisePointer.matches ||
+        reducedMotion.matches ||
+        !heroInView ||
+        bounds.width === 0 ||
+        bounds.height === 0
+      ) {
         return;
       }
 
@@ -76,19 +95,43 @@ export default function HomepageHero() {
         )
       );
 
+      trailPoints.push({
+        x: event.clientX - bounds.left,
+        y: event.clientY - bounds.top,
+      });
+      trailPoints = trailPoints.slice(-14);
+
       queuePointerPosition();
     };
 
     const resetPointerPosition = () => {
       pointerShiftX = 0;
       pointerShiftY = 0;
+      trailPoints = [];
       queuePointerPosition();
     };
 
+    const updateScrollLight = () => {
+      scrollFrame = null;
+      if (!heroInView || reducedMotion.matches) return;
+      const progress = Math.min(1, Math.max(0, -bounds.top / Math.max(bounds.height, 1)));
+      hero.style.setProperty("--tbds-hero-scroll-shift", `${(progress * 34).toFixed(2)}px`);
+    };
+
+    const queueScrollLight = () => {
+      if (scrollFrame === null) {
+        scrollFrame = window.requestAnimationFrame(() => {
+          measure();
+          updateScrollLight();
+        });
+      }
+    };
+
     const handlePointerModeChange = () => {
-      if (!precisePointer.matches) {
+      if (!precisePointer.matches || reducedMotion.matches) {
         resetPointerPosition();
       }
+      syncMotionState();
     };
 
     const resizeObserver = new ResizeObserver(measure);
@@ -105,7 +148,9 @@ export default function HomepageHero() {
     hero.addEventListener("pointerenter", handlePointerEnter);
     hero.addEventListener("pointermove", handlePointerMove, { passive: true });
     hero.addEventListener("pointerleave", resetPointerPosition);
+    window.addEventListener("scroll", queueScrollLight, { passive: true });
     precisePointer.addEventListener("change", handlePointerModeChange);
+    reducedMotion.addEventListener("change", handlePointerModeChange);
     document.addEventListener("visibilitychange", syncMotionState);
     syncMotionState();
 
@@ -113,13 +158,16 @@ export default function HomepageHero() {
       if (frame !== null) {
         window.cancelAnimationFrame(frame);
       }
+      if (scrollFrame !== null) window.cancelAnimationFrame(scrollFrame);
 
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
       hero.removeEventListener("pointerenter", handlePointerEnter);
       hero.removeEventListener("pointermove", handlePointerMove);
       hero.removeEventListener("pointerleave", resetPointerPosition);
+      window.removeEventListener("scroll", queueScrollLight);
       precisePointer.removeEventListener("change", handlePointerModeChange);
+      reducedMotion.removeEventListener("change", handlePointerModeChange);
       document.removeEventListener("visibilitychange", syncMotionState);
     };
   }, []);
@@ -132,6 +180,16 @@ export default function HomepageHero() {
     >
       <div className={styles.heroGrid} aria-hidden="true" />
       <div className={styles.heroPointerGlow} aria-hidden="true" />
+      <svg className={styles.heroTrail} aria-hidden="true">
+        <defs>
+          <linearGradient id="tbds-homepage-trail" x1="0" y1="0" x2="1" y2="0">
+            <stop stopColor="#c7d2fe" stopOpacity="0" />
+            <stop offset="0.62" stopColor="#fecaca" stopOpacity="0.58" />
+            <stop offset="1" stopColor="#fef9c3" stopOpacity="0.9" />
+          </linearGradient>
+        </defs>
+        <polyline ref={trailRef} fill="none" stroke="url(#tbds-homepage-trail)" strokeWidth="1.35" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
 
       <div className={styles.heroVisual} aria-hidden="true">
         <div className={styles.heroVisualField}>
@@ -160,11 +218,13 @@ export default function HomepageHero() {
             </defs>
 
             <path
+              id="tbds-hero-signal-path-one"
               d="M82 584C206 413 179 233 350 135C478 61 605 137 650 264"
               stroke="url(#tbds-homepage-hero-line)"
               strokeWidth="1.5"
             />
             <path
+              id="tbds-hero-signal-path-two"
               d="M35 504C171 379 215 179 412 101C537 51 656 142 696 292"
               stroke="url(#tbds-homepage-hero-line)"
               strokeOpacity="0.42"
@@ -176,16 +236,25 @@ export default function HomepageHero() {
             />
             <circle cx="350" cy="135" r="4" fill="#fef9c3" fillOpacity="0.72" />
             <circle cx="522" cy="399" r="3" fill="#c7d2fe" fillOpacity="0.7" />
+            <circle className={styles.heroSignalDot} r="3.25" fill="#fef9c3">
+              <animateMotion dur="8.5s" repeatCount="indefinite">
+                <mpath href="#tbds-hero-signal-path-one" />
+              </animateMotion>
+            </circle>
+            <circle className={styles.heroSignalDot} r="2.5" fill="#c7d2fe" opacity="0.78">
+              <animateMotion dur="11s" begin="-4s" repeatCount="indefinite">
+                <mpath href="#tbds-hero-signal-path-two" />
+              </animateMotion>
+            </circle>
           </svg>
         </div>
       </div>
 
       <div className={styles.heroInner}>
         <div className={styles.heroContent}>
-          <p className={styles.heroBrand}>TAN BUI DESIGNS</p>
-
           <AnimatedHeadline
             as="h1"
+            tone="dark"
             id="homepage-hero-title"
             className={styles.heroTitle}
           >

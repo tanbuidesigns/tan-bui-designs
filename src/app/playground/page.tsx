@@ -25,9 +25,10 @@ export default function PlaygroundPage() {
       <section className="relative isolate overflow-clip border-b border-white/10 py-20 sm:py-24 lg:py-28">
         <ArtworkBackground variant="hero" />
         <WideShell className="relative z-10">
-          <AnimatedLabel className="mb-8 text-white/55">Playground</AnimatedLabel>
+          <AnimatedLabel tone="dark" className="mb-8 text-white/55">Playground</AnimatedLabel>
           <AnimatedHeadline
             as="h1"
+            tone="dark"
             className="max-w-6xl text-5xl sm:text-6xl lg:text-8xl"
           >
             The work between the work.

@@ -27,9 +27,10 @@ export default function ArtworkCTA({
     <section className="relative isolate overflow-clip bg-[#07080a] py-24 text-white sm:py-28 lg:py-36">
       <ArtworkBackground variant="cta" />
       <WideShell className="relative z-10">
-        <AnimatedLabel className="mb-7 text-white/55">{label}</AnimatedLabel>
+        <AnimatedLabel tone="dark" className="mb-7 text-white/55">{label}</AnimatedLabel>
         <AnimatedHeadline
           as="h2"
+          tone="dark"
           className="max-w-6xl text-5xl md:text-7xl lg:text-[5.5rem]"
         >
           {heading}
@@ -40,11 +41,10 @@ export default function ArtworkCTA({
         <div className="mt-12">
           <Button
             href={href}
-            variant="accent"
+            variant="gradient"
             size="lg"
             expandOnHover
             showArrow
-            className="focus-visible:ring-white focus-visible:ring-offset-black"
           >
             {buttonLabel}
           </Button>

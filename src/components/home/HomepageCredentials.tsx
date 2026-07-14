@@ -22,6 +22,7 @@ export default function HomepageCredentials() {
         <div className={styles.credentialsHeading}>
           <AnimatedHeadline
             as="h2"
+            tone="dark"
             id="homepage-credentials-title"
             className={styles.credentialsTitle}
           >
@@ -54,6 +55,7 @@ export default function HomepageCredentials() {
               <strong className={styles.credentialValue}>
                 {credential.value}
               </strong>
+              <span className={styles.credentialRule} aria-hidden="true" />
               <span className={styles.credentialLabel}>{credential.label}</span>
             </article>
           ))}

@@ -23,11 +23,12 @@ export default function HomepageScrollHighlight() {
         return;
       }
 
-      const start = 75;
-      const end = 300;
+      const rect = highlight.getBoundingClientRect();
+      const start = window.innerHeight * 0.76;
+      const end = window.innerHeight * 0.38;
       const progress = Math.min(
         1,
-        Math.max(0, (window.scrollY - start) / (end - start))
+        Math.max(0, (start - rect.top) / (start - end))
       );
 
       highlight.style.setProperty(
@@ -58,7 +59,9 @@ export default function HomepageScrollHighlight() {
 
   return (
     <span ref={highlightRef} className={styles.heroHighlight}>
-      Make complicated things easier to understand.
+      <span className={styles.heroHighlightText}>
+        Make complicated things easier to understand.
+      </span>
     </span>
   );
 }

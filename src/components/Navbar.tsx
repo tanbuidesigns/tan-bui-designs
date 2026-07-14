@@ -12,6 +12,7 @@ const links = [
   { label: "Work", href: "/work" },
   { label: "About", href: "/about" },
   { label: "Playground", href: "/playground" },
+  { label: "Blog", href: "/blog" },
 ] as const;
 
 export default function Navbar() {

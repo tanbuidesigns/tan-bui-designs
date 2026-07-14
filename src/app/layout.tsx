@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://tanbuidesigns.com"),
   title: "Tan Bui Designs",
   description: "Multimedia design consultant.",
 };

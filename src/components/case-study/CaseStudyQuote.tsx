@@ -58,7 +58,7 @@ export default function CaseStudyQuote({
           >
             <span className="text-gray-300">“</span>
 
-            <AnimatedHeadline className="inline">
+            <AnimatedHeadline as="span" className="inline">
               {quote}
             </AnimatedHeadline>
 
