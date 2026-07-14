@@ -13,6 +13,7 @@ export default function Footer() {
     { label: "Home", href: "/" },
     { label: "Work", href: "/work" },
     { label: "About", href: "/about" },
+    { label: "Playground", href: "/playground" },
     { label: "Contact", href: "/contact" },
   ];
 
@@ -157,6 +158,28 @@ export default function Footer() {
                   {link.label}
                 </Link>
               ))}
+
+              <a
+                href="https://www.linkedin.com/in/tanbuidesigns/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="
+                  relative inline-flex text-gray-500
+                  transition-all duration-300
+                  ease-[cubic-bezier(0.22,1,0.36,1)]
+                  hover:-translate-y-[1px] hover:text-black
+                  focus-visible:outline-none focus-visible:ring-2
+                  focus-visible:ring-black focus-visible:ring-offset-4
+                  after:absolute after:left-0 after:-bottom-1
+                  after:h-px after:w-full after:origin-left after:scale-x-0
+                  after:bg-[image:var(--tbds-accent-gradient)]
+                  after:transition-transform after:duration-300
+                  after:ease-[cubic-bezier(0.22,1,0.36,1)]
+                  hover:after:scale-x-100 focus-visible:after:scale-x-100
+                "
+              >
+                LinkedIn
+              </a>
             </nav>
           </div>
 

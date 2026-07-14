@@ -4,6 +4,7 @@ import Reveal from "@/components/Reveal";
 import AnimatedLabel from "@/components/AnimatedLabel";
 import AnimatedHeadline from "@/components/AnimatedHeadline";
 import FeaturedWorkSection from "@/components/FeaturedWorkSection";
+import CaseStudyCTA from "@/components/case-study/CaseStudyCTA";
 
 import Container from "@/components/ui/Container";
 import Section from "@/components/ui/Section";
@@ -19,6 +20,7 @@ export default function WorkPage() {
             </AnimatedLabel>
 
             <AnimatedHeadline
+              as="h1"
               className="
                 max-w-5xl
 
@@ -54,6 +56,7 @@ export default function WorkPage() {
       </Section>
 
       <FeaturedWorkSection showHeading={false} />
+      <CaseStudyCTA />
     </main>
   );
 }

@@ -217,7 +217,7 @@ export default function UrbanEatClient() {
             COMPLETE BRANDING
           </AnimatedLabel>
 
-          <AnimatedHeadline className="max-w-5xl text-6xl font-bold leading-[0.92] md:text-8xl">
+          <AnimatedHeadline as="h1" className="max-w-5xl text-6xl font-bold leading-[0.92] md:text-8xl">
             Urban Eat
           </AnimatedHeadline>
 

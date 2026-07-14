@@ -1,200 +1,95 @@
-"use client";
+import type { Metadata } from "next";
 
-import Reveal from "@/components/Reveal";
-import AnimatedLabel from "@/components/AnimatedLabel";
 import AnimatedHeadline from "@/components/AnimatedHeadline";
+import AnimatedLabel from "@/components/AnimatedLabel";
+import ArtworkBackground from "@/components/ArtworkBackground";
 import ContactForm from "@/components/ContactForm";
+import WideShell from "@/components/ui/WideShell";
 
-import Container from "@/components/ui/Container";
-import GradientLine from "@/components/ui/GradientLine";
-import Section from "@/components/ui/Section";
+export const metadata: Metadata = {
+  title: "Contact | Tan Bui Designs",
+  description:
+    "Start a conversation with Tan Bui Designs about branding, packaging, publications, websites, exhibitions or creative direction.",
+  alternates: {
+    canonical: "/contact",
+  },
+};
+
+const services = [
+  "Brand Identity",
+  "Packaging Design",
+  "Publication Design",
+  "Website Design",
+  "Exhibition Design",
+  "Creative Direction",
+] as const;
 
 export default function ContactPage() {
-  const services = [
-    "Brand Identity",
-    "Packaging Design",
-    "Publication Design",
-    "Website Design",
-    "Exhibition Design",
-    "Creative Direction",
-  ];
-
   return (
-    <main className="bg-white text-black">
-      {/* HERO */}
+    <main className="relative isolate overflow-x-clip bg-[#07080a] text-white">
+      <ArtworkBackground variant="contact" />
 
-      <Section spacing="hero">
-        <Container size="lg">
-          <Reveal>
-            <AnimatedLabel className="mb-8">
-              CONTACT
-            </AnimatedLabel>
-
-            <AnimatedHeadline className="text-5xl md:text-7xl font-bold leading-[0.95] max-w-5xl">
+      <WideShell className="relative z-10 py-20 sm:py-24 lg:py-28 2xl:py-32">
+        <div className="grid gap-14 lg:grid-cols-[minmax(0,0.95fr)_minmax(24rem,0.72fr)] lg:items-start lg:gap-16 xl:gap-24">
+          <div className="lg:sticky lg:top-32">
+            <AnimatedLabel className="mb-8 text-white/55">Contact</AnimatedLabel>
+            <AnimatedHeadline
+              as="h1"
+              className="max-w-5xl text-5xl sm:text-6xl lg:text-7xl xl:text-[5.5rem]"
+            >
               Let&apos;s build something clear, useful and meaningful.
             </AnimatedHeadline>
 
-            <div className="mt-12 space-y-6 text-xl text-gray-600 leading-relaxed max-w-3xl">
-              <p>
-                Every project starts with a conversation.
-              </p>
-
+            <div className="mt-10 max-w-3xl space-y-5 text-lg leading-relaxed text-white/68 sm:text-xl">
+              <p>Every project starts with a conversation.</p>
               <p>
                 Whether you&apos;re launching a brand, publishing educational
                 content, building a website or creating an exhibition
                 experience, I&apos;d be happy to learn more about what
                 you&apos;re working on.
               </p>
-
               <p>
                 Tell me a little about your project and I&apos;ll get back to
                 you as soon as possible.
               </p>
             </div>
 
-            <GradientLine size="md" className="mt-12" />
-          </Reveal>
-        </Container>
-      </Section>
-
-      {/* CONTACT FORM + DETAILS */}
-
-      <Section spacing="editorial" borderTop>
-        <Container size="lg">
-          <div className="grid gap-20 lg:grid-cols-2 lg:gap-24">
-            <Reveal>
-              <ContactForm />
-            </Reveal>
-
-            <Reveal delay={150}>
-              <aside
-                className="
-                  grid
-                  gap-16
-
-                  md:grid-cols-2
-                  md:gap-12
-
-                  lg:grid-cols-1
-                  lg:gap-16
-
-                  min-[1120px]:grid-cols-2
-                  min-[1120px]:gap-12
-                  min-[1120px]:items-start
-
-                  2xl:grid-cols-1
-                  2xl:gap-16
-                "
-              >
-                {/* SERVICES */}
-
-                <div>
-                  <div className="mb-8">
-                    <AnimatedLabel>
-                      WHAT I CAN HELP WITH
-                    </AnimatedLabel>
-                  </div>
-
-                  <div className="space-y-5 text-2xl">
-                    {services.map((service) => (
-                      <p key={service}>
-                        {service}
-                      </p>
-                    ))}
-                  </div>
-
-                  <GradientLine size="md" className="mt-12" />
-                </div>
-
-                {/* CONTACT DETAILS */}
-
-                <div
-                  className="
-                    space-y-16
-
-                    md:border-l
-                    md:border-gray-100
-                    md:pl-10
-
-                    lg:border-l-0
-                    lg:pl-0
-
-                    min-[1120px]:border-l
-                    min-[1120px]:border-gray-100
-                    min-[1120px]:pl-10
-
-                    2xl:border-l-0
-                    2xl:pl-0
-                  "
+            <div className="mt-12 grid gap-8 border-t border-white/12 pt-9 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+              <div>
+                <AnimatedLabel className="mb-4 text-white/45">Email</AnimatedLabel>
+                <a
+                  href="mailto:tanbuidesigns@gmail.com"
+                  className="break-all text-base text-white/78 underline decoration-white/25 underline-offset-4 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-black"
                 >
-                  <div>
-                    <div className="mb-6">
-                      <AnimatedLabel>
-                        EMAIL
-                      </AnimatedLabel>
-                    </div>
-
-                    <a
-                      href="mailto:tanbuidesigns@gmail.com"
-                      className="
-                        group
-                        relative
-                        inline-block
-
-                        break-all
-
-                        text-xl
-                        text-gray-500
-
-                        transition-all
-                        duration-300
-
-                        hover:text-black
-                      "
-                    >
-                      tanbuidesigns@gmail.com
-
-                      <span
-                        className="
-                          absolute
-                          left-0
-                          -bottom-2
-                          h-px
-                          w-full
-
-                          origin-left
-                          scale-x-0
-
-                          bg-[image:var(--tbds-accent-gradient)]
-
-                          transition-transform
-                          duration-300
-
-                          group-hover:scale-x-100
-                        "
-                      />
-                    </a>
-                  </div>
-
-                  <div className="border-t border-gray-100 pt-10">
-                    <div className="mb-6">
-                      <AnimatedLabel>
-                        LOCATION
-                      </AnimatedLabel>
-                    </div>
-
-                    <p className="text-gray-600 leading-relaxed">
-                      Based in West Yorkshire, UK.
-                      <br />
-                      Working with organisations locally and remotely.
-                    </p>
-                  </div>
-                </div>
-              </aside>
-            </Reveal>
+                  tanbuidesigns@gmail.com
+                </a>
+              </div>
+              <div>
+                <AnimatedLabel className="mb-4 text-white/45">Location</AnimatedLabel>
+                <p className="text-base leading-relaxed text-white/68">
+                  Based in West Yorkshire, UK.
+                  <br />
+                  Working with organisations locally and remotely.
+                </p>
+              </div>
+            </div>
           </div>
-        </Container>
-      </Section>
+
+          <div className="rounded-[1.35rem] border border-white/16 bg-white/[0.94] p-6 text-black shadow-[0_34px_120px_rgba(0,0,0,0.34)] sm:p-8 lg:p-10">
+            <AnimatedLabel className="mb-7">Tell me about the project</AnimatedLabel>
+            <ContactForm />
+
+            <div className="mt-12 border-t border-black/10 pt-8">
+              <AnimatedLabel className="mb-5">What I can help with</AnimatedLabel>
+              <div className="grid grid-cols-2 gap-x-5 gap-y-3 text-sm leading-relaxed text-gray-600">
+                {services.map((service) => (
+                  <span key={service}>{service}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </WideShell>
     </main>
   );
 }

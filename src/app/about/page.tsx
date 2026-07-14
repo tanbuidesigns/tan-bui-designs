@@ -4,6 +4,7 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 
 import Reveal from "@/components/Reveal";
+import AnimatedHeadline from "@/components/AnimatedHeadline";
 import AnimatedLabel from "@/components/AnimatedLabel";
 
 import Button from "@/components/ui/Button";
@@ -143,16 +144,13 @@ export default function AboutPage() {
                     </p>
                   </div>
 
-                  <h1
+                  <AnimatedHeadline
+                    as="h1"
                     className="max-w-[58rem] text-[clamp(3.15rem,4.75vw,6rem)] font-bold leading-[0.95] tracking-[-0.06em]"
-                    style={{
-                      animation:
-                        "tbds-about-title-in 900ms cubic-bezier(0.22,1,0.36,1) both",
-                    }}
                   >
                     <span className="block">From complex briefs</span>
                     <span className="block">to clear design systems</span>
-                  </h1>
+                  </AnimatedHeadline>
 
                   <div className="mt-12 flex max-w-2xl items-center gap-4 border-t border-black/10 pt-6 sm:gap-5">
                     <div className="relative h-16 w-16 flex-none overflow-hidden rounded-full border border-black/10 bg-white shadow-[0_14px_40px_rgba(0,0,0,0.08)] sm:h-20 sm:w-20">
@@ -220,9 +218,9 @@ export default function AboutPage() {
                   }}
                 />
 
-                <h2 className="max-w-3xl text-4xl font-bold leading-[1] tracking-[-0.045em] sm:text-5xl xl:text-6xl">
+                <AnimatedHeadline as="h2" className="max-w-3xl text-4xl font-bold leading-[1] tracking-[-0.045em] sm:text-5xl xl:text-6xl">
                   Design is where thinking becomes visible.
-                </h2>
+                </AnimatedHeadline>
 
                 <div className="mt-10 max-w-3xl space-y-6 text-lg leading-relaxed text-gray-600 sm:text-xl">
                   <p>
@@ -262,9 +260,9 @@ export default function AboutPage() {
           <Reveal>
             <AnimatedLabel className="mb-6">JOURNEY</AnimatedLabel>
 
-            <h2 className="max-w-5xl text-5xl font-bold leading-[1] tracking-[-0.045em] md:text-6xl">
+            <AnimatedHeadline as="h2" className="max-w-5xl text-5xl font-bold leading-[1] tracking-[-0.045em] md:text-6xl">
               A career built through craft, pressure and constant learning.
-            </h2>
+            </AnimatedHeadline>
           </Reveal>
 
           <JourneyTimeline />
@@ -279,9 +277,9 @@ export default function AboutPage() {
             <AnimatedLabel className="mb-6">PHILOSOPHY</AnimatedLabel>
 
             <div className="grid gap-12 lg:grid-cols-[0.86fr_1.14fr] lg:gap-20">
-              <h2 className="max-w-3xl text-5xl font-bold leading-[1.02] tracking-[-0.045em] md:text-6xl">
+              <AnimatedHeadline as="h2" className="max-w-3xl text-5xl font-bold leading-[1.02] tracking-[-0.045em] md:text-6xl">
                 Good design combines style with craftsmanship.
-              </h2>
+              </AnimatedHeadline>
 
               <div className="max-w-4xl space-y-8 text-xl leading-relaxed text-gray-600">
                 <p>
@@ -336,10 +334,10 @@ export default function AboutPage() {
               WHAT I BRING
             </AnimatedLabel>
 
-            <h2 className="max-w-[88rem] text-[clamp(3.25rem,7vw,7.5rem)] font-bold leading-[0.9] tracking-[-0.065em]">
+            <AnimatedHeadline as="h2" className="max-w-[88rem] text-[clamp(3.25rem,7vw,7.5rem)] font-bold leading-[0.9] tracking-[-0.065em]">
               <span className="block">Different mediums.</span>
               <span className="block lg:ml-[18%]">Same standard.</span>
-            </h2>
+            </AnimatedHeadline>
 
             <div className="mt-16 grid gap-12 lg:grid-cols-12 lg:items-end">
               <div className="max-w-4xl space-y-8 text-xl leading-relaxed text-gray-300 lg:col-span-7">

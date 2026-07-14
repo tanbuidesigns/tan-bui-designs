@@ -1,19 +1,21 @@
-import HeroSection from "@/components/HeroSection";
-import CredibilitySection from "@/components/CredibilitySection";
-import WhatIDoSection from "@/components/WhatIDoSection";
+import HomepageHero from "@/components/home/HomepageHero";
+import ClientLogoShowcase from "@/components/home/ClientLogoShowcase";
+import HomepageCredentials from "@/components/home/HomepageCredentials";
+import ServicesBento from "@/components/home/ServicesBento";
+import HomepageAboutPreview from "@/components/home/HomepageAboutPreview";
+import HomepageCTA from "@/components/home/HomepageCTA";
 import FeaturedWorkSection from "@/components/FeaturedWorkSection";
-import AboutPreviewSection from "@/components/AboutPreviewSection";
-import ContactCTASection from "@/components/ContactCTASection";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white text-black">
-      <HeroSection />
-      <CredibilitySection />
-      <WhatIDoSection />
+    <main className="min-h-screen bg-white text-black [overflow-x:clip]">
+      <HomepageHero />
+      <ClientLogoShowcase />
       <FeaturedWorkSection />
-      <AboutPreviewSection />
-      <ContactCTASection />
+      <HomepageCredentials />
+      <ServicesBento />
+      <HomepageAboutPreview />
+      <HomepageCTA />
     </main>
   );
 }

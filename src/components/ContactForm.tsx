@@ -2,123 +2,70 @@
 
 import { useState } from "react";
 
+import Button from "@/components/ui/Button";
+
 export default function ContactForm() {
   const [loading, setLoading] = useState(false);
-
   const [success, setSuccess] = useState(false);
 
-  async function handleSubmit(
-    e: React.FormEvent<HTMLFormElement>
-  ) {
-    e.preventDefault();
-
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     setLoading(true);
     setSuccess(false);
 
-    const formData = new FormData(
-      e.currentTarget
-    );
-
-    const response = await fetch(
-      "/api/contact",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type":
-            "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.get("name"),
-          email: formData.get("email"),
-          message:
-            formData.get("message"),
-        }),
-      }
-    );
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: formData.get("name"),
+        email: formData.get("email"),
+        message: formData.get("message"),
+      }),
+    });
 
     setLoading(false);
 
     if (response.ok) {
       setSuccess(true);
-      e.currentTarget.reset();
+      form.reset();
     }
   }
 
+  const fieldClass =
+    "w-full border-0 border-b border-black/20 bg-transparent px-0 py-4 text-lg text-black outline-none transition-colors placeholder:text-gray-400 focus:border-black focus-visible:ring-0";
+
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-10"
-    >
+    <form onSubmit={handleSubmit} className="space-y-8">
       <div>
-        <label className="block text-sm uppercase tracking-[0.15em] text-gray-500 mb-3">
+        <label htmlFor="contact-name" className="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
           Name
         </label>
-
-        <input
-          type="text"
-          name="name"
-          required
-          className="w-full border-b border-gray-300 py-4 outline-none focus:border-black transition"
-        />
+        <input id="contact-name" type="text" name="name" autoComplete="name" required className={fieldClass} />
       </div>
 
       <div>
-        <label className="block text-sm uppercase tracking-[0.15em] text-gray-500 mb-3">
+        <label htmlFor="contact-email" className="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
           Email
         </label>
-
-        <input
-          type="email"
-          name="email"
-          required
-          className="w-full border-b border-gray-300 py-4 outline-none focus:border-black transition"
-        />
+        <input id="contact-email" type="email" name="email" autoComplete="email" required className={fieldClass} />
       </div>
 
       <div>
-        <label className="block text-sm uppercase tracking-[0.15em] text-gray-500 mb-3">
+        <label htmlFor="contact-message" className="block text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
           Message
         </label>
-
-        <textarea
-          name="message"
-          rows={7}
-          required
-          className="w-full border-b border-gray-300 py-4 outline-none resize-none focus:border-black transition"
-        />
+        <textarea id="contact-message" name="message" rows={6} required className={`${fieldClass} resize-y`} />
       </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="
-          group
-          inline-flex
-          items-center
-          gap-3
-          bg-black
-          text-white
-          px-8
-          py-4
-          transition-all
-          duration-300
-          hover:px-10
-        "
-      >
-        {loading
-          ? "Sending..."
-          : "Send Message"}
+      <Button type="submit" disabled={loading} variant="primary" size="lg" showArrow>
+        {loading ? "Sending..." : "Send Message"}
+      </Button>
 
-        <span className="transition-transform duration-300 group-hover:translate-x-2">
-          →
-        </span>
-      </button>
-
-      {success && (
-        <p className="text-green-600">
-          Thanks. Your message has been sent.
-        </p>
-      )}
+      <p aria-live="polite" className="min-h-6 text-sm text-green-700">
+        {success ? "Thanks. Your message has been sent." : null}
+      </p>
     </form>
   );
 }

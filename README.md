@@ -16,6 +16,17 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+### Homepage client logos
+
+Place each client or brand logo as a WebP file directly inside
+`public/homepage`. The filename becomes the readable logo name, so use a clear
+name such as `British Airways.webp`.
+
+Restart `npm run dev`, run `npm run build`, or run
+`npm run generate:homepage-logos` directly. The generator updates
+`src/data/homepageLogos.generated.ts`, and the logo then appears without a
+component edit. Commit the WebP asset and the generated data file together.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

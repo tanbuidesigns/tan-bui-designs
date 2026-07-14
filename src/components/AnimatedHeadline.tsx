@@ -1,34 +1,45 @@
 "use client";
 
+import type { ReactNode } from "react";
+
+import styles from "@/components/EditorialMotion.module.css";
+
+type HeadingTag = "h1" | "h2" | "h3" | "p" | "div" | "span";
+
 type AnimatedHeadlineProps = {
-  children: string;
+  children: ReactNode;
   className?: string;
+  as?: HeadingTag;
+  id?: string;
 };
 
 export default function AnimatedHeadline({
   children,
   className = "",
+  as = "h2",
+  id,
 }: AnimatedHeadlineProps) {
-  const words = children.split(" ");
+  const Tag = as;
+  const words = typeof children === "string" ? children.trim().split(/\s+/) : null;
 
   return (
-    <h2 className={className}>
-      {words.map((word, index) => (
-        <span
-          key={index}
-          className="
-            inline-block
-            mr-[0.25em]
-            transition-all
-            duration-300
-            ease-[cubic-bezier(0.22,1,0.36,1)]
-            hover:-translate-y-[2px]
-            hover:text-gray-600
-          "
-        >
-          {word}
-        </span>
-      ))}
-    </h2>
+    <Tag
+      id={id}
+      className={`${styles.headline} tracking-[-0.05em] leading-[0.96] [text-wrap:balance] ${className}`}
+    >
+      {words
+        ? words.map((word, index) => (
+            <span key={`${word}-${index}`} className={styles.wordClip}>
+              <span
+                className={styles.word}
+                style={{ animationDelay: `${Math.min(index * 45, 360)}ms` }}
+              >
+                {word}
+              </span>
+              {index < words.length - 1 ? "\u00A0" : null}
+            </span>
+          ))
+        : children}
+    </Tag>
   );
 }

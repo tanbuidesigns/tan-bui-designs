@@ -1,29 +1,25 @@
 "use client";
 
+import styles from "@/components/EditorialMotion.module.css";
+
+type LabelTag = "div" | "p" | "span";
+
 type AnimatedLabelProps = {
   children: string;
   className?: string;
+  as?: LabelTag;
 };
 
 export default function AnimatedLabel({
   children,
   className = "",
+  as = "div",
 }: AnimatedLabelProps) {
+  const Tag = as;
+
   return (
-    <div className={`hero-brand ${className}`}>
-      {children.split("").map((letter, index) => (
-        <span
-          key={index}
-          className={`hero-letter ${
-            letter === " " ? "mx-2" : ""
-          }`}
-          style={{
-            transitionDelay: `${index * 25}ms`,
-          }}
-        >
-          {letter}
-        </span>
-      ))}
-    </div>
+    <Tag className={`${styles.label} ${className}`}>
+      <span className={styles.labelText}>{children}</span>
+    </Tag>
   );
 }
