@@ -14,15 +14,6 @@ export default function HomepageHero() {
     const hero = heroRef.current;
     if (!hero) return;
 
-    const mobileLayout = window.matchMedia(
-      "(max-width: 767px), (max-height: 520px) and (max-width: 1023px)"
-    );
-
-    if (mobileLayout.matches) {
-      hero.dataset.motion = "paused";
-      return;
-    }
-
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let bounds = hero.getBoundingClientRect();
     let scrollFrame: number | null = null;

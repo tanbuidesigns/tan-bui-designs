@@ -12,12 +12,6 @@ export default function HomepageScrollHighlight() {
 
     if (!highlight) return;
 
-    const mobileLayout = window.matchMedia(
-      "(max-width: 767px), (max-height: 520px) and (max-width: 1023px)"
-    );
-
-    if (mobileLayout.matches) return;
-
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame: number | null = null;
 
