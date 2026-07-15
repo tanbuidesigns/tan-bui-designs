@@ -5,11 +5,13 @@ import ServicesBento from "@/components/home/ServicesBento";
 import HomepageAboutPreview from "@/components/home/HomepageAboutPreview";
 import HomepageCTA from "@/components/home/HomepageCTA";
 import HomepageFAQ from "@/components/home/HomepageFAQ";
+import HomepageScrollHoverPlayback from "@/components/home/HomepageScrollHoverPlayback";
 import FeaturedWorkSection from "@/components/FeaturedWorkSection";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-white text-black [overflow-x:clip]">
+      <HomepageScrollHoverPlayback />
       <HomepageHero />
       <ClientLogoShowcase />
       <FeaturedWorkSection />

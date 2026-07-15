@@ -86,6 +86,7 @@ export default function ServicesBento() {
             <article
               key={service.title}
               className={`${styles.serviceCard} ${service.layoutClass}`}
+              data-homepage-scroll-hover
             >
               <Image
                 src={service.image}

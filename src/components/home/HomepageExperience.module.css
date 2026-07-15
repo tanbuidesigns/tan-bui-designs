@@ -69,7 +69,7 @@
   font-size: clamp(2.55rem, 10.5vw, 4.5rem);
   font-weight: 700;
   letter-spacing: -0.065em;
-  line-height: 0.91;
+  line-height: 0.96;
 }
 
 .heroGradientText {
@@ -113,7 +113,7 @@
 
 .heroMutedLine {
   margin-top: 0.13em;
-  color: rgb(203 213 225 / 0.46);
+  color: #f8fafc;
 }
 
 .heroSpace {
@@ -141,9 +141,9 @@
   background: linear-gradient(115deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.045));
   box-shadow: inset 0 1px rgb(255 255 255 / 0.08);
   backdrop-filter: blur(12px);
-  color: rgb(255 255 255 / calc(0.12 + (var(--tbds-highlight-progress) * 0.88)));
+  color: rgb(255 255 255 / var(--tbds-highlight-progress));
   font-weight: 720;
-  opacity: calc(0.2 + (var(--tbds-highlight-progress) * 0.8));
+  opacity: var(--tbds-highlight-progress);
   transform: translateX(calc((1 - var(--tbds-highlight-progress)) * -2.5rem));
   transition: color 100ms linear, opacity 100ms linear, transform 100ms linear;
 }
@@ -620,6 +620,10 @@
     right: -53%;
     width: 46rem;
     opacity: 0.5;
+  }
+
+  .interfaceDesktop {
+    display: none;
   }
 
   .logoFrame::before,

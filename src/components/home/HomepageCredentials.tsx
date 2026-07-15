@@ -50,7 +50,11 @@ export default function HomepageCredentials() {
 
         <div className={styles.credentialsGrid}>
           {credentials.map((credential) => (
-            <article key={credential.label} className={styles.credentialItem}>
+            <article
+              key={credential.label}
+              className={styles.credentialItem}
+              data-homepage-scroll-hover
+            >
               <strong className={styles.credentialValue}>
                 {credential.value}
               </strong>

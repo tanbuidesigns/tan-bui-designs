@@ -135,6 +135,20 @@
   transition: opacity 450ms ease;
 }
 
+.credentialItem[data-scroll-hover-playing="true"]::before {
+  opacity: 1;
+}
+
+.credentialItem[data-scroll-hover-playing="true"] .credentialRule {
+  opacity: 1;
+  transform: scaleX(1.45);
+}
+
+.credentialItem[data-scroll-hover-playing="true"] .credentialValue,
+.credentialItem[data-scroll-hover-playing="true"] .credentialLabel {
+  transform: translateY(-2px);
+}
+
 .credentialItem:last-child {
   grid-column: 1 / -1;
 }
@@ -227,6 +241,11 @@
   transition:
     filter 600ms ease,
     transform 900ms var(--tbds-ease);
+}
+
+.serviceCard[data-scroll-hover-playing="true"] .serviceImage {
+  filter: grayscale(0) contrast(1);
+  transform: scale(1.045);
 }
 
 .serviceImageCentre {
