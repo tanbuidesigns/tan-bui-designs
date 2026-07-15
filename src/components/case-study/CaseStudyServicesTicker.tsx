@@ -15,7 +15,7 @@ type CaseStudyServicesTickerProps = {
 };
 
 const DEFAULT_HOLD_TIME = 2200;
-const DEFAULT_TRANSITION_TIME = 700;
+const DEFAULT_TRANSITION_TIME = 860;
 
 type Movement =
   | "auto"
@@ -209,12 +209,12 @@ export default function CaseStudyServicesTicker({
         </div>
 
         <div
-          className="relative min-w-0 overflow-hidden py-8 sm:py-10"
+          className="relative min-w-0 overflow-hidden px-3 py-8 sm:px-5 sm:py-10"
           style={{
             WebkitMaskImage:
-              "linear-gradient(to right, transparent 0%, black 13%, black 87%, transparent 100%)",
+              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 8%, black 18%, black 82%, rgba(0,0,0,0.4) 92%, transparent 100%)",
             maskImage:
-              "linear-gradient(to right, transparent 0%, black 13%, black 87%, transparent 100%)",
+              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 8%, black 18%, black 82%, rgba(0,0,0,0.4) 92%, transparent 100%)",
           }}
         >
           <div
@@ -227,13 +227,13 @@ export default function CaseStudyServicesTicker({
           >
             <div
               ref={trackRef}
-              className="absolute left-1/2 top-0 flex h-full items-center gap-[var(--service-pill-gap)] [--service-pill-gap:0.65rem] [--service-pill-step:calc(var(--service-pill-width)+var(--service-pill-gap))] [--service-pill-width:clamp(10.5rem,52vw,17rem)] sm:[--service-pill-gap:0.85rem] sm:[--service-pill-width:clamp(12rem,28vw,18rem)]"
+              className="absolute left-1/2 top-0 flex h-full items-center gap-[var(--service-pill-gap)] [--service-pill-gap:0.75rem] [--service-pill-step:calc(var(--service-pill-width)+var(--service-pill-gap))] [--service-pill-width:clamp(10.75rem,48vw,17rem)] sm:[--service-pill-gap:0.95rem] sm:[--service-pill-width:clamp(12rem,26vw,18rem)]"
               onTransitionEnd={handleTransitionEnd}
               style={{
                 transform: movementTransform,
                 transition:
                   transitionEnabled && !reducedMotion
-                    ? `transform ${movement === "auto" ? transitionTime : 420}ms cubic-bezier(0.22,1,0.36,1)`
+                    ? `transform ${movement === "auto" ? transitionTime : 560}ms cubic-bezier(0.2,0.82,0.24,1)`
                     : "none",
               }}
             >
@@ -246,7 +246,7 @@ export default function CaseStudyServicesTicker({
                     className={`flex h-12 w-[var(--service-pill-width)] shrink-0 items-center justify-center rounded-full border px-5 text-center transition-[background-color,border-color,box-shadow,color,opacity,transform] duration-500 sm:h-14 sm:px-6 ${
                       isMiddle
                         ? "scale-100 border-transparent text-gray-950 opacity-100 shadow-[0_12px_32px_rgba(15,23,42,0.12)]"
-                        : "scale-[0.94] border-gray-100 bg-white text-gray-300 opacity-55"
+                        : "scale-[0.965] border-gray-100 bg-white/95 text-gray-500 opacity-80"
                     }`}
                     style={
                       isMiddle
