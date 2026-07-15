@@ -14,12 +14,15 @@ type CaseStudyServicesTickerProps = {
   transitionTime?: number;
 };
 
-const ITEM_HEIGHT = 44;
-const VISIBLE_ITEMS = 3;
 const DEFAULT_HOLD_TIME = 2200;
 const DEFAULT_TRANSITION_TIME = 700;
 
-type Movement = "auto" | "manual-up" | "manual-down" | "manual-return" | null;
+type Movement =
+  | "auto"
+  | "manual-left"
+  | "manual-right"
+  | "manual-return"
+  | null;
 
 export default function CaseStudyServicesTicker({
   id,
@@ -62,12 +65,6 @@ export default function CaseStudyServicesTicker({
   }, []);
 
   useEffect(() => {
-    setCurrentIndex(0);
-    setMovement(null);
-    setTransitionEnabled(true);
-  }, [cleanServices.length]);
-
-  useEffect(() => {
     if (cleanServices.length <= 1 || movement || reducedMotion) return;
 
     const timeout = window.setTimeout(() => {
@@ -86,18 +83,17 @@ export default function CaseStudyServicesTicker({
     return cleanServices[index];
   };
 
-  const visibleRows = [-2, -1, 0, 1, 2].map((offset) => ({
+  const visiblePills = [-2, -1, 0, 1, 2].map((offset) => ({
     offset,
     service: getService(offset),
   }));
 
-  const baseTransform = -ITEM_HEIGHT;
   const movementTransform =
-    movement === "auto" || movement === "manual-up"
-      ? baseTransform - ITEM_HEIGHT
-      : movement === "manual-down"
-        ? baseTransform + ITEM_HEIGHT
-        : baseTransform;
+    movement === "auto" || movement === "manual-left"
+      ? "translateX(calc(-50% - var(--service-pill-step)))"
+      : movement === "manual-right"
+        ? "translateX(calc(-50% + var(--service-pill-step)))"
+        : "translateX(-50%)";
 
   const resetTrack = () => {
     setTransitionEnabled(false);
@@ -111,10 +107,12 @@ export default function CaseStudyServicesTicker({
   const handleTransitionEnd = (event: TransitionEvent<HTMLDivElement>) => {
     if (event.currentTarget !== event.target || !movement) return;
 
-    if (movement === "auto" || movement === "manual-up") {
+    if (movement === "auto" || movement === "manual-left") {
       setCurrentIndex((index) => (index + 1) % cleanServices.length);
-    } else if (movement === "manual-down") {
-      setCurrentIndex((index) => Math.max(0, index - 1));
+    } else if (movement === "manual-right") {
+      setCurrentIndex(
+        (index) => (index - 1 + cleanServices.length) % cleanServices.length
+      );
     }
 
     resetTrack();
@@ -139,7 +137,7 @@ export default function CaseStudyServicesTicker({
 
     if (!dragEstablishedRef.current) {
       if (Math.max(Math.abs(deltaX), Math.abs(deltaY)) < 7) return;
-      if (Math.abs(deltaY) <= Math.abs(deltaX) * 1.15) {
+      if (Math.abs(deltaX) <= Math.abs(deltaY) * 1.15) {
         pointerIdRef.current = null;
         resetTrack();
         return;
@@ -148,11 +146,9 @@ export default function CaseStudyServicesTicker({
       event.currentTarget.setPointerCapture(event.pointerId);
     }
 
-    const minimum = currentIndex < cleanServices.length - 1 ? -ITEM_HEIGHT : 0;
-    const maximum = currentIndex > 0 ? ITEM_HEIGHT : 0;
-    const offset = Math.max(minimum, Math.min(maximum, deltaY));
+    const offset = Math.max(-160, Math.min(160, deltaX));
     dragOffsetRef.current = offset;
-    trackRef.current.style.transform = `translateY(${baseTransform + offset}px)`;
+    trackRef.current.style.transform = `translateX(calc(-50% + ${offset}px))`;
     event.preventDefault();
   };
 
@@ -167,52 +163,63 @@ export default function CaseStudyServicesTicker({
     dragEstablishedRef.current = false;
 
     if (reducedMotion) {
-      if (offset <= -18 && currentIndex < cleanServices.length - 1) {
-        setCurrentIndex((index) => index + 1);
-      } else if (offset >= 18 && currentIndex > 0) {
-        setCurrentIndex((index) => index - 1);
+      if (offset <= -44) {
+        setCurrentIndex((index) => (index + 1) % cleanServices.length);
+      } else if (offset >= 44) {
+        setCurrentIndex(
+          (index) => (index - 1 + cleanServices.length) % cleanServices.length
+        );
       }
       resetTrack();
       return;
     }
 
-    setTransitionEnabled(!reducedMotion);
-
-    if (offset <= -18 && currentIndex < cleanServices.length - 1) {
-      setMovement("manual-up");
-    } else if (offset >= 18 && currentIndex > 0) {
-      setMovement("manual-down");
+    setTransitionEnabled(true);
+    if (offset <= -44) {
+      setMovement("manual-left");
+    } else if (offset >= 44) {
+      setMovement("manual-right");
     } else {
       setMovement("manual-return");
-      if (trackRef.current) {
-        trackRef.current.style.transition =
-          "transform 420ms cubic-bezier(0.22,1,0.36,1)";
-        trackRef.current.style.transform = `translateY(${baseTransform}px)`;
-      }
+      trackRef.current?.style.setProperty(
+        "transform",
+        "translateX(-50%)"
+      );
     }
   };
 
+  const activeOffset =
+    movement === "auto" || movement === "manual-left"
+      ? 1
+      : movement === "manual-right"
+        ? -1
+        : 0;
+
   return (
-    <section id={id} className="mx-auto max-w-6xl scroll-mt-40 border-t border-gray-100 px-8 py-20">
-      <div className="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+    <section
+      id={id}
+      className="mx-auto max-w-6xl scroll-mt-40 border-t border-gray-100 px-5 py-16 sm:px-8 sm:py-20"
+    >
+      <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:gap-12">
         <div>
           <AnimatedLabel className="mb-8">{title}</AnimatedLabel>
-          <p className="max-w-2xl text-xl leading-relaxed text-gray-600">{intro}</p>
+          <p className="max-w-2xl text-xl leading-relaxed text-gray-600">
+            {intro}
+          </p>
         </div>
 
         <div
-          className="relative overflow-hidden py-8"
+          className="relative min-w-0 overflow-hidden py-8 sm:py-10"
           style={{
             WebkitMaskImage:
-              "linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%)",
+              "linear-gradient(to right, transparent 0%, black 13%, black 87%, transparent 100%)",
             maskImage:
-              "linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%)",
+              "linear-gradient(to right, transparent 0%, black 13%, black 87%, transparent 100%)",
           }}
         >
           <div
-            className="mx-auto overflow-hidden touch-none select-none"
-            style={{ height: `${ITEM_HEIGHT * VISIBLE_ITEMS}px` }}
-            aria-label="Project services. Swipe vertically on the service names to browse."
+            className="relative h-16 touch-pan-y select-none sm:h-[4.5rem]"
+            aria-label="Project services. Swipe horizontally on the service pills to browse."
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={finishPointer}
@@ -220,36 +227,37 @@ export default function CaseStudyServicesTicker({
           >
             <div
               ref={trackRef}
-              className="flex flex-col"
+              className="absolute left-1/2 top-0 flex h-full items-center gap-[var(--service-pill-gap)] [--service-pill-gap:0.65rem] [--service-pill-step:calc(var(--service-pill-width)+var(--service-pill-gap))] [--service-pill-width:clamp(10.5rem,52vw,17rem)] sm:[--service-pill-gap:0.85rem] sm:[--service-pill-width:clamp(12rem,28vw,18rem)]"
               onTransitionEnd={handleTransitionEnd}
               style={{
-                transform: `translateY(${movementTransform}px)`,
+                transform: movementTransform,
                 transition:
                   transitionEnabled && !reducedMotion
                     ? `transform ${movement === "auto" ? transitionTime : 420}ms cubic-bezier(0.22,1,0.36,1)`
                     : "none",
               }}
             >
-              {visibleRows.map((row) => {
-                const activeOffset =
-                  movement === "auto" || movement === "manual-up"
-                    ? 1
-                    : movement === "manual-down"
-                      ? -1
-                      : 0;
-                const isMiddle = row.offset === activeOffset;
+              {visiblePills.map((pill) => {
+                const isMiddle = pill.offset === activeOffset;
 
                 return (
-                  <div key={`${row.offset}-${row.service}-${currentIndex}`} className="flex items-center justify-center" style={{ height: `${ITEM_HEIGHT}px` }}>
-                    <p
-                      className={`text-center text-2xl font-semibold leading-none tracking-[-0.035em] transition-all duration-500 md:text-3xl ${
-                        isMiddle
-                          ? "scale-100 text-black opacity-100 blur-0"
-                          : "scale-[0.94] text-gray-300 opacity-55 blur-[0.2px]"
-                      }`}
-                    >
-                      {row.service}
-                    </p>
+                  <div
+                    key={`${pill.offset}-${pill.service}-${currentIndex}`}
+                    className={`flex h-12 w-[var(--service-pill-width)] shrink-0 items-center justify-center rounded-full border px-5 text-center transition-[background-color,border-color,box-shadow,color,opacity,transform] duration-500 sm:h-14 sm:px-6 ${
+                      isMiddle
+                        ? "scale-100 border-transparent text-gray-950 opacity-100 shadow-[0_12px_32px_rgba(15,23,42,0.12)]"
+                        : "scale-[0.94] border-gray-100 bg-white text-gray-300 opacity-55"
+                    }`}
+                    style={
+                      isMiddle
+                        ? { background: "var(--tbds-accent-gradient)" }
+                        : undefined
+                    }
+                    aria-hidden={!isMiddle}
+                  >
+                    <span className="text-sm font-semibold leading-tight tracking-[-0.02em] sm:text-base">
+                      {pill.service}
+                    </span>
                   </div>
                 );
               })}
