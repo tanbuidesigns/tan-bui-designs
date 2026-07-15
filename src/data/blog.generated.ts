@@ -26,7 +26,7 @@ export const blogPosts = [
   {
     "slug": "avoiding-trendslop-design-taste-ai",
     "entry": {
-      "title": "Avoiding Trendslop: Why Taste Matters More in the Age of AI",
+      "title": "Avoiding trendslop: why taste matters more in the age of AI",
       "excerpt": "AI can generate polished options at remarkable speed. The harder job is recognising when those options are fashionable, interchangeable or simply wrong for the brief.",
       "publishedDate": "2026-07-14",
       "updatedDate": "2026-07-14",
@@ -48,7 +48,7 @@ export const blogPosts = [
   {
     "slug": "design-foundations-still-matter",
     "entry": {
-      "title": "Design Foundations Still Matter, Especially When Everything Gets Faster",
+      "title": "Design foundations still matter, especially when everything gets faster",
       "excerpt": "Tools keep changing, but typography, hierarchy, spacing, contrast and production judgement still decide whether design survives contact with the real world.",
       "publishedDate": "2026-07-14",
       "updatedDate": "2026-07-14",
@@ -70,7 +70,7 @@ export const blogPosts = [
   {
     "slug": "vibe-coding-custom-websites",
     "entry": {
-      "title": "Vibe Coding Is Changing How Custom Websites Get Made",
+      "title": "Vibe coding is changing how custom websites get made",
       "excerpt": "A practical look at how strategy, design judgement and AI-assisted coding can work together without pretending that tools make the difficult decisions for us.",
       "publishedDate": "2026-07-14",
       "updatedDate": "2026-07-14",
