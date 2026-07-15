@@ -83,7 +83,7 @@ export default function CaseStudyServicesTicker({
     return cleanServices[index];
   };
 
-  const visiblePills = [-2, -1, 0, 1, 2].map((offset) => ({
+  const visiblePills = [-3, -2, -1, 0, 1, 2, 3].map((offset) => ({
     offset,
     service: getService(offset),
   }));
@@ -209,12 +209,12 @@ export default function CaseStudyServicesTicker({
         </div>
 
         <div
-          className="relative min-w-0 overflow-hidden px-3 py-8 sm:px-5 sm:py-10"
+          className="relative min-w-0 overflow-hidden px-2 py-8 sm:px-4 sm:py-10"
           style={{
             WebkitMaskImage:
-              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 8%, black 18%, black 82%, rgba(0,0,0,0.4) 92%, transparent 100%)",
+              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 6%, black 14%, black 86%, rgba(0,0,0,0.5) 94%, transparent 100%)",
             maskImage:
-              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.4) 8%, black 18%, black 82%, rgba(0,0,0,0.4) 92%, transparent 100%)",
+              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 6%, black 14%, black 86%, rgba(0,0,0,0.5) 94%, transparent 100%)",
           }}
         >
           <div
@@ -227,7 +227,7 @@ export default function CaseStudyServicesTicker({
           >
             <div
               ref={trackRef}
-              className="absolute left-1/2 top-0 flex h-full items-center gap-[var(--service-pill-gap)] [--service-pill-gap:0.75rem] [--service-pill-step:calc(var(--service-pill-width)+var(--service-pill-gap))] [--service-pill-width:clamp(10.75rem,48vw,17rem)] sm:[--service-pill-gap:0.95rem] sm:[--service-pill-width:clamp(12rem,26vw,18rem)]"
+              className="absolute left-1/2 top-0 flex h-full items-center gap-[var(--service-pill-gap)] [--service-pill-gap:0.55rem] [--service-pill-step:calc(var(--service-pill-width)+var(--service-pill-gap))] [--service-pill-width:clamp(7.4rem,20vw,9.6rem)] sm:[--service-pill-gap:0.7rem] sm:[--service-pill-width:clamp(8rem,16vw,10.5rem)]"
               onTransitionEnd={handleTransitionEnd}
               style={{
                 transform: movementTransform,
@@ -243,19 +243,23 @@ export default function CaseStudyServicesTicker({
                 return (
                   <div
                     key={`${pill.offset}-${pill.service}-${currentIndex}`}
-                    className={`flex h-12 w-[var(--service-pill-width)] shrink-0 items-center justify-center rounded-full border px-5 text-center transition-[background-color,border-color,box-shadow,color,opacity,transform] duration-500 sm:h-14 sm:px-6 ${
+                    className={`flex h-10 w-[var(--service-pill-width)] shrink-0 items-center justify-center rounded-full border px-3 text-center transition-[background-color,border-color,box-shadow,color,opacity,transform] duration-500 sm:h-11 sm:px-4 ${
                       isMiddle
-                        ? "scale-100 border-transparent text-gray-950 opacity-100 shadow-[0_12px_32px_rgba(15,23,42,0.12)]"
-                        : "scale-[0.965] border-gray-100 bg-white/95 text-gray-500 opacity-80"
+                        ? "scale-100 border-[rgba(255,255,255,0.48)] text-gray-950 opacity-100 shadow-[0_12px_32px_rgba(15,23,42,0.12)]"
+                        : "scale-[0.94] border-gray-100/80 bg-white/92 text-gray-500 opacity-72"
                     }`}
                     style={
                       isMiddle
-                        ? { background: "var(--tbds-accent-gradient)" }
+                        ? {
+                            background: "var(--tbds-accent-gradient)",
+                            boxShadow:
+                              "0 0 0 1px rgba(255,255,255,0.18), 0 12px 32px rgba(15,23,42,0.12)",
+                          }
                         : undefined
                     }
                     aria-hidden={!isMiddle}
                   >
-                    <span className="text-sm font-semibold leading-tight tracking-[-0.02em] sm:text-base">
+                    <span className="text-xs font-semibold leading-tight tracking-[-0.02em] sm:text-sm">
                       {pill.service}
                     </span>
                   </div>
