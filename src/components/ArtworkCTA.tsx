@@ -2,6 +2,7 @@ import AnimatedHeadline from "@/components/AnimatedHeadline";
 import type { AnimatedHeadlineChunk } from "@/components/AnimatedHeadline";
 import AnimatedLabel from "@/components/AnimatedLabel";
 import ArtworkBackground from "@/components/ArtworkBackground";
+import type { ArtworkVariant } from "@/components/ArtworkBackground";
 import ServicePillTicker from "@/components/ServicePillTicker";
 import Button from "@/components/ui/Button";
 import WideShell from "@/components/ui/WideShell";
@@ -17,6 +18,7 @@ type ArtworkCTAProps = {
   note?: string;
   scrollingItems?: readonly string[];
   bodyClassName?: string;
+  artworkVariant?: ArtworkVariant;
 };
 
 export default function ArtworkCTA({
@@ -30,10 +32,11 @@ export default function ArtworkCTA({
   note,
   scrollingItems,
   bodyClassName = "max-w-3xl",
+  artworkVariant = "cta",
 }: ArtworkCTAProps) {
   return (
     <section className="relative isolate overflow-clip bg-[#07080a] py-16 text-white sm:py-20 lg:py-24">
-      <ArtworkBackground variant="cta" />
+      <ArtworkBackground variant={artworkVariant} />
       <WideShell className="relative z-10">
         <AnimatedLabel tone="dark" className="mb-5 text-white/55">{label}</AnimatedLabel>
         {headingChunks ? (

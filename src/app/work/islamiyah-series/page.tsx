@@ -24,7 +24,7 @@ import CaseStudyQuote from "@/components/case-study/CaseStudyQuote";
 import CaseStudyTimeline from "@/components/case-study/CaseStudyTimeline";
 import CaseStudyResults from "@/components/case-study/CaseStudyResults";
 import CaseStudyNavigation from "@/components/case-study/CaseStudyNavigation";
-import CaseStudyCTA from "@/components/case-study/CaseStudyCTA";
+import ProjectCTA from "@/components/ProjectCTA";
 
 import CaseStudyImageCarousel, {
   CaseStudyCarouselItem,
@@ -292,7 +292,7 @@ export default function IslamiyahSeriesPage() {
         nextProject={navigationProject}
       />
 
-      <CaseStudyCTA />
+      <ProjectCTA artworkVariant="caseStudyCta" />
 
       <style>
         {`

@@ -3,8 +3,8 @@
 import Reveal from "@/components/Reveal";
 import AnimatedLabel from "@/components/AnimatedLabel";
 import AnimatedHeadline from "@/components/AnimatedHeadline";
-import ArtworkCTA from "@/components/ArtworkCTA";
 import FeaturedWorkSection from "@/components/FeaturedWorkSection";
+import ProjectCTA from "@/components/ProjectCTA";
 
 import Container from "@/components/ui/Container";
 import Section from "@/components/ui/Section";
@@ -56,13 +56,7 @@ export default function WorkPage() {
       </Section>
 
       <FeaturedWorkSection showHeading={false} />
-      <ArtworkCTA
-        label="Start a project"
-        heading="Ready to build something meaningful?"
-        headingChunks={["Ready to build", "something meaningful?"]}
-        body="Whether you’re planning a brand, publication, website, exhibition, digital product or creative campaign, I’d love to hear about it. Every project starts with a conversation, a challenge and a clear objective."
-        buttonLabel="Start a Conversation"
-      />
+      <ProjectCTA />
     </main>
   );
 }

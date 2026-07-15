@@ -81,6 +81,42 @@
   width: min(30rem, 38vw);
 }
 
+.caseStudyCta .grid {
+  background-size: 4.25rem 4.25rem;
+  mask-image: radial-gradient(ellipse at 35% 62%, black 8%, transparent 70%);
+  opacity: 0.58;
+  transform: rotate(-3deg) scale(1.08);
+}
+
+.caseStudyCta .glowOne {
+  top: 12%;
+  right: auto;
+  left: 18%;
+  width: min(36rem, 58vw);
+  background: radial-gradient(circle, rgb(199 210 254 / 0.2), transparent 68%);
+}
+
+.caseStudyCta .glowTwo {
+  right: -4%;
+  bottom: -58%;
+  left: auto;
+  width: min(48rem, 72vw);
+  background: radial-gradient(circle, rgb(254 202 202 / 0.2), transparent 68%);
+}
+
+.caseStudyCta .prism {
+  top: -34%;
+  right: -7%;
+  width: min(34rem, 42vw);
+  border-radius: 64% 36% 44% 56% / 58% 62% 38% 42%;
+  opacity: 0.68;
+  transform: rotate(-19deg);
+}
+
+.caseStudyCta .lines {
+  opacity: 0.9;
+}
+
 .contact .grid {
   opacity: 0.52;
 }
@@ -116,6 +152,24 @@
   .glowOne,
   .glowTwo {
     animation: none;
+  }
+
+  .caseStudyCta .grid {
+    background-size: 3.15rem 3.15rem;
+    transform: rotate(-3deg) scale(1.12);
+  }
+
+  .caseStudyCta .prism {
+    top: -10%;
+    right: -58%;
+    width: 27rem;
+    opacity: 0.34;
+  }
+
+  .caseStudyCta .glowOne {
+    top: 18%;
+    left: -28%;
+    width: 26rem;
   }
 }
 

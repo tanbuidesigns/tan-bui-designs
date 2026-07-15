@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import AnimatedHeadline from "@/components/AnimatedHeadline";
 import AnimatedLabel from "@/components/AnimatedLabel";
 import Reveal from "@/components/Reveal";
-import CaseStudyCTA from "@/components/case-study/CaseStudyCTA";
+import ProjectCTA from "@/components/ProjectCTA";
 import CaseStudyImageCarousel, {
   CaseStudyCarouselItem,
 } from "@/components/case-study/CaseStudyImageCarousel";
@@ -448,7 +448,7 @@ export default function UrbanEatClient() {
         nextProject={null}
       />
 
-      <CaseStudyCTA />
+      <ProjectCTA artworkVariant="caseStudyCta" />
 
       <style>
         {`

@@ -3,6 +3,8 @@
   overflow: clip;
   padding-block: 0.14em 0.22em;
   margin-block: -0.14em -0.22em;
+  padding-inline: 0.05em 0.12em;
+  margin-inline: -0.05em -0.12em;
   vertical-align: bottom;
 }
 
