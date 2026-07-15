@@ -94,7 +94,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
               <div className={styles.heroGrid}>
                 <div className={styles.heroCopy}>
                   <AnimatedHeadline as="h1" className={styles.articleTitle}>
-                    {post.title}
+                    {toSentenceCase(post.title)}
                   </AnimatedHeadline>
 
                   <p className={styles.heroExcerpt}>{post.excerpt}</p>
@@ -172,6 +172,19 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
     </main>
+  );
+}
+
+function toSentenceCase(title: string) {
+  const acronyms = title.match(/\b[A-Z0-9]{2,}\b/g) ?? [];
+  const sentenceCase = `${title.charAt(0).toUpperCase()}${title
+    .slice(1)
+    .toLowerCase()}`;
+
+  return acronyms.reduce(
+    (result, acronym) =>
+      result.replace(new RegExp(`\\b${acronym.toLowerCase()}\\b`, "g"), acronym),
+    sentenceCase
   );
 }
 
