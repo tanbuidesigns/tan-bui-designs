@@ -10,7 +10,6 @@ import styles from "@/components/blog/Blog.module.css";
 import Button from "@/components/ui/Button";
 import WideShell from "@/components/ui/WideShell";
 import {
-  blogReader,
   formatBlogDate,
   getBlogCoverPath,
   getPublishedBlogPost,
@@ -55,14 +54,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = await blogReader.collections.blog.read(slug);
-  if (!post || post.draft) notFound();
+  const post = await getPublishedBlogPost(slug);
+  if (!post) notFound();
 
-  const [{ node }, readingMinutes, allPosts] = await Promise.all([
-    post.body(),
+  const [readingMinutes, allPosts] = await Promise.all([
     getReadingTime(slug),
     getPublishedBlogPosts(),
   ]);
+  const node = Markdoc.parse(post.bodySource);
   const errors = Markdoc.validate(node);
   if (errors.length) throw new Error(`Invalid Markdoc in ${slug}`);
   const renderedContent = Markdoc.renderers.react(Markdoc.transform(node), React);

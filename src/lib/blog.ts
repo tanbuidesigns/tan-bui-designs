@@ -1,16 +1,7 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-
-import { createReader } from "@keystatic/core/reader";
-
-import keystaticConfig from "../../keystatic.config";
-
-export const blogReader = createReader(process.cwd(), keystaticConfig);
+import { blogPosts } from "@/data/blog.generated";
 
 export async function getPublishedBlogPosts() {
-  const posts = await blogReader.collections.blog.all();
-
-  return posts
+  return [...blogPosts]
     .filter((post) => !post.entry.draft)
     .sort(
       (first, second) =>
@@ -20,15 +11,13 @@ export async function getPublishedBlogPosts() {
 }
 
 export async function getPublishedBlogPost(slug: string) {
-  const post = await blogReader.collections.blog.read(slug);
+  const post = blogPosts.find((item) => item.slug === slug)?.entry;
   return post && !post.draft ? post : null;
 }
 
 export async function getReadingTime(slug: string) {
-  const source = await readFile(
-    path.join(process.cwd(), "content", "blog", slug, "body.mdoc"),
-    "utf8"
-  );
+  const source = blogPosts.find((item) => item.slug === slug)?.entry.bodySource;
+  if (!source) return 1;
   const words = source
     .replace(/\[[^\]]+\]\([^\)]+\)/g, " ")
     .replace(/[#*_>`~\-]/g, " ")
