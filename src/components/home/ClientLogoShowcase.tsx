@@ -54,6 +54,9 @@ export default function ClientLogoShowcase() {
     if (!section || !viewport || !track) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mobileLayout = window.matchMedia(
+      "(max-width: 767px), (max-height: 520px) and (max-width: 1023px)"
+    );
     const movementSpeed = 22;
     let animationFrame: number | null = null;
     let lastTimestamp: number | null = null;
@@ -65,6 +68,7 @@ export default function ClientLogoShowcase() {
         pauseState.inView &&
         pauseState.documentVisible &&
         !pauseState.reducedMotion &&
+        !mobileLayout.matches &&
         !pauseState.focus &&
         !pauseState.touch &&
         !pauseState.manual &&
@@ -157,6 +161,10 @@ export default function ClientLogoShowcase() {
       syncAnimation();
     };
 
+    const handleMobileLayoutChange = () => {
+      syncAnimation();
+    };
+
     const handleKeyboardInput = () => {
       keyboardInputRef.current = true;
     };
@@ -178,6 +186,7 @@ export default function ClientLogoShowcase() {
     document.addEventListener("visibilitychange", handleVisibilityChange);
     document.addEventListener("keydown", handleKeyboardInput);
     reducedMotion.addEventListener("change", handleReducedMotionChange);
+    mobileLayout.addEventListener("change", handleMobileLayoutChange);
     measureTrack();
 
     return () => {
@@ -198,6 +207,7 @@ export default function ClientLogoShowcase() {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       document.removeEventListener("keydown", handleKeyboardInput);
       reducedMotion.removeEventListener("change", handleReducedMotionChange);
+      mobileLayout.removeEventListener("change", handleMobileLayoutChange);
       syncAnimationRef.current = () => undefined;
     };
   }, []);
