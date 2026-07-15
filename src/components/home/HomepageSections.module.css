@@ -1,7 +1,6 @@
 .credentials,
 .services,
-.aboutPreview,
-.cta {
+.aboutPreview {
   content-visibility: auto;
 }
 
@@ -54,8 +53,7 @@
 
 .credentialsInner,
 .servicesInner,
-.aboutInner,
-.ctaInner {
+.aboutInner {
   width: 100%;
   max-width: 96rem;
   margin-inline: auto;
@@ -392,76 +390,6 @@
   background: var(--tbds-accent-gradient);
 }
 
-.cta {
-  position: relative;
-  isolation: isolate;
-  overflow: clip;
-  background:
-    radial-gradient(circle at 84% 24%, rgb(254 202 202 / 0.18), transparent 28rem),
-    radial-gradient(circle at 12% 94%, rgb(199 210 254 / 0.14), transparent 30rem),
-    #07080a;
-  color: #f8fafc;
-  contain-intrinsic-size: auto 48rem;
-  padding-block: clamp(6rem, 12vw, 11rem);
-}
-
-.ctaGrid {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  background-image:
-    linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
-  background-size: 5rem 5rem;
-  mask-image: linear-gradient(90deg, transparent 3%, black 65%, transparent 100%);
-  pointer-events: none;
-}
-
-.ctaOrb {
-  position: absolute;
-  z-index: -1;
-  top: 50%;
-  right: clamp(-19rem, -12vw, -7rem);
-  width: clamp(24rem, 48vw, 48rem);
-  aspect-ratio: 1;
-  border: 1px solid rgb(255 255 255 / 0.15);
-  border-radius: 46% 54% 62% 38% / 47% 34% 66% 53%;
-  background:
-    radial-gradient(circle at 35% 28%, rgb(254 249 195 / 0.18), transparent 28%),
-    linear-gradient(145deg, rgb(199 210 254 / 0.09), rgb(254 202 202 / 0.06));
-  box-shadow:
-    inset 0 0 90px rgb(255 255 255 / 0.035),
-    0 0 80px rgb(99 102 241 / 0.08);
-  pointer-events: none;
-  transform: translateY(-50%) rotate(-12deg);
-}
-
-.ctaInner {
-  position: relative;
-  z-index: 2;
-}
-
-.ctaTitle {
-  max-width: 70rem;
-  margin-top: 1.75rem;
-  font-size: clamp(3rem, 8vw, 7.5rem);
-  font-weight: 700;
-  letter-spacing: -0.07em;
-  line-height: 0.91;
-}
-
-.ctaText {
-  max-width: 47rem;
-  margin-top: clamp(2.25rem, 5vw, 3.75rem);
-  color: rgb(226 232 240 / 0.72);
-  font-size: clamp(1.05rem, 2vw, 1.25rem);
-  line-height: 1.72;
-}
-
-.ctaButton {
-  margin-top: clamp(2.75rem, 6vw, 4rem);
-}
-
 @keyframes tbds-home-credentials-path {
   to {
     stroke-dashoffset: -1;
@@ -496,8 +424,7 @@
 @media (min-width: 640px) {
   .credentialsInner,
   .servicesInner,
-  .aboutInner,
-  .ctaInner {
+  .aboutInner {
     padding-inline: var(--tbds-page-padding-comfortable);
   }
 
@@ -545,8 +472,7 @@
 @media (min-width: 1024px) {
   .credentialsInner,
   .servicesInner,
-  .aboutInner,
-  .ctaInner {
+  .aboutInner {
     padding-inline: var(--tbds-page-padding-expanded);
   }
 
@@ -613,8 +539,7 @@
 @media (min-width: 1440px) {
   .credentialsInner,
   .servicesInner,
-  .aboutInner,
-  .ctaInner {
+  .aboutInner {
     padding-inline: var(--tbds-page-padding-immersive);
   }
 }
@@ -633,11 +558,6 @@
     aspect-ratio: 4 / 3;
   }
 
-  .ctaOrb {
-    top: 76%;
-    right: -18rem;
-    opacity: 0.58;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
