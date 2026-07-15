@@ -17,7 +17,7 @@ import {
   getReadingTime,
 } from "@/lib/blog";
 
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 const highlightedStatements: Record<string, string> = {
   "avoiding-trendslop-design-taste-ai": "Context-specific judgement still has to come from the person directing and editing the work.",
