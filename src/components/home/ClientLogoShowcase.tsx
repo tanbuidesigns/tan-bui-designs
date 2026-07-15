@@ -13,7 +13,6 @@ type PauseState = {
   inView: boolean;
   documentVisible: boolean;
   reducedMotion: boolean;
-  hover: boolean;
   focus: boolean;
   touch: boolean;
   manual: boolean;
@@ -41,7 +40,6 @@ export default function ClientLogoShowcase() {
     inView: false,
     documentVisible: true,
     reducedMotion: false,
-    hover: false,
     focus: false,
     touch: false,
     manual: false,
@@ -67,7 +65,6 @@ export default function ClientLogoShowcase() {
         pauseState.inView &&
         pauseState.documentVisible &&
         !pauseState.reducedMotion &&
-        !pauseState.hover &&
         !pauseState.focus &&
         !pauseState.touch &&
         !pauseState.manual &&
@@ -204,16 +201,6 @@ export default function ClientLogoShowcase() {
       syncAnimationRef.current = () => undefined;
     };
   }, []);
-
-  const pauseForHover = () => {
-    pauseStateRef.current.hover = true;
-    syncAnimationRef.current();
-  };
-
-  const resumeAfterHover = () => {
-    pauseStateRef.current.hover = false;
-    syncAnimationRef.current();
-  };
 
   const pauseForFocus = () => {
     if (!keyboardInputRef.current) return;
@@ -400,9 +387,7 @@ export default function ClientLogoShowcase() {
                 className={`${styles.logoButton} ${
                   activeLogoId === logo.id ? styles.logoButtonActive : ""
                 }`}
-                aria-label={`Pause movement on ${logo.alt}`}
-                onMouseEnter={pauseForHover}
-                onMouseLeave={resumeAfterHover}
+                aria-label={logo.alt}
                 onFocus={pauseForFocus}
                 onBlur={resumeAfterFocus}
                 onPointerDown={(event) =>

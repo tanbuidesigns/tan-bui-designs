@@ -3,8 +3,8 @@
 import Reveal from "@/components/Reveal";
 import AnimatedLabel from "@/components/AnimatedLabel";
 import AnimatedHeadline from "@/components/AnimatedHeadline";
+import ArtworkCTA from "@/components/ArtworkCTA";
 import FeaturedWorkSection from "@/components/FeaturedWorkSection";
-import CaseStudyCTA from "@/components/case-study/CaseStudyCTA";
 
 import Container from "@/components/ui/Container";
 import Section from "@/components/ui/Section";
@@ -12,7 +12,7 @@ import Section from "@/components/ui/Section";
 export default function WorkPage() {
   return (
     <main className="bg-white text-black">
-      <Section spacing="hero">
+      <Section spacing="none" className="pb-36 pt-14 sm:pb-48 sm:pt-16 lg:pb-60 lg:pt-20">
         <Container size="lg">
           <Reveal>
             <AnimatedLabel className="mb-8">
@@ -56,7 +56,13 @@ export default function WorkPage() {
       </Section>
 
       <FeaturedWorkSection showHeading={false} />
-      <CaseStudyCTA />
+      <ArtworkCTA
+        label="Start a project"
+        heading="Ready to build something meaningful?"
+        headingChunks={["Ready to build", "something meaningful?"]}
+        body="Whether you’re planning a brand, publication, website, exhibition, digital product or creative campaign, I’d love to hear about it. Every project starts with a conversation, a challenge and a clear objective."
+        buttonLabel="Start a Conversation"
+      />
     </main>
   );
 }

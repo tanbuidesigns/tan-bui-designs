@@ -1,12 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 
 import Button from "@/components/ui/Button";
 import WideShell from "@/components/ui/WideShell";
+import styles from "@/components/Navbar.module.css";
 
 const links = [
   { label: "Work", href: "/work" },
@@ -16,6 +17,7 @@ const links = [
 ] as const;
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -31,21 +33,28 @@ export default function Navbar() {
     if (!menuOpen) return;
 
     setHidden(false);
+    const desktopMedia = window.matchMedia("(min-width: 1024px)");
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const frame = window.requestAnimationFrame(() => {
       firstMobileLinkRef.current?.focus();
     });
+    const closeAtDesktop = (event: MediaQueryListEvent) => {
+      if (event.matches) setMenuOpen(false);
+    };
+
+    desktopMedia.addEventListener("change", closeAtDesktop);
 
     return () => {
       window.cancelAnimationFrame(frame);
+      desktopMedia.removeEventListener("change", closeAtDesktop);
       document.body.style.overflow = previousOverflow;
     };
   }, [menuOpen]);
 
   useEffect(() => {
     let frame: number | null = null;
-    let lastY = window.scrollY;
+    let lastY = Math.max(0, window.scrollY);
     let travelled = 0;
     let lastDirection: 1 | -1 | 0 = 0;
 
@@ -60,17 +69,21 @@ export default function Navbar() {
         return current === next ? current : next;
       });
 
-      if (currentY < 32 || menuOpenRef.current || focusInsideRef.current) {
+      if (currentY < 80 || menuOpenRef.current || focusInsideRef.current) {
         setHidden(false);
         travelled = 0;
       } else if (direction !== 0) {
-        travelled = direction === lastDirection ? travelled + delta : delta;
-        lastDirection = direction;
+        if (direction !== lastDirection) {
+          travelled = 0;
+          lastDirection = direction;
+        }
 
-        if (travelled > 18 && currentY > 96) {
+        travelled += Math.abs(delta);
+
+        if (direction === 1 && travelled >= 28 && currentY > 104) {
           setHidden(true);
           travelled = 0;
-        } else if (travelled < -12) {
+        } else if (direction === -1 && travelled >= 16) {
           setHidden(false);
           travelled = 0;
         }
@@ -94,6 +107,8 @@ export default function Navbar() {
   }, []);
 
   const closeMenu = () => setMenuOpen(false);
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`);
 
   const handleHeaderKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (event.key === "Escape" && menuOpen) {
@@ -134,10 +149,10 @@ export default function Navbar() {
           focusInsideRef.current = false;
         }
       }}
-      className={`sticky top-0 z-50 border-b backdrop-blur-xl transition-[transform,opacity,background-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+      className={`${styles.header} sticky top-0 z-50 border-b backdrop-blur-xl transition-[transform,opacity,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
         scrolled
-          ? "border-black/10 bg-white/88 shadow-[0_12px_42px_rgba(0,0,0,0.07)]"
-          : "border-black/5 bg-white/76"
+          ? "border-white/8 shadow-[0_12px_42px_rgba(0,0,0,0.22)]"
+          : "border-white/5"
       } ${
         hidden && !menuOpen
           ? "pointer-events-none -translate-y-full opacity-0"
@@ -146,22 +161,32 @@ export default function Navbar() {
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[image:var(--tbds-accent-gradient)] opacity-65"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[image:var(--tbds-accent-gradient)] opacity-20 blur-[0.3px]"
       />
 
       <WideShell className="relative">
-        <div className="flex min-h-[4.75rem] items-center gap-5 lg:min-h-[5.25rem]">
+        <div className="flex min-h-12 items-center gap-5 lg:min-h-14">
           <Link
             href="/"
-            className="group inline-flex min-w-0 flex-shrink-0 items-center gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4"
-            aria-label="Tan Bui Designs home"
+            className={`${styles.brand} group inline-flex min-h-11 min-w-11 flex-shrink-0 items-center justify-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[#07080a]`}
+            aria-label="Tan Bui Designs homepage"
             onClick={closeMenu}
           >
-            <span className="relative h-9 w-9 flex-none overflow-hidden rounded-[0.7rem] border border-black/10 bg-black shadow-sm">
-              <Image src="/icon.png" alt="" fill sizes="36px" className="object-cover" />
-            </span>
-            <span className="truncate text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-black sm:text-xs sm:tracking-[0.22em]">
-              Tan Bui Designs
+            <span className={styles.brandMark} aria-hidden="true">
+              <svg viewBox="0 20 100 60" role="presentation">
+                <defs>
+                  <linearGradient id="tbds-navbar-logo" x1="5" y1="50" x2="95" y2="50" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#c7d2fd" />
+                    <stop offset="0.48" stopColor="#f5ccd3" />
+                    <stop offset="1" stopColor="#fef9c3" />
+                  </linearGradient>
+                </defs>
+                <g fill="url(#tbds-navbar-logo)">
+                  <path d="M55.5 47.3c0-3-2.5-5.4-5.5-5.4H39.2V31.1c-3 0-5.5 2.5-5.5 5.6v21.4c0 3 2.5 5.5 5.5 5.5 0 3 2.4 5.4 5.4 5.4h10.8v-5.4h5.4V52.8c0-3-2.4-5.3-5.3-5.4Zm-16.3 16.2V47.3h16.1v16.1H39.2Z" />
+                  <path d="M87.8 31.1v10.8H77.1c-3 0-5.4 2.4-5.5 5.4-3 0-5.4 2.5-5.4 5.5v10.7h5.4V69h10.7c3 0 5.4-2.4 5.5-5.4 3 0 5.4-2.5 5.4-5.4V36.7c0-3-2.4-5.4-5.4-5.4Zm-.1 32.4H71.6V47.4h16.1v16.1Z" />
+                  <path d="M28.4 68.9H23c-3 0-5.4-2.4-5.4-5.4-3 0-5.3-2.4-5.4-5.4V47.3H6.8v-2.8c0-1.5 1.2-2.7 2.7-2.7h2.7v-5.5c0-3 2.4-5.3 5.4-5.3v10.8h10.8v5.5H17.6v16.2h10.8v5.4Z" />
+                </g>
+              </svg>
             </span>
           </Link>
 
@@ -169,17 +194,26 @@ export default function Navbar() {
             className="ml-auto hidden items-center gap-7 text-[0.72rem] font-medium uppercase tracking-[0.16em] lg:flex xl:gap-9"
             aria-label="Primary navigation"
           >
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="relative py-2 text-gray-600 transition-colors duration-300 hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4 after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-[image:var(--tbds-accent-gradient)] after:transition-transform hover:after:scale-x-100"
-              >
-                {link.label}
-              </Link>
-            ))}
-            <Button href="/contact" variant="accent" size="sm" showArrow>
-              Start a project
+            {links.map((link) => {
+              const active = isActive(link.href);
+
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`relative py-2 transition-[color,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[#07080a] after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:bg-[image:var(--tbds-accent-gradient)] after:transition-transform after:duration-500 ${
+                    active
+                      ? "text-white after:scale-x-100"
+                      : "text-white/62 after:scale-x-0 hover:after:scale-x-100"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+            <Button href="/contact" variant="gradient" size="sm" showArrow>
+              Contact us
             </Button>
           </nav>
 
@@ -187,34 +221,40 @@ export default function Navbar() {
             ref={menuButtonRef}
             type="button"
             onClick={() => setMenuOpen((current) => !current)}
-            className="relative ml-auto flex h-11 w-11 items-center justify-center rounded-[0.85rem] border border-black/10 bg-white/80 shadow-sm transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4 lg:hidden"
+            className="relative ml-auto flex h-11 w-11 items-center justify-center rounded-[0.85rem] border border-white/16 bg-white/8 shadow-sm transition-[background-color,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white/12 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[#07080a] lg:hidden"
             aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
           >
             <span className="sr-only">{menuOpen ? "Close menu" : "Open menu"}</span>
             <span className="relative h-4 w-5" aria-hidden="true">
-              <span className={`absolute left-0 top-0 h-px w-full bg-black transition-transform ${menuOpen ? "translate-y-[7px] rotate-45" : ""}`} />
-              <span className={`absolute left-0 top-[7px] h-px w-full bg-black transition-opacity ${menuOpen ? "opacity-0" : ""}`} />
-              <span className={`absolute bottom-0 left-0 h-px w-full bg-black transition-transform ${menuOpen ? "-translate-y-[8px] -rotate-45" : ""}`} />
+              <span className={`absolute left-0 top-0 h-px w-full bg-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${menuOpen ? "translate-y-[7px] rotate-45" : ""}`} />
+              <span className={`absolute left-0 top-[7px] h-px w-full bg-white transition-opacity duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+              <span className={`absolute bottom-0 left-0 h-px w-full bg-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${menuOpen ? "-translate-y-[8px] -rotate-45" : ""}`} />
             </span>
           </button>
         </div>
 
-        {menuOpen && (
-          <nav
-            id="mobile-navigation"
-            className="border-t border-black/10 pb-7 pt-4 lg:hidden"
-            aria-label="Mobile navigation"
-          >
-            <div className="flex flex-col">
+        <nav
+          id="mobile-navigation"
+          className={`${styles.mobileMenu} lg:hidden ${
+            menuOpen ? styles.mobileMenuOpen : styles.mobileMenuClosed
+          }`}
+          aria-label="Mobile navigation"
+          aria-hidden={!menuOpen}
+        >
+            <div className={`${styles.mobileMenuInner} flex flex-col`}>
               {links.map((link, index) => (
                 <Link
                   ref={index === 0 ? firstMobileLinkRef : undefined}
                   key={link.href}
                   href={link.href}
                   onClick={closeMenu}
-                  className="flex min-h-14 items-center justify-between border-b border-black/5 text-sm font-medium uppercase tracking-[0.16em] text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-black"
+                  tabIndex={menuOpen ? undefined : -1}
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                  className={`flex min-h-14 items-center justify-between border-b border-white/8 text-sm font-medium uppercase tracking-[0.16em] transition-[color,transform,background-color] duration-300 hover:translate-x-1 hover:bg-white/[0.035] hover:text-white active:translate-x-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white ${
+                    isActive(link.href) ? "text-white" : "text-white/72"
+                  }`}
                 >
                   {link.label}
                   <span aria-hidden="true">→</span>
@@ -223,13 +263,14 @@ export default function Navbar() {
               <Link
                 href="/contact"
                 onClick={closeMenu}
-                className="mt-5 inline-flex min-h-14 items-center justify-center gap-3 border border-black bg-black px-6 text-sm font-medium text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4"
+                tabIndex={menuOpen ? undefined : -1}
+                aria-current={pathname === "/contact" ? "page" : undefined}
+                className="mt-5 inline-flex min-h-14 items-center justify-center gap-3 border border-white/25 bg-[image:var(--tbds-accent-gradient)] px-6 text-sm font-medium uppercase tracking-[0.16em] text-black transition-[transform,filter] duration-300 hover:-translate-y-px hover:saturate-125 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[#07080a]"
               >
-                Start a project <span aria-hidden="true">→</span>
+                Contact us <span aria-hidden="true">→</span>
               </Link>
             </div>
-          </nav>
-        )}
+        </nav>
       </WideShell>
     </header>
   );

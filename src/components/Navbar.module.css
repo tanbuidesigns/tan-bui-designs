@@ -1,0 +1,113 @@
+.header {
+  isolation: isolate;
+  background: rgb(4 5 8 / 0.91);
+  box-shadow: inset 0 1px rgb(255 255 255 / 0.055);
+  will-change: transform, opacity;
+}
+
+.header::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    linear-gradient(132deg, rgb(199 210 254 / 0.11) 0%, transparent 30%),
+    linear-gradient(142deg, transparent 34%, rgb(254 202 202 / 0.09) 58%, rgb(254 249 195 / 0.055) 78%, transparent 100%);
+  background-size: 210% 210%;
+  content: "";
+  animation: tbds-navbar-gradient-drift 20s ease-in-out infinite alternate;
+}
+
+.brandMark {
+  position: relative;
+  display: grid;
+  width: 2.55rem;
+  height: 2.15rem;
+  flex: none;
+  place-items: center;
+}
+
+.brandMark::before {
+  position: absolute;
+  inset: -0.3rem;
+  border-radius: 50%;
+  background: var(--tbds-accent-gradient);
+  content: "";
+  filter: blur(0.7rem);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 360ms ease, transform 480ms var(--tbds-ease);
+}
+
+.brandMark svg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transition: transform 480ms var(--tbds-ease);
+}
+
+.brand:hover .brandMark::before,
+.brand:focus-visible .brandMark::before {
+  opacity: 0.24;
+  transform: scale(1);
+}
+
+.brand:hover .brandMark svg,
+.brand:focus-visible .brandMark svg {
+  transform: rotate(-3deg) scale(1.04);
+}
+
+.mobileMenu {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transform: translateY(-0.65rem);
+  transition:
+    grid-template-rows 500ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 360ms ease,
+    transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mobileMenuOpen {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.mobileMenuClosed {
+  pointer-events: none;
+}
+
+.mobileMenuInner {
+  min-height: 0;
+  overflow: hidden;
+  border-top: 1px solid rgb(255 255 255 / 0.1);
+  padding: 1rem 0 1.75rem;
+  transition:
+    border-color 360ms ease,
+    padding 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mobileMenuClosed .mobileMenuInner {
+  border-top-color: transparent;
+  padding-block: 0;
+}
+
+@media (min-width: 1024px) {
+  .mobileMenu {
+    display: none;
+  }
+}
+
+@keyframes tbds-navbar-gradient-drift {
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header::before { animation: none; }
+  .brandMark::before,
+  .brandMark svg,
+  .mobileMenu { transition: none; }
+}

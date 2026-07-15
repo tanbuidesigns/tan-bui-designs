@@ -25,9 +25,8 @@ export default function HomepageCredentials() {
             tone="dark"
             id="homepage-credentials-title"
             className={styles.credentialsTitle}
-          >
-            Credentials and experience
-          </AnimatedHeadline>
+            chunks={["Credentials", "and experience"]}
+          />
         </div>
 
         <svg

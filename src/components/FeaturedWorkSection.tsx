@@ -54,7 +54,7 @@ export default function FeaturedWorkSection({
               </AnimatedLabel>
 
               <AnimatedHeadline className="max-w-4xl text-5xl font-bold leading-tight md:text-6xl">
-                Projects with purpose.
+                Projects with purpose
               </AnimatedHeadline>
 
               <GradientLine size="md" className="mt-8" />

@@ -11,6 +11,7 @@ export async function POST(
     const {
       name,
       email,
+      services,
       message,
     } = await request.json();
 
@@ -32,6 +33,9 @@ ${name}
 
 Email:
 ${email}
+
+Services:
+${Array.isArray(services) && services.length ? services.join(", ") : "Not specified"}
 
 Message:
 ${message}

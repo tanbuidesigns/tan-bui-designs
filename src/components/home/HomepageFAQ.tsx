@@ -57,9 +57,12 @@ export default function HomepageFAQ() {
         <div className="grid gap-10 lg:grid-cols-[minmax(18rem,0.72fr)_minmax(0,1.28fr)] lg:gap-20">
           <div>
             <AnimatedLabel className="mb-6">Frequently asked</AnimatedLabel>
-            <AnimatedHeadline as="h2" id="homepage-faq-title" className="max-w-xl text-4xl sm:text-5xl lg:text-6xl">
-              Questions before we start.
-            </AnimatedHeadline>
+            <AnimatedHeadline
+              as="h2"
+              id="homepage-faq-title"
+              className="max-w-xl text-4xl font-bold leading-[0.96] tracking-[-0.05em] [text-wrap:balance] sm:text-5xl lg:text-6xl"
+              chunks={["Questions before", "we start"]}
+            />
           </div>
 
           <div className="border-t border-black/14">

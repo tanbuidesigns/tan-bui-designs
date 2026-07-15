@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import styles from "@/components/home/HomepageExperience.module.css";
 
 export default function HomepageScrollHighlight() {
-  const highlightRef = useRef<HTMLSpanElement | null>(null);
+  const highlightRef = useRef<HTMLParagraphElement | null>(null);
 
   useEffect(() => {
     const highlight = highlightRef.current;
@@ -19,7 +19,7 @@ export default function HomepageScrollHighlight() {
       frame = null;
 
       if (reducedMotion.matches) {
-        highlight.style.setProperty("--tbds-highlight-progress", "100%");
+        highlight.style.setProperty("--tbds-highlight-progress", "1");
         return;
       }
 
@@ -33,7 +33,7 @@ export default function HomepageScrollHighlight() {
 
       highlight.style.setProperty(
         "--tbds-highlight-progress",
-        `${(progress * 100).toFixed(2)}%`
+        progress.toFixed(3)
       );
     };
 
@@ -58,10 +58,8 @@ export default function HomepageScrollHighlight() {
   }, []);
 
   return (
-    <span ref={highlightRef} className={styles.heroHighlight}>
-      <span className={styles.heroHighlightText}>
-        Make complicated things easier to understand.
-      </span>
-    </span>
+    <p ref={highlightRef} className={styles.heroHighlight}>
+      Make complicated things easier to understand.
+    </p>
   );
 }
