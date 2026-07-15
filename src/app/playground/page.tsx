@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 import AnimatedHeadline from "@/components/AnimatedHeadline";
 import AnimatedLabel from "@/components/AnimatedLabel";
@@ -7,6 +8,7 @@ import PlaygroundGallery from "@/components/playground/PlaygroundGallery";
 import WideShell from "@/components/ui/WideShell";
 import { playgroundItems } from "@/data/playground.generated";
 import { playgroundPlaceholders } from "@/data/playgroundPlaceholders";
+import { showPlayground } from "@/lib/site-visibility";
 
 export const metadata: Metadata = {
   title: "Playground | Tan Bui Designs",
@@ -18,6 +20,8 @@ export const metadata: Metadata = {
 };
 
 export default function PlaygroundPage() {
+  if (!showPlayground) notFound();
+
   const items = playgroundItems.length > 0 ? playgroundItems : playgroundPlaceholders;
 
   return (

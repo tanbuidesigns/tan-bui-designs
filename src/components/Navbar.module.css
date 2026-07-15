@@ -14,7 +14,7 @@
     linear-gradient(142deg, transparent 34%, rgb(254 202 202 / 0.09) 58%, rgb(254 249 195 / 0.055) 78%, transparent 100%);
   background-size: 210% 210%;
   content: "";
-  animation: tbds-navbar-gradient-drift 20s ease-in-out infinite alternate;
+  animation: none;
 }
 
 .brandMark {
@@ -58,21 +58,34 @@
 }
 
 .mobileMenu {
-  display: grid;
-  grid-template-rows: 0fr;
+  position: absolute;
+  z-index: 20;
+  top: 100%;
+  right: 0;
+  left: 0;
+  visibility: hidden;
+  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  background: rgb(4 5 8 / 0.985);
+  box-shadow: 0 20px 40px rgb(0 0 0 / 0.28);
+  clip-path: inset(0 0 100% 0);
   opacity: 0;
-  transform: translateY(-0.65rem);
+  padding-inline: var(--tbds-page-padding-compact);
+  transform: translate3d(0, -0.35rem, 0);
   transition:
-    grid-template-rows 500ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 360ms ease,
-    transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+    clip-path 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 150ms ease-out,
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 180ms;
+  will-change: transform, opacity;
 }
 
 .mobileMenuOpen {
-  grid-template-rows: 1fr;
+  visibility: visible;
+  clip-path: inset(0);
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0s;
 }
 
 .mobileMenuClosed {
@@ -80,23 +93,23 @@
 }
 
 .mobileMenuInner {
-  min-height: 0;
-  overflow: hidden;
   border-top: 1px solid rgb(255 255 255 / 0.1);
   padding: 1rem 0 1.75rem;
-  transition:
-    border-color 360ms ease,
-    padding 500ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.mobileMenuClosed .mobileMenuInner {
-  border-top-color: transparent;
-  padding-block: 0;
 }
 
 @media (min-width: 1024px) {
+  .header::before {
+    animation: tbds-navbar-gradient-drift 20s ease-in-out infinite alternate;
+  }
+
   .mobileMenu {
     display: none;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .mobileMenu {
+    padding-inline: var(--tbds-page-padding-comfortable);
   }
 }
 

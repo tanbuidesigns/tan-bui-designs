@@ -4,6 +4,7 @@ import AnimatedLabel from "@/components/AnimatedLabel";
 import ArtworkBackground from "@/components/ArtworkBackground";
 import Button from "@/components/ui/Button";
 import WideShell from "@/components/ui/WideShell";
+import { showPlayground } from "@/lib/site-visibility";
 
 const linkColumns = [
   [
@@ -13,7 +14,9 @@ const linkColumns = [
     { label: "Blog", href: "/blog" },
   ],
   [
-    { label: "Playground", href: "/playground" },
+    ...(showPlayground
+      ? [{ label: "Playground", href: "/playground" } as const]
+      : []),
     { label: "Contact", href: "/contact" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/tanbuidesigns/", external: true },
     { label: "Privacy", href: "/privacy" },

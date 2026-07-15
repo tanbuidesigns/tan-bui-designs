@@ -8,11 +8,14 @@ import type { KeyboardEvent } from "react";
 import Button from "@/components/ui/Button";
 import WideShell from "@/components/ui/WideShell";
 import styles from "@/components/Navbar.module.css";
+import { showPlayground } from "@/lib/site-visibility";
 
 const links = [
   { label: "Work", href: "/work" },
   { label: "About", href: "/about" },
-  { label: "Playground", href: "/playground" },
+  ...(showPlayground
+    ? [{ label: "Playground", href: "/playground" } as const]
+    : []),
   { label: "Blog", href: "/blog" },
 ] as const;
 
@@ -32,7 +35,6 @@ export default function Navbar() {
 
     if (!menuOpen) return;
 
-    setHidden(false);
     const desktopMedia = window.matchMedia("(min-width: 1024px)");
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -165,7 +167,7 @@ export default function Navbar() {
       />
 
       <WideShell className="relative">
-        <div className="flex min-h-12 items-center gap-5 lg:min-h-14">
+        <div className="flex min-h-12 items-center gap-5 py-1 lg:min-h-14 lg:py-0">
           <Link
             href="/"
             className={`${styles.brand} group inline-flex min-h-11 min-w-11 flex-shrink-0 items-center justify-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[#07080a]`}
@@ -220,17 +222,20 @@ export default function Navbar() {
           <button
             ref={menuButtonRef}
             type="button"
-            onClick={() => setMenuOpen((current) => !current)}
-            className="relative ml-auto flex h-11 w-11 items-center justify-center rounded-[0.85rem] border border-white/16 bg-white/8 shadow-sm transition-[background-color,transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white/12 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[#07080a] lg:hidden"
+            onClick={() => {
+              setHidden(false);
+              setMenuOpen((current) => !current);
+            }}
+            className="relative ml-auto flex h-11 w-11 items-center justify-center rounded-[0.85rem] border border-white/16 bg-white/8 shadow-sm transition-[background-color,transform] duration-200 ease-out hover:bg-white/12 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[#07080a] lg:hidden"
             aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
           >
             <span className="sr-only">{menuOpen ? "Close menu" : "Open menu"}</span>
             <span className="relative h-4 w-5" aria-hidden="true">
-              <span className={`absolute left-0 top-0 h-px w-full bg-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${menuOpen ? "translate-y-[7px] rotate-45" : ""}`} />
-              <span className={`absolute left-0 top-[7px] h-px w-full bg-white transition-opacity duration-300 ${menuOpen ? "opacity-0" : ""}`} />
-              <span className={`absolute bottom-0 left-0 h-px w-full bg-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${menuOpen ? "-translate-y-[8px] -rotate-45" : ""}`} />
+              <span className={`absolute left-0 top-0 h-px w-full bg-white transition-transform duration-200 ease-out ${menuOpen ? "translate-y-[7px] rotate-45" : ""}`} />
+              <span className={`absolute left-0 top-[7px] h-px w-full bg-white transition-opacity duration-150 ${menuOpen ? "opacity-0" : ""}`} />
+              <span className={`absolute bottom-0 left-0 h-px w-full bg-white transition-transform duration-200 ease-out ${menuOpen ? "-translate-y-[8px] -rotate-45" : ""}`} />
             </span>
           </button>
         </div>
