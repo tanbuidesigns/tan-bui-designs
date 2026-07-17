@@ -1,39 +1,38 @@
+import Link from "next/link";
+
 const sections = [
-  { label: "Overview", active: true },
-  { label: "Pages", active: false },
-  { label: "Performance", active: false },
-  { label: "Content", active: false },
-  { label: "Leads", active: false },
-  { label: "Change log", active: false },
+  { id: "overview", label: "Overview", href: "/control-room" },
+  { id: "pages", label: "Pages", href: "/control-room/pages" },
+  { id: "actions", label: "Actions", href: "/control-room/actions" },
+  { id: "content", label: "Content", href: "/control-room/content" },
+  { id: "performance", label: "Performance", href: "/control-room/performance" },
+  { id: "leads", label: "Leads", href: "/control-room/leads" },
+  { id: "change-log", label: "Change log", href: "/control-room/change-log" },
 ] as const;
 
-export default function ControlRoomSidebar() {
+export type ControlRoomSection = (typeof sections)[number]["id"];
+
+export default function ControlRoomSidebar({ activeSection }: { activeSection: ControlRoomSection }) {
   return (
     <aside className="min-w-0 rounded-[1.35rem] bg-[#101114] p-4 text-white shadow-[0_24px_70px_rgba(0,0,0,0.14)] lg:sticky lg:top-20 lg:p-5">
-      <p className="px-3 pb-4 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-white/45">
-        Workspace
-      </p>
+      <p className="px-3 pb-4 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-white/45">Workspace</p>
       <nav aria-label="Control Room sections">
         <ul className="flex flex-wrap gap-2 lg:flex-col">
-          {sections.map((section) => (
-            <li key={section.label} className="shrink-0 lg:shrink">
-              {section.active ? (
-                <a
-                  href="#overview"
-                  aria-current="page"
-                  className="flex min-h-11 items-center justify-between gap-5 rounded-xl bg-white px-4 text-sm font-semibold text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c7d2fd] focus-visible:ring-offset-2 focus-visible:ring-offset-[#101114]"
+          {sections.map((section) => {
+            const active = section.id === activeSection;
+            return (
+              <li key={section.id} className="shrink-0 lg:shrink">
+                <Link
+                  href={section.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`flex min-h-11 items-center justify-between gap-5 rounded-xl px-4 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c7d2fd] focus-visible:ring-offset-2 focus-visible:ring-offset-[#101114] ${active ? "bg-white font-semibold text-black" : "text-white/62 transition-colors hover:bg-white/8 hover:text-white"}`}
                 >
                   {section.label}
-                  <span aria-hidden="true" className="h-2 w-2 rounded-full bg-[image:var(--tbds-accent-gradient)]" />
-                </a>
-              ) : (
-                <span className="flex min-h-11 items-center justify-between gap-5 rounded-xl px-4 text-sm text-white/55" aria-disabled="true">
-                  {section.label}
-                  <span className="text-[0.62rem] font-medium uppercase tracking-[0.14em] text-white/30">Planned</span>
-                </span>
-              )}
-            </li>
-          ))}
+                  {active ? <span aria-hidden="true" className="h-2 w-2 rounded-full bg-[image:var(--tbds-accent-gradient)]" /> : null}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </aside>
