@@ -53,4 +53,17 @@ export const changeLog: readonly ChangeLogEntry[] = [
     reviewDate: "17 July 2026",
     notes: "No public-site issue listed in the register was fixed during V2.",
   },
+  {
+    id: "integration-foundation",
+    date: "17 July 2026",
+    changeType: "integration-foundation",
+    summary: "Control Room V3 integration foundation established",
+    reason: "Prepare server-only providers, operational states and an allowlisted Task 4 contract without connecting a live service.",
+    affectedArea: "Control Room runtime policy, provider registry, Performance, Operations and operational runbook",
+    expectedOutcome: "Task 4 can add one PageSpeed adapter without redesigning the dashboard or accepting arbitrary URLs.",
+    verificationStatus: "confirmed",
+    source: "repository-review",
+    reviewDate: "17 July 2026",
+    notes: "No external API, credential, database, scheduler, authentication or production access was added.",
+  },
 ];

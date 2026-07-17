@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+
+import { enforceControlRoomRuntimePolicy } from "@/lib/control-room/runtime/control-room-policy";
 
 export const metadata: Metadata = {
   title: "TBD Control Room | Internal Prototype",
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default function ControlRoomLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  if (process.env.NODE_ENV === "production") notFound();
+  enforceControlRoomRuntimePolicy();
 
   return children;
 }

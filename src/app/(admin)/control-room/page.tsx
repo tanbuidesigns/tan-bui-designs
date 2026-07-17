@@ -18,7 +18,7 @@ export default function ControlRoomPage() {
     { id: "priority-actions", label: "Critical / high open", value: snapshot.actionSummary.openCriticalHigh, description: "Open actions whose curated priority is critical or high." },
     { id: "ready", label: "Ready to begin", value: snapshot.actionSummary.ready, description: "Open actions without a recorded blocking status." },
     { id: "verification", label: "External verification", value: externalVerificationCount, description: "Planned integrations that require access, runtime evidence or approval." },
-    { id: "integrations", label: "Planned integrations", value: snapshot.integrations.length, description: "Future data sources; none are connected." },
+    { id: "integrations", label: "Planned integrations", value: snapshot.integrationSummary.plannedExternal, description: "External sources represented truthfully as disconnected." },
   ];
 
   return (
@@ -66,6 +66,24 @@ export default function ControlRoomPage() {
         </div>
       </section>
 
+      <section aria-labelledby="system-readiness-title" className="rounded-[1.35rem] border border-black/8 bg-white p-5 shadow-[0_18px_50px_rgba(0,0,0,0.04)] sm:p-7">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">Integration registry</p><h2 id="system-readiness-title" className="mt-2 text-2xl font-bold tracking-[-0.04em] sm:text-3xl">System readiness</h2></div>
+          <Link href="/control-room/operations" className="text-sm font-semibold underline decoration-gray-300 underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black">Open Operations</Link>
+        </div>
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-gray-600">Live integrations are not connected. Current website findings come from the local repository baseline.</p>
+        <dl className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {[
+            ["Active local sources", snapshot.integrationSummary.activeLocal],
+            ["Planned external", snapshot.integrationSummary.plannedExternal],
+            ["Require configuration", snapshot.integrationSummary.requiringConfiguration],
+            ["Personal-data sources", snapshot.integrationSummary.personalData],
+            ["Stale sources", snapshot.integrationSummary.stale],
+            ["Sources in error", snapshot.integrationSummary.errors],
+          ].map(([label, value]) => <div key={label} className="rounded-xl border border-black/8 bg-[#f7f7f4] p-4"><dt className="text-xs font-semibold uppercase tracking-[0.1em] text-gray-500">{label}</dt><dd className="mt-2 text-3xl font-bold tracking-[-0.04em]">{value}</dd></div>)}
+        </dl>
+      </section>
+
       <section aria-labelledby="decisions-title" className="rounded-[1.35rem] border border-black/8 bg-[#111216] p-5 text-white shadow-[0_20px_60px_rgba(0,0,0,0.12)] sm:p-7">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/42">Owner and technical decisions</p>
         <h2 id="decisions-title" className="mt-2 text-2xl font-bold tracking-[-0.04em] sm:text-3xl">Decisions required</h2>
@@ -91,8 +109,8 @@ export default function ControlRoomPage() {
         <ul className="mt-6 grid gap-3 sm:grid-cols-2">
           {snapshot.integrations.map((integration) => (
             <li key={integration.id} className="rounded-xl border border-black/8 bg-[#f7f7f4] p-4">
-              <div className="flex flex-wrap items-center justify-between gap-2"><p className="font-semibold">{integration.name}</p><span className="text-xs font-semibold capitalize text-gray-500">{integration.status.replaceAll("-", " ")}</span></div>
-              <p className="mt-2 text-sm leading-relaxed text-gray-500">{integration.requirements}</p>
+              <div className="flex flex-wrap items-center justify-between gap-2"><p className="font-semibold">{integration.displayName}</p><span className="text-xs font-semibold capitalize text-gray-500">{integration.lifecycleState.replaceAll("-", " ")}</span></div>
+              <p className="mt-2 text-sm leading-relaxed text-gray-500">{integration.accessRequirements}</p>
             </li>
           ))}
         </ul>

@@ -128,31 +128,204 @@ export type ContentHypothesis = {
   source: DataSourceLabel;
 };
 
-export type IntegrationStatus =
-  | "not-connected"
-  | "awaiting-access"
-  | "awaiting-technical-work"
-  | "not-approved";
+export type IntegrationId =
+  | "local-baseline"
+  | "repository-review"
+  | "pagespeed-lab"
+  | "crux-field"
+  | "search-console"
+  | "cloudflare-analytics"
+  | "lead-store"
+  | "github-change-history";
 
-export type IntegrationReadiness = {
-  id: string;
-  name: string;
-  category: "performance" | "search" | "analytics" | "leads" | "change-management";
-  status: IntegrationStatus;
-  requirements: string;
-  intendedMetrics: readonly string[];
-  limitations: string;
-  refreshCadence: string;
-  persistenceNeeded: boolean;
-  complexity: EffortLevel;
+export type IntegrationLifecycleState =
+  | "local"
+  | "planned"
+  | "awaiting-configuration"
+  | "ready"
+  | "connected"
+  | "healthy"
+  | "stale"
+  | "degraded"
+  | "unavailable"
+  | "error";
+
+export type DataFreshnessState = "current" | "ageing" | "stale" | "unknown" | "not-applicable";
+
+export type IntegrationErrorKind =
+  | "configuration"
+  | "authentication"
+  | "authorization"
+  | "quota"
+  | "timeout"
+  | "network"
+  | "upstream"
+  | "parsing"
+  | "validation"
+  | "unavailable"
+  | "unknown";
+
+export type IntegrationSourceType =
+  | "local-repository"
+  | "external-public-api"
+  | "external-authorised-api"
+  | "cloudflare-binding"
+  | "private-database"
+  | "manual-entry";
+
+export type SecurityClassification = "public" | "internal" | "confidential" | "personal-data";
+export type IntegrationDataMode = "local-snapshot" | "disconnected" | "manual" | "live";
+export type ConfigurationState = "not-required" | "missing" | "requires-authorization" | "not-enabled" | "ready";
+
+export type FreshnessMetadata = {
+  state: DataFreshnessState;
+  generatedAt: string | null;
+  lastSuccessfulUpdate: string | null;
+  threshold: string;
+  explanation: string;
+};
+
+export type IntegrationDescriptor = {
+  id: IntegrationId;
+  displayName: string;
+  description: string;
+  sourceType: IntegrationSourceType;
+  lifecycleState: IntegrationLifecycleState;
+  dataMode: IntegrationDataMode;
+  freshness: FreshnessMetadata;
+  plannedCadence: string;
+  currentRefreshMode: string;
+  configurationState: ConfigurationState;
+  configurationRequirements: readonly string[];
+  accessRequirements: string;
+  persistenceRequired: boolean;
+  schedulingRequired: boolean;
+  securityClassification: SecurityClassification;
+  limitation: string;
+  nextTask: string;
   verificationStatus: VerificationStatus;
   source: DataSourceLabel;
+};
+
+export type ProviderSourceMetadata = {
+  integrationId: IntegrationId;
+  displayName: string;
+  dataMode: IntegrationDataMode;
+  freshness: FreshnessMetadata;
+};
+
+export type ProviderResult<T> =
+  | {
+      status: "success";
+      data: T;
+      source: ProviderSourceMetadata;
+      warnings: readonly string[];
+    }
+  | {
+      status: "unavailable";
+      reason: string;
+      nextRequirement: string;
+      source: ProviderSourceMetadata;
+    }
+  | {
+      status: "error";
+      error: { kind: IntegrationErrorKind; message: string };
+      retryable: boolean;
+      source: ProviderSourceMetadata;
+    };
+
+export type PerformanceStrategy = "mobile" | "desktop";
+export type LighthouseCategory = "performance" | "accessibility" | "best-practices" | "seo";
+
+export type PerformanceTarget = {
+  id: string;
+  displayLabel: string;
+  pageId: string;
+  canonicalUrl: string;
+  route: string;
+  pageCategory: PageCategory;
+  allowedStrategies: readonly PerformanceStrategy[];
+  defaultStrategy: PerformanceStrategy;
+  enabled: boolean;
+  reviewPriority: ReviewPriority;
+};
+
+export type PerformanceRequest = {
+  targetId: PerformanceTarget["id"];
+  strategy: PerformanceStrategy;
+  requestedCategories: readonly LighthouseCategory[];
+};
+
+export type LabMetric = { value: number | null; displayValue: string | null };
+export type LabPerformanceResult = {
+  targetId: string;
+  requestedUrl: string;
+  finalUrl: string | null;
+  strategy: PerformanceStrategy;
+  analysisTimestamp: string | null;
+  lighthouseVersion: string | null;
+  categoryScores: Record<LighthouseCategory, number | null>;
+  metrics: {
+    firstContentfulPaint: LabMetric;
+    largestContentfulPaint: LabMetric;
+    cumulativeLayoutShift: LabMetric;
+    totalBlockingTime: LabMetric;
+    speedIndex: LabMetric;
+  };
+  opportunities: readonly string[];
+  diagnostics: readonly string[];
+  warnings: readonly string[];
+};
+
+export type FieldPerformanceResult = {
+  targetId: string;
+  coverage: "page" | "origin" | "unavailable";
+  collectionPeriod: { start: string | null; end: string | null };
+  trafficEligibility: "eligible" | "ineligible" | "unknown";
+  coreWebVitalsAssessment: "pass" | "fail" | "unknown";
+  lcpDistribution: readonly number[] | null;
+  inpDistribution: readonly number[] | null;
+  clsDistribution: readonly number[] | null;
+};
+
+export type IntegrationSummary = {
+  total: number;
+  activeLocal: number;
+  plannedExternal: number;
+  requiringConfiguration: number;
+  personalData: number;
+  stale: number;
+  errors: number;
+};
+
+export type FutureConfigurationItem = {
+  name: string;
+  purpose: string;
+  secret: boolean;
+  serverOnly: true;
+  futureTask: string;
+  required: boolean;
+  status: "not-created";
+};
+
+export type ReadinessChecklistItem = {
+  id: string;
+  label: string;
+  complete: boolean;
+  explanation: string;
+};
+
+export type OperationalReadinessItem = {
+  id: string;
+  label: string;
+  state: "active" | "not-configured" | "not-enabled" | "decision-required" | "planned";
+  explanation: string;
 };
 
 export type ChangeLogEntry = {
   id: string;
   date: string;
-  changeType: "prototype" | "baseline" | "inventory" | "planning-system";
+  changeType: "prototype" | "baseline" | "inventory" | "planning-system" | "integration-foundation";
   summary: string;
   reason: string;
   affectedArea: string;
@@ -210,10 +383,11 @@ export type ControlRoomSnapshot = {
   pages: readonly PageBaselineRecord[];
   actions: readonly ActionRecord[];
   contentHypotheses: readonly ContentHypothesis[];
-  integrations: readonly IntegrationReadiness[];
+  integrations: readonly IntegrationDescriptor[];
   changes: readonly ChangeLogEntry[];
   decisions: readonly DecisionRecord[];
   leadPrerequisites: readonly LeadPrerequisite[];
   pageSummary: PageSummary;
   actionSummary: ActionSummary;
+  integrationSummary: IntegrationSummary;
 };
