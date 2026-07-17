@@ -31,7 +31,7 @@ export default function ControlRoomShell({
           <div className="relative max-w-5xl">
             <div className="flex flex-wrap items-center gap-3">
               <span className="rounded-full border border-white/20 bg-white/8 px-3 py-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-white/72">
-                Local baseline · No live services connected
+                Controlled sources · No background refresh
               </span>
               <a className="text-xs text-white/55 underline decoration-white/25 underline-offset-4 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white" href="#data-sources">
                 How sources are labelled

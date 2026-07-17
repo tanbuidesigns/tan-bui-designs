@@ -54,13 +54,13 @@ export const integrationDescriptors: readonly IntegrationDescriptor[] = [
   {
     id: "pagespeed-lab",
     displayName: "PageSpeed Insights / Lighthouse",
-    description: "Future on-demand laboratory diagnostics for verified Tan Bui Designs targets.",
+    description: "On-demand Lighthouse laboratory diagnostics for verified Tan Bui Designs targets.",
     sourceType: "external-public-api",
     lifecycleState: "awaiting-configuration",
     dataMode: "disconnected",
     freshness: unavailableFreshness,
-    plannedCadence: "On demand in Task 4; weekly history only if later justified",
-    currentRefreshMode: "No refresh — disconnected",
+    plannedCadence: "Manual on-demand runs only",
+    currentRefreshMode: "Derived at request time from server configuration",
     configurationState: "missing",
     configurationRequirements: ["PAGESPEED_API_KEY"],
     accessRequirements: "Server-side Google API key and quota policy",
@@ -68,8 +68,8 @@ export const integrationDescriptors: readonly IntegrationDescriptor[] = [
     schedulingRequired: false,
     securityClassification: "public",
     limitation: "Lab results vary between runs and do not represent real-user field experience.",
-    nextTask: "Task 4: implement the server-only PageSpeed provider adapter.",
-    verificationStatus: "requires-verification",
+    nextTask: "Configure the server-only key, then run one registered target when evidence is needed.",
+    verificationStatus: "confirmed",
     source: "planned-integration",
   },
   {
@@ -180,7 +180,7 @@ export const integrationDescriptors: readonly IntegrationDescriptor[] = [
 ];
 
 export const futureConfigurationManifest: readonly FutureConfigurationItem[] = [
-  { name: "PAGESPEED_API_KEY", purpose: "Authenticate future PageSpeed Insights requests", secret: true, serverOnly: true, futureTask: "Task 4", required: true, status: "not-created" },
+  { name: "PAGESPEED_API_KEY", purpose: "Authenticate on-demand PageSpeed Insights requests", secret: true, serverOnly: true, futureTask: "Task 4 runtime configuration", required: true, status: "runtime-derived" },
   { name: "GOOGLE_CRUX_API_KEY", purpose: "Authenticate a future separate CrUX integration if approved", secret: true, serverOnly: true, futureTask: "Future CrUX task", required: false, status: "not-created" },
   { name: "GOOGLE_CLIENT_ID", purpose: "Future Search Console OAuth client identity", secret: false, serverOnly: true, futureTask: "Future Search Console task", required: true, status: "not-created" },
   { name: "GOOGLE_CLIENT_SECRET", purpose: "Future Search Console OAuth client secret", secret: true, serverOnly: true, futureTask: "Future Search Console task", required: true, status: "not-created" },

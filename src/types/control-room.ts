@@ -250,19 +250,34 @@ export type PerformanceTarget = {
   reviewPriority: ReviewPriority;
 };
 
-export type PerformanceRequest = {
+export type LabPerformanceRequest = {
   targetId: PerformanceTarget["id"];
-  strategy: PerformanceStrategy;
-  requestedCategories: readonly LighthouseCategory[];
+  strategy?: PerformanceStrategy;
 };
 
 export type LabMetric = { value: number | null; displayValue: string | null };
+export type LabDiagnostic = {
+  auditId: string;
+  title: string;
+  summary: string | null;
+  displayValue: string | null;
+  score: number | null;
+  scoreDisplayMode: string | null;
+  estimatedSavingsMs: number | null;
+  estimatedSavingsBytes: number | null;
+  group: string | null;
+  sourceVersion: string | null;
+};
+
 export type LabPerformanceResult = {
   targetId: string;
   requestedUrl: string;
   finalUrl: string | null;
+  redirected: boolean;
   strategy: PerformanceStrategy;
+  requestedCategories: readonly LighthouseCategory[];
   analysisTimestamp: string | null;
+  providerGeneratedAt: string;
   lighthouseVersion: string | null;
   categoryScores: Record<LighthouseCategory, number | null>;
   metrics: {
@@ -272,8 +287,7 @@ export type LabPerformanceResult = {
     totalBlockingTime: LabMetric;
     speedIndex: LabMetric;
   };
-  opportunities: readonly string[];
-  diagnostics: readonly string[];
+  diagnostics: readonly LabDiagnostic[];
   warnings: readonly string[];
 };
 
@@ -305,7 +319,7 @@ export type FutureConfigurationItem = {
   serverOnly: true;
   futureTask: string;
   required: boolean;
-  status: "not-created";
+  status: "not-created" | "runtime-derived";
 };
 
 export type ReadinessChecklistItem = {

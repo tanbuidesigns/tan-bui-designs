@@ -3,9 +3,9 @@ import "server-only";
 import { integrationDescriptors } from "@/data/control-room/integration-manifest";
 import type { IntegrationDescriptor, IntegrationId, IntegrationSummary } from "@/types/control-room";
 
-import { createDisconnectedPerformanceProvider } from "./disconnected-performance-provider";
 import { createDisconnectedProvider } from "./disconnected-providers";
 import { createLocalBaselineProvider } from "./local-baseline-provider";
+import { createPageSpeedLabProvider } from "./pagespeed-lab-provider";
 
 function descriptor(id: IntegrationId): IntegrationDescriptor {
   const match = integrationDescriptors.find((item) => item.id === id);
@@ -14,7 +14,7 @@ function descriptor(id: IntegrationId): IntegrationDescriptor {
 }
 
 export const localBaselineProvider = createLocalBaselineProvider(descriptor("local-baseline"));
-export const performanceProvider = createDisconnectedPerformanceProvider(descriptor("pagespeed-lab"));
+export const performanceProvider = createPageSpeedLabProvider(descriptor("pagespeed-lab"));
 
 export const integrationRegistry = integrationDescriptors.map((item) => ({
   descriptor: item,

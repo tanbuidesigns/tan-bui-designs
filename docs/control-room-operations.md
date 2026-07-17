@@ -17,7 +17,7 @@ Current routes:
 
 ## Integration architecture
 
-Presentation routes receive normalized data from server-only providers. The integration registry is the single source of lifecycle, freshness, configuration, security and operating status. The working `LocalBaselineProvider` supplies the V2 page and action snapshot. The current `PerformanceProvider` returns a typed unavailable result. Other integrations remain disconnected descriptors.
+Presentation routes receive normalized data from server-only providers. The integration registry is the single source of lifecycle, freshness, configuration, security and operating status. The working `LocalBaselineProvider` supplies the curated page and action snapshot. The PageSpeed performance provider runs only after an explicit server-rendered form submission. Other integrations remain disconnected descriptors.
 
 Providers expose a descriptor, `getStatus()` and one domain-specific load method. Do not build a universal plugin framework. Add a provider only when its domain and normalized result are understood.
 
@@ -30,13 +30,13 @@ Every important record identifies its source and whether it is confirmed, inferr
 Freshness is `current`, `ageing`, `stale`, `unknown` or `not-applicable`. Current refresh modes and planned cadences are separate:
 
 - Local baseline: manual review after material code or content changes.
-- PageSpeed lab: on demand in Task 4; no history initially.
+- PageSpeed lab: one manual on-demand request; no history.
 - CrUX field: future monthly or collection-window review; availability is not guaranteed.
 - Search Console: future manual or daily snapshot after authorization; recent and finalized data must later be distinguished.
 - Leads: future event-driven handling only after retention and security approval.
 - GitHub changes: manual change log unless API assistance becomes useful.
 
-Nothing is scheduled in V3.
+Nothing is scheduled.
 
 ## Performance boundary
 
@@ -80,10 +80,18 @@ Public information includes public URLs, metadata and future lab results. The ac
 
 Persistent storage should be added only for a defined need, retention period, deletion process, access model and rollback. Scheduling should be added only after on-demand collection proves useful and quotas, failure handling and ownership are clear. D1, KV, R2, Cron and lead storage are not configured.
 
-## Task 4 checklist
+## PageSpeed laboratory provider
 
-Task 4 may only add a server-only PageSpeed adapter, a justified safe HTTP utility and server-side `PAGESPEED_API_KEY` access. It must accept a target ID, resolve the allowlisted URL, request mobile analysis first, validate and normalize the response, and return the existing provider result shape. It must remain on demand, add no database, scheduler or CrUX call, keep production unavailable and never expose the key.
+The provider uses the PageSpeed Insights API v5 `runPagespeed` GET endpoint for one controlled Lighthouse laboratory snapshot. It supports `mobile` (the default) and `desktop`, and always requests the performance, accessibility, best-practices and SEO categories. PageSpeed-supplied CrUX fields are ignored; real-user performance remains a separate future integration.
+
+The browser submits only a registered target ID, an allowed strategy and explicit `run=1` intent. The provider resolves the URL from the eight-target allowlist, revalidates HTTPS, hostname, credentials, port, fragment and restricted paths, and validates the final audited hostname after redirects. It never accepts a free-form URL. Opening the Performance page, building the application or visiting another route does not run PageSpeed.
+
+`PAGESPEED_API_KEY` is read at request time inside a `server-only` configuration boundary. A missing value returns a normal unavailable result and makes no network request. Never prefix it with `NEXT_PUBLIC_`, pass it through React, print it, log a completed request URL, commit an environment file or store it as a plaintext Wrangler variable. A future deployment must use a Cloudflare Worker Secret.
+
+The request uses `cache: "no-store"`, a 90-second abort timeout and a 10 MB response limit. Unknown JSON is progressively validated before normalization. HTTP, quota, authentication, timeout, network, content-type, response-size, parsing, CAPTCHA and Lighthouse runtime failures map to bounded safe states. Raw upstream bodies, headers, errors and request URLs are never rendered. Diagnostic audits are selected from current performance audit references, bounded to eight and rendered as plain text; warnings are bounded to ten.
+
+Results are not persisted, scheduled, polled or written to the action register. Repeated manual runs may differ because Lighthouse laboratory measurements vary. Roll back by removing the PageSpeed provider and restoring the disconnected provider registration; do not alter public pages or the separate CrUX descriptor.
 
 ## Rollback and limitations
 
-V3 can be rolled back to the V2 checkpoint commit. Do not alter public files during rollback. The current registry is static, the baseline is manual, all external providers are disconnected, the loading boundary is brief for local synchronous data, and no remote access protection exists yet.
+The Control Room can be rolled back to the Task 3 checkpoint commit. Do not alter public files during rollback. The baseline is manual, PageSpeed is request-time only, every other external provider is disconnected, and no remote access protection exists yet.

@@ -4,7 +4,7 @@ import type {
   ControlRoomSnapshot,
   IntegrationDescriptor,
   LabPerformanceResult,
-  PerformanceRequest,
+  LabPerformanceRequest,
   ProviderResult,
 } from "@/types/control-room";
 
@@ -21,7 +21,7 @@ export interface PerformanceProvider {
   readonly id: "pagespeed-lab";
   readonly descriptor: IntegrationDescriptor;
   getStatus(): IntegrationDescriptor;
-  loadLabPerformance(request: PerformanceRequest): Promise<ProviderResult<LabPerformanceResult>>;
+  loadLabPerformance(request: LabPerformanceRequest): Promise<ProviderResult<LabPerformanceResult>>;
 }
 
 export interface DisconnectedProvider {

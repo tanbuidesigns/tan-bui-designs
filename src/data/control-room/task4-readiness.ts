@@ -4,11 +4,11 @@ export const task4Readiness: readonly ReadinessChecklistItem[] = [
   { id: "domain", label: "Performance domain types prepared", complete: true, explanation: "Lab and field models are separate and permit unavailable values." },
   { id: "targets", label: "Verified target allowlist prepared", complete: true, explanation: "Task 4 will accept a target ID and resolve an approved tanbuidesigns.com URL." },
   { id: "server-boundary", label: "Server-only provider boundary prepared", complete: true, explanation: "Provider implementations and the registry are protected by server-only imports." },
-  { id: "disconnected", label: "Disconnected provider active", complete: true, explanation: "The Performance page currently receives a typed unavailable result." },
-  { id: "states", label: "Empty and safe error states prepared", complete: true, explanation: "Presentation states do not expose exceptions or sensitive details." },
-  { id: "configuration", label: "Configuration supplied", complete: false, explanation: "PAGESPEED_API_KEY is documented but has not been created or read." },
-  { id: "client", label: "Safe PageSpeed HTTP client implemented", complete: false, explanation: "No network utility or API request exists in V3." },
-  { id: "live", label: "Live PageSpeed provider connected", complete: false, explanation: "Task 4 will implement and verify the adapter." },
+  { id: "provider", label: "Server-only PageSpeed provider implemented", complete: true, explanation: "The provider reads configuration at request time and never exposes it to React or the browser." },
+  { id: "validation", label: "Google response validation implemented", complete: true, explanation: "Unknown upstream data is progressively checked and normalized into the existing provider result." },
+  { id: "states", label: "Unavailable and safe error states implemented", complete: true, explanation: "Configuration, validation, timeout, quota, network and upstream failures render without raw details." },
+  { id: "on-demand", label: "On-demand Performance view implemented", complete: true, explanation: "A server-rendered GET form runs one registered target only when run=1 is submitted." },
+  { id: "configuration", label: "API key configured", complete: false, explanation: "This state is derived at request time; no key value is stored in Control Room data." },
 ];
 
 export const securityReadiness: readonly OperationalReadinessItem[] = [
@@ -16,7 +16,7 @@ export const securityReadiness: readonly OperationalReadinessItem[] = [
   { id: "access", label: "Cloudflare Access application", state: "not-configured", explanation: "No Access policy or application has been created." },
   { id: "jwt", label: "Access JWT validation", state: "not-enabled", explanation: "Audience and issuer validation are documented but not implemented." },
   { id: "hostnames", label: "Alternate hostname review", state: "decision-required", explanation: "workers.dev and preview URL requirements still need an account-level decision." },
-  { id: "credentials", label: "Private credentials", state: "not-enabled", explanation: "No Control Room credential or configuration value is present." },
+  { id: "credentials", label: "Private credentials", state: "not-enabled", explanation: "PageSpeed configuration is checked only at request time; no credential value is displayed or persisted." },
   { id: "private-data", label: "Private data storage", state: "not-enabled", explanation: "No confidential or personal Control Room data is stored." },
 ];
 
