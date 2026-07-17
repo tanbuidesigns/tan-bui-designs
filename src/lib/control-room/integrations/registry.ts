@@ -4,6 +4,7 @@ import { integrationDescriptors } from "@/data/control-room/integration-manifest
 import type { IntegrationDescriptor, IntegrationId, IntegrationSummary } from "@/types/control-room";
 
 import { createDisconnectedProvider } from "./disconnected-providers";
+import { createGoogleSearchConsoleProvider } from "./google-search-console-provider";
 import { createLocalBaselineProvider } from "./local-baseline-provider";
 import { createPageSpeedLabProvider } from "./pagespeed-lab-provider";
 
@@ -15,6 +16,7 @@ function descriptor(id: IntegrationId): IntegrationDescriptor {
 
 export const localBaselineProvider = createLocalBaselineProvider(descriptor("local-baseline"));
 export const performanceProvider = createPageSpeedLabProvider(descriptor("pagespeed-lab"));
+export const searchPerformanceProvider = createGoogleSearchConsoleProvider(descriptor("search-console"));
 
 export const integrationRegistry = integrationDescriptors.map((item) => ({
   descriptor: item,
@@ -23,6 +25,8 @@ export const integrationRegistry = integrationDescriptors.map((item) => ({
       ? localBaselineProvider
       : item.id === "pagespeed-lab"
         ? performanceProvider
+        : item.id === "search-console"
+          ? searchPerformanceProvider
         : createDisconnectedProvider(item),
 }));
 

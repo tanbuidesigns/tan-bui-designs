@@ -11,13 +11,14 @@ Current routes:
 - `/control-room/actions`
 - `/control-room/content`
 - `/control-room/performance`
+- `/control-room/search`
 - `/control-room/operations`
 - `/control-room/leads`
 - `/control-room/change-log`
 
 ## Integration architecture
 
-Presentation routes receive normalized data from server-only providers. The integration registry is the single source of lifecycle, freshness, configuration, security and operating status. The working `LocalBaselineProvider` supplies the curated page and action snapshot. The PageSpeed performance provider runs only after an explicit server-rendered form submission. Other integrations remain disconnected descriptors.
+Presentation routes receive normalized data from server-only providers. The integration registry is the single source of lifecycle, freshness, configuration, security and operating status. The working `LocalBaselineProvider` supplies the curated page and action snapshot. PageSpeed and Search Console providers run only after explicit server-rendered form submissions. Other integrations remain disconnected descriptors.
 
 Providers expose a descriptor, `getStatus()` and one domain-specific load method. Do not build a universal plugin framework. Add a provider only when its domain and normalized result are understood.
 
@@ -32,7 +33,7 @@ Freshness is `current`, `ageing`, `stale`, `unknown` or `not-applicable`. Curren
 - Local baseline: manual review after material code or content changes.
 - PageSpeed lab: one manual on-demand request; no history.
 - CrUX field: future monthly or collection-window review; availability is not guaranteed.
-- Search Console: future manual or daily snapshot after authorization; recent and finalized data must later be distinguished.
+- Search Console: one manual finalised-data report; no token or report history.
 - Leads: future event-driven handling only after retention and security approval.
 - GitHub changes: manual change log unless API assistance becomes useful.
 
@@ -59,7 +60,7 @@ PageSpeed/Lighthouse is laboratory evidence. CrUX is real-user field evidence. T
 
 ## Configuration and secrets
 
-The typed configuration manifest documents names only. V3 creates no environment value, Wrangler secret or Cloudflare binding. Never display or log keys, authorization headers, cookies, token values, raw private logs or lead payloads. Confidential configuration and personal data must remain server-only.
+The typed configuration manifest documents names and request-time status only. Never display or log keys, service-account identities, signed assertions, authorization headers, cookies, token values, raw private logs or lead payloads. Confidential configuration and personal data must remain server-only. Local values belong only in the ignored `.env.local`; future protected deployment values must use Cloudflare Worker Secrets.
 
 ## Cloudflare Access production plan
 
@@ -72,7 +73,7 @@ Production must remain unavailable until a separate approved task provides:
 5. Audience-tag and issuer/team-domain validation.
 6. Generic unauthorized responses and no private response caching.
 
-A hidden URL and `noindex` are not authentication. Do not add JWT verification or a `jose` dependency until the access design is approved.
+A hidden URL and `noindex` are not authentication. Task 5 uses `jose` only for Google service-account signing. Do not reuse that token module for Cloudflare Access; Task 6 must implement a separate, explicit Access-token validation boundary.
 
 ## Storage, scheduling and privacy
 
@@ -92,6 +93,26 @@ The request uses `cache: "no-store"`, a 90-second abort timeout and a 10 MB resp
 
 Results are not persisted, scheduled, polled or written to the action register. Repeated manual runs may differ because Lighthouse laboratory measurements vary. Roll back by removing the PageSpeed provider and restoring the disconnected provider registration; do not alter public pages or the separate CrUX descriptor.
 
+## Google Search Console provider
+
+The Search Console integration supplies internal, read-only organic-search observations for the enabled `Tan Bui Designs domain` registry record. The dedicated service account must be added to that exact Search Console property as a Full user; owner access is unnecessary. Authentication requests only `https://www.googleapis.com/auth/webmasters.readonly`. It does not use browser OAuth, refresh tokens, domain-wide delegation, an API key, the write-enabled scope, URL Inspection, Indexing API or sitemap mutation.
+
+The server-only configuration boundary reads `GSC_SERVICE_ACCOUNT_EMAIL`, `GSC_SERVICE_ACCOUNT_PRIVATE_KEY`, optional `GSC_SERVICE_ACCOUNT_PRIVATE_KEY_ID` and `GSC_PROPERTY_ID` at request time. The private key must be PKCS#8 PEM; real newlines and escaped `\n` are accepted and normalized internally. Missing names return an unavailable state without a token or Search Analytics request. The registered property ID is never accepted from the browser. Never commit a service-account JSON file, point `GOOGLE_APPLICATION_CREDENTIALS` at one or expose a `NEXT_PUBLIC_GSC_*` value.
+
+For each explicit `run=1`, the server uses `jose` with RS256 to create one assertion lasting no more than one hour. It exchanges that assertion once at `https://oauth2.googleapis.com/token`, validates the unknown token response and discards the assertion and access token after the report. There is no cross-request token cache. Token exchange has a 20-second timeout and a 1 MB response limit. Assertions, token material, service-account values and raw OAuth errors must never be logged or rendered.
+
+The provider then sends exactly five fixed POST requests to the Search Analytics query endpoint: property totals, daily trend, top queries, top canonical pages and device breakdown. Search type is `web`; data state is `final`. There are no browser-defined dates, filters, dimensions, row limits, aggregation settings or query builders. Page-and-query combined grouping, pagination and automatic retries are prohibited. Each Search Analytics request has a 30-second timeout and 5 MB response limit. The totals query is essential; the other four panels may fail independently and produce a bounded partial result.
+
+Reporting supports only `28d` and `90d`, defaulting to 28 days. Dates are calculated with the `America/Los_Angeles` calendar. The inclusive end date is the Pacific date three calendar days before the run; the start date is 27 or 89 days earlier. Recent or preliminary data is not requested. Exact dates are shown in the report.
+
+Google responses are treated as unknown and progressively validated. Metrics must be finite and within their valid ranges. Query text is stripped of control characters and bounded. Page rows must be HTTPS on `tanbuidesigns.com` or `www.tanbuidesigns.com`, contain no credentials or fragments, and are matched to the curated page inventory when possible. Malformed optional rows are omitted with bounded warnings; malformed totals fail safely. Raw responses, headers, complete request bodies and query results are not logged.
+
+Search Console returns top rows rather than a complete export and omits some anonymised queries for privacy. Page data may be aggregated under Google-selected canonical URLs. Average position is not a fixed rank, visible rows may not sum to property totals, and Search Console clicks are not equivalent to analytics sessions. The report is a planning signal, not proof that a website change caused an outcome.
+
+Reports are server-rendered locally, internal, unpersisted and unscheduled. Nothing is written to a database, browser storage, files, logs, analytics or the action register. Credentials should be rotated or revoked if exposure is suspected and the local key should be deleted when no longer required. Roll back by restoring the disconnected Search Console provider registration and removing the Search route; do not change public routes.
+
+Task 6 must choose `dashboard.tanbuidesigns.com` or an explicitly approved protected path, add a single-user Cloudflare Access policy, validate `Cf-Access-Jwt-Assertion` at the application boundary, protect or disable workers.dev and preview hostnames, prevent private response caching and store PageSpeed/Search Console values as Worker Secrets. Production must remain 404 until unauthorised and authorised access paths are verified. Task 6 adds no database or scheduler.
+
 ## Rollback and limitations
 
-The Control Room can be rolled back to the Task 3 checkpoint commit. Do not alter public files during rollback. The baseline is manual, PageSpeed is request-time only, every other external provider is disconnected, and no remote access protection exists yet.
+The Control Room can be rolled back to the Task 4 checkpoint commit. Do not alter public files during rollback. The baseline is manual, PageSpeed and Search Console are request-time only, every other external provider is disconnected, and no remote access protection exists yet.

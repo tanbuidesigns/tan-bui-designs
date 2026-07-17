@@ -6,6 +6,7 @@ const sections = [
   { id: "actions", label: "Actions", href: "/control-room/actions" },
   { id: "content", label: "Content", href: "/control-room/content" },
   { id: "performance", label: "Performance", href: "/control-room/performance" },
+  { id: "search", label: "Search", href: "/control-room/search" },
   { id: "operations", label: "Operations", href: "/control-room/operations" },
   { id: "leads", label: "Leads", href: "/control-room/leads" },
   { id: "change-log", label: "Change log", href: "/control-room/change-log" },

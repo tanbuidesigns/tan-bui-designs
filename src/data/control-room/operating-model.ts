@@ -41,6 +41,14 @@ export const decisions: readonly DecisionRecord[] = [
     verificationStatus: "requires-verification",
     source: "repository-review",
   },
+  {
+    id: "control-room-production-host",
+    question: "Should the protected Control Room use dashboard.tanbuidesigns.com or an approved private path?",
+    context: "Task 6 must choose one production address before Cloudflare Access, origin JWT validation and alternate-host protection are configured.",
+    priority: "high",
+    verificationStatus: "requires-verification",
+    source: "planned-integration",
+  },
 ];
 
 export const leadPrerequisites: readonly LeadPrerequisite[] = [

@@ -16,7 +16,7 @@ export const securityReadiness: readonly OperationalReadinessItem[] = [
   { id: "access", label: "Cloudflare Access application", state: "not-configured", explanation: "No Access policy or application has been created." },
   { id: "jwt", label: "Access JWT validation", state: "not-enabled", explanation: "Audience and issuer validation are documented but not implemented." },
   { id: "hostnames", label: "Alternate hostname review", state: "decision-required", explanation: "workers.dev and preview URL requirements still need an account-level decision." },
-  { id: "credentials", label: "Private credentials", state: "not-enabled", explanation: "PageSpeed configuration is checked only at request time; no credential value is displayed or persisted." },
+  { id: "credentials", label: "Private credentials", state: "not-enabled", explanation: "PageSpeed and Search Console configuration is checked only at request time; no credential value is displayed or persisted." },
   { id: "private-data", label: "Private data storage", state: "not-enabled", explanation: "No confidential or personal Control Room data is stored." },
 ];
 
