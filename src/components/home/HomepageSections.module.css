@@ -1,0 +1,575 @@
+.credentials,
+.services,
+.aboutPreview {
+  content-visibility: auto;
+}
+
+.sectionLabel,
+.sectionLabelDark {
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.28em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.sectionLabel {
+  color: rgb(255 255 255 / 0.52);
+}
+
+.sectionLabelDark {
+  color: #6b7280;
+}
+
+.credentials {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  min-height: 38rem;
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+  background:
+    radial-gradient(circle at 18% 22%, rgb(199 210 254 / 0.12), transparent 30%),
+    radial-gradient(circle at 82% 80%, rgb(254 202 202 / 0.11), transparent 27%),
+    #08090b;
+  color: #f8fafc;
+  contain-intrinsic-size: auto 44rem;
+  padding-block: clamp(5.5rem, 10vw, 9rem);
+}
+
+.credentialsAtmosphere {
+  position: absolute;
+  z-index: -1;
+  top: -16rem;
+  right: -13rem;
+  width: 39rem;
+  aspect-ratio: 1;
+  border: 1px solid rgb(255 255 255 / 0.09);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 5rem rgb(255 255 255 / 0.018),
+    0 0 0 10rem rgb(255 255 255 / 0.012);
+  pointer-events: none;
+}
+
+.credentialsInner,
+.servicesInner,
+.aboutInner {
+  width: 100%;
+  max-width: 96rem;
+  margin-inline: auto;
+  padding-inline: var(--tbds-page-padding-compact);
+}
+
+.credentialsHeading {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.credentialsTitle {
+  max-width: 54rem;
+  font-size: clamp(2.75rem, 8vw, 6.5rem);
+  font-weight: 700;
+  letter-spacing: -0.065em;
+  line-height: 0.94;
+}
+
+.credentialsWave {
+  display: block;
+  width: 100%;
+  height: clamp(6rem, 14vw, 11rem);
+  margin-block: clamp(2.25rem, 5vw, 4.5rem) clamp(1.5rem, 3vw, 2.5rem);
+  overflow: visible;
+}
+
+.credentialsWaveMuted,
+.credentialsWaveAccent {
+  vector-effect: non-scaling-stroke;
+}
+
+.credentialsWaveMuted {
+  stroke: rgb(255 255 255 / 0.11);
+  stroke-width: 1;
+}
+
+.credentialsWaveAccent {
+  stroke: rgb(254 202 202 / 0.72);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 0.16 0.055;
+  animation: tbds-home-credentials-path 16s linear infinite;
+}
+
+.credentialsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid rgb(255 255 255 / 0.13);
+}
+
+.credentialItem {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 11rem;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  border-right: 1px solid rgb(255 255 255 / 0.11);
+  border-bottom: 1px solid rgb(255 255 255 / 0.11);
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+}
+
+.credentialItem::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    145deg,
+    rgb(199 210 254 / 0.14),
+    rgb(254 202 202 / 0.08) 48%,
+    transparent 78%
+  );
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 450ms ease;
+}
+
+.credentialItem[data-scroll-hover-playing="true"]::before {
+  opacity: 1;
+}
+
+.credentialItem[data-scroll-hover-playing="true"] .credentialRule {
+  opacity: 1;
+  transform: scaleX(1.45);
+}
+
+.credentialItem[data-scroll-hover-playing="true"] .credentialValue,
+.credentialItem[data-scroll-hover-playing="true"] .credentialLabel {
+  transform: translateY(-2px);
+}
+
+.credentialItem:last-child {
+  grid-column: 1 / -1;
+}
+
+.credentialValue,
+.credentialRule,
+.credentialLabel {
+  position: relative;
+  z-index: 1;
+}
+
+.credentialValue,
+.credentialLabel {
+  transition: transform 480ms var(--tbds-ease);
+}
+
+.credentialValue {
+  font-size: clamp(3.4rem, 8vw, 6.6rem);
+  font-weight: 700;
+  letter-spacing: -0.075em;
+  line-height: 0.86;
+}
+
+.credentialRule {
+  display: block;
+  width: clamp(2.5rem, 6vw, 4.5rem);
+  height: 2px;
+  margin-top: clamp(1.4rem, 3vw, 2.4rem);
+  background-image: var(--tbds-accent-gradient);
+  background-size: 180% 100%;
+  opacity: 0.72;
+  transform-origin: left center;
+  transition:
+    opacity 420ms ease,
+    transform 520ms var(--tbds-ease);
+}
+
+.credentialLabel {
+  max-width: 12rem;
+  margin-top: 1rem;
+  color: rgb(226 232 240 / 0.62);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.services {
+  border-bottom: 1px solid #e5e7eb;
+  background: #f7f7f4;
+  contain-intrinsic-size: auto 110rem;
+  padding-block: clamp(5.5rem, 10vw, 9rem);
+}
+
+.servicesHeading {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: clamp(3.25rem, 7vw, 6rem);
+}
+
+.servicesTitle {
+  max-width: 66rem;
+  font-size: clamp(2.7rem, 7vw, 6rem);
+  font-weight: 700;
+  letter-spacing: -0.065em;
+  line-height: 0.96;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.serviceCard {
+  position: relative;
+  isolation: isolate;
+  min-height: 24rem;
+  overflow: hidden;
+  border-radius: 1.35rem;
+  background: #111827;
+  box-shadow: 0 24px 70px rgb(0 0 0 / 0.07);
+}
+
+.serviceImage {
+  z-index: -2;
+  object-fit: cover;
+  transform: scale(1.01);
+  transition:
+    filter 600ms ease,
+    transform 900ms var(--tbds-ease);
+}
+
+.serviceCard[data-scroll-hover-playing="true"] .serviceImage {
+  filter: grayscale(0) contrast(1);
+  transform: scale(1.045);
+}
+
+.serviceImageCentre {
+  object-position: center;
+}
+
+.serviceImageRight {
+  object-position: 64% center;
+}
+
+.serviceShade {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0.06) 14%, rgb(0 0 0 / 0.8) 100%),
+    linear-gradient(90deg, rgb(0 0 0 / 0.3), transparent 70%);
+  pointer-events: none;
+}
+
+.serviceContent {
+  position: absolute;
+  inset: auto 0 0;
+  padding: clamp(1.5rem, 4vw, 2.75rem);
+  color: #fff;
+}
+
+.serviceTitle {
+  max-width: 22rem;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 650;
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+}
+
+.serviceDescription {
+  max-width: 34rem;
+  margin-top: 0.9rem;
+  color: rgb(255 255 255 / 0.79);
+  font-size: clamp(0.98rem, 1.6vw, 1.12rem);
+  line-height: 1.58;
+}
+
+.aboutPreview {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  background:
+    radial-gradient(circle at 6% 18%, rgb(199 210 254 / 0.22), transparent 26rem),
+    radial-gradient(circle at 92% 78%, rgb(254 202 202 / 0.2), transparent 25rem),
+    #fff;
+  contain-intrinsic-size: auto 70rem;
+  padding-block: clamp(5.5rem, 10vw, 9rem);
+}
+
+.aboutGlow {
+  position: absolute;
+  z-index: -1;
+  right: -8rem;
+  bottom: -12rem;
+  width: 34rem;
+  aspect-ratio: 1;
+  border: 1px solid rgb(17 24 39 / 0.07);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.aboutInner {
+  display: grid;
+  gap: clamp(3.5rem, 8vw, 8rem);
+}
+
+.aboutCopy {
+  position: relative;
+  z-index: 2;
+}
+
+.aboutTitle {
+  max-width: 48rem;
+  margin-top: 1.5rem;
+  font-size: clamp(2.75rem, 7vw, 6rem);
+  font-weight: 700;
+  letter-spacing: -0.065em;
+  line-height: 0.96;
+}
+
+.aboutText {
+  max-width: 45rem;
+  margin-top: clamp(2.25rem, 5vw, 3.5rem);
+  color: #4b5563;
+  font-size: clamp(1.05rem, 1.8vw, 1.22rem);
+  line-height: 1.75;
+}
+
+.aboutText > * + * {
+  margin-top: 1.25rem;
+}
+
+.aboutButton {
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+}
+
+.aboutImages {
+  position: relative;
+  width: min(100%, 44rem);
+  justify-self: center;
+  padding: 0 0 2.75rem 1.75rem;
+}
+
+.aboutStudioImage {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border-radius: 1.35rem;
+  background: #e5e7eb;
+  box-shadow: 0 32px 100px rgb(17 24 39 / 0.14);
+}
+
+.aboutPortrait {
+  position: absolute;
+  z-index: 2;
+  bottom: 0;
+  left: 0;
+  width: clamp(7.25rem, 19vw, 11rem);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 0.45rem solid #fff;
+  border-radius: 50%;
+  background: #facc15;
+  box-shadow: 0 18px 54px rgb(17 24 39 / 0.16);
+}
+
+.aboutImage {
+  object-fit: cover;
+}
+
+.aboutImageRule {
+  position: absolute;
+  z-index: 3;
+  right: -1rem;
+  bottom: 1.4rem;
+  width: min(42%, 12rem);
+  height: 1px;
+  background: var(--tbds-accent-gradient);
+}
+
+@keyframes tbds-home-credentials-path {
+  to {
+    stroke-dashoffset: -1;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .credentialItem:hover::before {
+    opacity: 1;
+  }
+
+  .credentialItem:hover .credentialRule {
+    opacity: 1;
+    transform: scaleX(1.45);
+  }
+
+  .credentialItem:hover .credentialValue,
+  .credentialItem:hover .credentialLabel {
+    transform: translateY(-2px);
+  }
+
+  .serviceImage {
+    filter: grayscale(1) contrast(0.94);
+  }
+
+  .serviceCard:hover .serviceImage {
+    filter: grayscale(0) contrast(1);
+    transform: scale(1.045);
+  }
+}
+
+@media (min-width: 640px) {
+  .credentialsInner,
+  .servicesInner,
+  .aboutInner {
+    padding-inline: var(--tbds-page-padding-comfortable);
+  }
+
+  .servicesHeading {
+    grid-template-columns: minmax(10rem, 0.35fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 3rem;
+  }
+
+  .servicesTitle {
+    margin-top: -0.12em;
+  }
+
+  .servicesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .serviceCard {
+    min-height: 28rem;
+  }
+
+  .serviceCard:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .aboutImages {
+    padding: 0 0 3.5rem 3rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .credentialsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .credentialItem:last-child {
+    grid-column: auto;
+  }
+
+  .credentialItem:nth-last-child(2) {
+    grid-column: 1 / 2;
+  }
+}
+
+@media (min-width: 1024px) {
+  .credentialsInner,
+  .servicesInner,
+  .aboutInner {
+    padding-inline: var(--tbds-page-padding-expanded);
+  }
+
+  .credentialsGrid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .credentialItem,
+  .credentialItem:nth-last-child(2),
+  .credentialItem:last-child {
+    grid-column: auto;
+  }
+
+  .credentialItem {
+    min-height: 15rem;
+  }
+
+  .aboutInner {
+    grid-template-columns: minmax(0, 1.05fr) minmax(25rem, 0.72fr);
+    align-items: center;
+  }
+
+  .aboutStudioImage {
+    aspect-ratio: 4 / 5;
+  }
+}
+
+@media (min-width: 1100px) {
+  .servicesGrid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    gap: 1.25rem;
+  }
+
+  .serviceCard {
+    min-height: 31rem;
+  }
+
+  .serviceBranding {
+    grid-column: span 7;
+  }
+
+  .servicePackaging {
+    grid-column: span 5;
+  }
+
+  .servicePublications {
+    grid-column: span 5;
+  }
+
+  .serviceWebsites {
+    grid-column: span 7;
+  }
+
+  .serviceExhibitions {
+    grid-column: span 7;
+  }
+
+  .serviceSystems {
+    grid-column: span 5;
+  }
+}
+
+@media (min-width: 1440px) {
+  .credentialsInner,
+  .servicesInner,
+  .aboutInner {
+    padding-inline: var(--tbds-page-padding-immersive);
+  }
+}
+
+@media (max-width: 639px) {
+  .credentialsAtmosphere {
+    top: -12rem;
+    right: -22rem;
+  }
+
+  .credentialItem:nth-child(even) {
+    border-right: 0;
+  }
+
+  .aboutStudioImage {
+    aspect-ratio: 4 / 3;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .credentialsWaveAccent {
+    animation: none;
+  }
+
+  .credentialItem::before,
+  .credentialValue,
+  .credentialRule,
+  .credentialLabel,
+  .serviceImage {
+    transition: none;
+  }
+}

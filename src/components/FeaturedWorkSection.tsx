@@ -54,7 +54,7 @@ export default function FeaturedWorkSection({
               </AnimatedLabel>
 
               <AnimatedHeadline className="max-w-4xl text-5xl font-bold leading-tight md:text-6xl">
-                Projects with purpose.
+                Projects with purpose
               </AnimatedHeadline>
 
               <GradientLine size="md" className="mt-8" />
@@ -106,12 +106,15 @@ function FeaturedWorkCard({
 
   return (
     <article
+      data-homepage-scroll-hover
       className="
         group block h-full overflow-hidden rounded-[1.35rem]
         border border-gray-200 bg-white
         shadow-[0_18px_60px_rgba(0,0,0,0.035)]
         transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]
         hover:-translate-y-1 hover:border-black hover:shadow-[0_26px_80px_rgba(0,0,0,0.075)]
+        data-[scroll-hover-playing=true]:-translate-y-1 data-[scroll-hover-playing=true]:border-black
+        data-[scroll-hover-playing=true]:shadow-[0_26px_80px_rgba(0,0,0,0.075)]
       "
     >
       <FeaturedImageSlider
@@ -459,6 +462,7 @@ function FeaturedImageSlider({
                   object-cover scale-100
                   transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]
                   group-hover:scale-[1.035]
+                  group-data-[scroll-hover-playing=true]:scale-[1.035]
                 "
               />
             </div>
@@ -477,6 +481,7 @@ function FeaturedImageSlider({
           pointer-events-none absolute inset-x-0 bottom-0 h-24
           bg-gradient-to-t from-black/[0.10] to-transparent
           opacity-0 transition-opacity duration-500 group-hover:opacity-100
+          group-data-[scroll-hover-playing=true]:opacity-100
         "
       />
 
@@ -528,6 +533,7 @@ function FeaturedImageSlider({
             pointer-events-none absolute bottom-4 left-4 z-20 flex items-center gap-2
             rounded-full bg-white/85 px-3 py-2 text-xs text-black shadow-sm backdrop-blur-md
             transition-opacity duration-500 group-hover:opacity-0
+            group-data-[scroll-hover-playing=true]:opacity-0
           "
         >
           <span aria-hidden="true">↔</span>

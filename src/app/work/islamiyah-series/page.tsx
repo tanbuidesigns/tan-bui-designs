@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import styles from "./IslamiyahGallery.module.css";
@@ -24,7 +24,7 @@ import CaseStudyQuote from "@/components/case-study/CaseStudyQuote";
 import CaseStudyTimeline from "@/components/case-study/CaseStudyTimeline";
 import CaseStudyResults from "@/components/case-study/CaseStudyResults";
 import CaseStudyNavigation from "@/components/case-study/CaseStudyNavigation";
-import CaseStudyCTA from "@/components/case-study/CaseStudyCTA";
+import ProjectCTA from "@/components/ProjectCTA";
 
 import CaseStudyImageCarousel, {
   CaseStudyCarouselItem,
@@ -264,6 +264,8 @@ export default function IslamiyahSeriesPage() {
         title="Services & Role"
         intro="A focused mix of brand, print, illustration and digital learning work, brought together as one connected educational system."
         services={islamiyah.services}
+        holdTime={1750}
+        transitionTime={600}
       />
 
       <CaseStudyDetailsAccordion items={accordionItems} />
@@ -290,7 +292,7 @@ export default function IslamiyahSeriesPage() {
         nextProject={navigationProject}
       />
 
-      <CaseStudyCTA />
+      <ProjectCTA artworkVariant="caseStudyCta" />
 
       <style>
         {`
@@ -492,6 +494,30 @@ function CaseStudyDetailsAccordion({
   items: AccordionItem[];
 }) {
   const [openId, setOpenId] = useState<string | null>(null);
+  const pendingScrollIdRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!openId || pendingScrollIdRef.current !== openId) return;
+    pendingScrollIdRef.current = null;
+    if (!window.matchMedia("(max-width: 767px)").matches) return;
+
+    let secondFrame: number | undefined;
+    const firstFrame = window.requestAnimationFrame(() => {
+      secondFrame = window.requestAnimationFrame(() => {
+        document.getElementById(openId)?.scrollIntoView({
+          block: "start",
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "auto"
+            : "smooth",
+        });
+      });
+    });
+
+    return () => {
+      window.cancelAnimationFrame(firstFrame);
+      if (secondFrame !== undefined) window.cancelAnimationFrame(secondFrame);
+    };
+  }, [openId]);
 
   return (
     <section
@@ -510,15 +536,17 @@ function CaseStudyDetailsAccordion({
             <article
               key={item.id}
               id={item.id}
-              className={index === 0 ? "" : "border-t border-gray-200"}
+              className={`scroll-mt-28 md:scroll-mt-0 ${
+                index === 0 ? "" : "border-t border-gray-200"
+              }`}
             >
               <button
                 type="button"
-                onClick={() =>
-                  setOpenId((currentId) =>
-                    currentId === item.id ? null : item.id
-                  )
-                }
+                onClick={() => {
+                  const opening = openId !== item.id;
+                  pendingScrollIdRef.current = opening ? item.id : null;
+                  setOpenId(opening ? item.id : null);
+                }}
                 className="
                   group
                   flex

@@ -1,0 +1,62 @@
+.label {
+  display: inline-flex;
+  font-size: 0.875rem;
+  font-weight: 650;
+  letter-spacing: 0.35em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.label[data-tone="light"] {
+  color: var(--tbds-color-gray-500);
+}
+
+.label[data-tone="dark"] {
+  color: rgb(255 255 255 / 0.48);
+}
+
+.labelText {
+  display: inline-block;
+}
+
+.labelLetter {
+  display: inline-block;
+  background-image: var(--tbds-accent-gradient);
+  background-position: var(--tbds-label-gradient-position) center;
+  background-size: calc(var(--tbds-label-length) * 100%) 100%;
+  color: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition:
+    color 350ms ease,
+    transform 350ms var(--tbds-ease);
+  transition-delay: calc(var(--tbds-letter-index) * 25ms);
+}
+
+.label[data-tapped="true"] .labelLetter {
+  color: transparent;
+  transform: translateY(-6px);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .label:hover .labelLetter {
+    color: transparent;
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .labelLetter {
+    transition: none;
+  }
+
+  .label[data-tapped="true"] .labelLetter {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
+  .label:hover .labelLetter {
+    transform: none;
+  }
+}

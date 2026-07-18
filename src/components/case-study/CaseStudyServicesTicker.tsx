@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { PointerEvent, TransitionEvent } from "react";
 
 import AnimatedLabel from "@/components/AnimatedLabel";
 
@@ -9,202 +10,258 @@ type CaseStudyServicesTickerProps = {
   title?: string;
   intro?: string;
   services: string[];
+  holdTime?: number;
+  transitionTime?: number;
 };
 
-const ITEM_HEIGHT = 44;
-const VISIBLE_ITEMS = 3;
-const HOLD_TIME = 2200;
-const TRANSITION_TIME = 700;
+const DEFAULT_HOLD_TIME = 2200;
+const DEFAULT_TRANSITION_TIME = 860;
+
+type Movement =
+  | "auto"
+  | "manual-left"
+  | "manual-right"
+  | "manual-return"
+  | null;
 
 export default function CaseStudyServicesTicker({
   id,
   title = "Services",
   intro = "A focused mix of creative, technical and production responsibilities across the project.",
   services,
+  holdTime = DEFAULT_HOLD_TIME,
+  transitionTime = DEFAULT_TRANSITION_TIME,
 }: CaseStudyServicesTickerProps) {
-  const cleanServices = useMemo(() => {
-    return services
-      .map((service) =>
-        service === "Curriculum Design"
-          ? "Project Management"
-          : service
-      )
-      .filter(
-        (service, index, array) =>
-          service.trim().length > 0 &&
-          array.indexOf(service) === index
-      );
-  }, [services]);
+  const cleanServices = useMemo(
+    () =>
+      services
+        .map((service) =>
+          service === "Curriculum Design" ? "Project Management" : service
+        )
+        .filter(
+          (service, index, array) =>
+            service.trim().length > 0 && array.indexOf(service) === index
+        ),
+    [services]
+  );
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isRolling, setIsRolling] = useState(false);
-  const [transitionEnabled, setTransitionEnabled] =
-    useState(true);
+  const [movement, setMovement] = useState<Movement>(null);
+  const [transitionEnabled, setTransitionEnabled] = useState(true);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const pointerIdRef = useRef<number | null>(null);
+  const startXRef = useRef(0);
+  const startYRef = useRef(0);
+  const dragEstablishedRef = useRef(false);
+  const dragOffsetRef = useRef(0);
 
   useEffect(() => {
-    setCurrentIndex(0);
-    setIsRolling(false);
-    setTransitionEnabled(true);
-  }, [cleanServices.length]);
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReducedMotion(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
 
   useEffect(() => {
-    if (cleanServices.length <= 1 || isRolling) return;
+    if (cleanServices.length <= 1 || movement || reducedMotion) return;
 
     const timeout = window.setTimeout(() => {
       setTransitionEnabled(true);
-      setIsRolling(true);
-    }, HOLD_TIME);
+      setMovement("auto");
+    }, holdTime);
 
     return () => window.clearTimeout(timeout);
-  }, [cleanServices.length, currentIndex, isRolling]);
+  }, [cleanServices.length, currentIndex, holdTime, movement, reducedMotion]);
 
   if (!cleanServices.length) return null;
 
   const getService = (offset: number) => {
-    const nextIndex =
-      (currentIndex + offset + cleanServices.length) %
-      cleanServices.length;
-
-    return cleanServices[nextIndex];
+    const index =
+      (currentIndex + offset + cleanServices.length) % cleanServices.length;
+    return cleanServices[index];
   };
 
-  const visibleRows = [
-    {
-      service: getService(-1),
-      position: "above",
-    },
-    {
-      service: getService(0),
-      position: "current",
-    },
-    {
-      service: getService(1),
-      position: "next",
-    },
-    {
-      service: getService(2),
-      position: "after-next",
-    },
-  ];
+  const visiblePills = [-3, -2, -1, 0, 1, 2, 3].map((offset) => ({
+    offset,
+    service: getService(offset),
+  }));
 
-  const handleTransitionEnd = (
-    event: React.TransitionEvent<HTMLDivElement>
-  ) => {
-    if (event.currentTarget !== event.target || !isRolling) {
+  const movementTransform =
+    movement === "auto" || movement === "manual-left"
+      ? "translateX(calc(-50% - var(--service-pill-step)))"
+      : movement === "manual-right"
+        ? "translateX(calc(-50% + var(--service-pill-step)))"
+        : "translateX(-50%)";
+
+  const resetTrack = () => {
+    setTransitionEnabled(false);
+    setMovement(null);
+    dragOffsetRef.current = 0;
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => setTransitionEnabled(true));
+    });
+  };
+
+  const handleTransitionEnd = (event: TransitionEvent<HTMLDivElement>) => {
+    if (event.currentTarget !== event.target || !movement) return;
+
+    if (movement === "auto" || movement === "manual-left") {
+      setCurrentIndex((index) => (index + 1) % cleanServices.length);
+    } else if (movement === "manual-right") {
+      setCurrentIndex(
+        (index) => (index - 1 + cleanServices.length) % cleanServices.length
+      );
+    }
+
+    resetTrack();
+  };
+
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse" || cleanServices.length <= 1) return;
+    pointerIdRef.current = event.pointerId;
+    startXRef.current = event.clientX;
+    startYRef.current = event.clientY;
+    dragEstablishedRef.current = false;
+    dragOffsetRef.current = 0;
+    setMovement("manual-return");
+    setTransitionEnabled(false);
+  };
+
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (pointerIdRef.current !== event.pointerId || !trackRef.current) return;
+
+    const deltaX = event.clientX - startXRef.current;
+    const deltaY = event.clientY - startYRef.current;
+
+    if (!dragEstablishedRef.current) {
+      if (Math.max(Math.abs(deltaX), Math.abs(deltaY)) < 7) return;
+      if (Math.abs(deltaX) <= Math.abs(deltaY) * 1.15) {
+        pointerIdRef.current = null;
+        resetTrack();
+        return;
+      }
+      dragEstablishedRef.current = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+    }
+
+    const offset = Math.max(-160, Math.min(160, deltaX));
+    dragOffsetRef.current = offset;
+    trackRef.current.style.transform = `translateX(calc(-50% + ${offset}px))`;
+    event.preventDefault();
+  };
+
+  const finishPointer = (event: PointerEvent<HTMLDivElement>) => {
+    if (pointerIdRef.current !== event.pointerId) return;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+
+    const offset = dragOffsetRef.current;
+    pointerIdRef.current = null;
+    dragEstablishedRef.current = false;
+
+    if (reducedMotion) {
+      if (offset <= -44) {
+        setCurrentIndex((index) => (index + 1) % cleanServices.length);
+      } else if (offset >= 44) {
+        setCurrentIndex(
+          (index) => (index - 1 + cleanServices.length) % cleanServices.length
+        );
+      }
+      resetTrack();
       return;
     }
 
-    setTransitionEnabled(false);
-
-    setCurrentIndex(
-      (currentValue) =>
-        (currentValue + 1) % cleanServices.length
-    );
-
-    setIsRolling(false);
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setTransitionEnabled(true);
-      });
-    });
+    setTransitionEnabled(true);
+    if (offset <= -44) {
+      setMovement("manual-left");
+    } else if (offset >= 44) {
+      setMovement("manual-right");
+    } else {
+      setMovement("manual-return");
+      trackRef.current?.style.setProperty(
+        "transform",
+        "translateX(-50%)"
+      );
+    }
   };
+
+  const activeOffset =
+    movement === "auto" || movement === "manual-left"
+      ? 1
+      : movement === "manual-right"
+        ? -1
+        : 0;
 
   return (
     <section
       id={id}
-      className="
-        mx-auto
-        max-w-6xl
-        scroll-mt-40
-        border-t
-        border-gray-100
-        px-8
-        py-20
-      "
+      className="mx-auto max-w-6xl scroll-mt-40 border-t border-gray-100 px-5 py-16 sm:px-8 sm:py-20"
     >
-      <div className="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+      <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:gap-12">
         <div>
-          <AnimatedLabel className="mb-8">
-            {title}
-          </AnimatedLabel>
-
+          <AnimatedLabel className="mb-8">{title}</AnimatedLabel>
           <p className="max-w-2xl text-xl leading-relaxed text-gray-600">
             {intro}
           </p>
         </div>
 
         <div
-          className="
-            relative
-            overflow-hidden
-            py-8
-          "
+          className="relative min-w-0 overflow-hidden px-2 py-8 sm:px-4 sm:py-10"
           style={{
             WebkitMaskImage:
-              "linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%)",
+              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 6%, black 14%, black 86%, rgba(0,0,0,0.5) 94%, transparent 100%)",
             maskImage:
-              "linear-gradient(to bottom, transparent 0%, black 24%, black 76%, transparent 100%)",
+              "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 6%, black 14%, black 86%, rgba(0,0,0,0.5) 94%, transparent 100%)",
           }}
         >
           <div
-            className="mx-auto overflow-hidden"
-            style={{
-              height: `${ITEM_HEIGHT * VISIBLE_ITEMS}px`,
-            }}
-            aria-label="Project services"
+            className="relative h-16 touch-pan-y select-none sm:h-[4.5rem]"
+            aria-label="Project services. Swipe horizontally on the service pills to browse."
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={finishPointer}
+            onPointerCancel={finishPointer}
           >
             <div
-              className="flex flex-col"
+              ref={trackRef}
+              className="absolute left-1/2 top-0 flex h-full items-center gap-[var(--service-pill-gap)] [--service-pill-gap:0.55rem] [--service-pill-step:calc(var(--service-pill-width)+var(--service-pill-gap))] [--service-pill-width:clamp(7.4rem,20vw,9.6rem)] sm:[--service-pill-gap:0.7rem] sm:[--service-pill-width:clamp(8rem,16vw,10.5rem)]"
               onTransitionEnd={handleTransitionEnd}
               style={{
-                transform: isRolling
-                  ? `translateY(-${ITEM_HEIGHT}px)`
-                  : "translateY(0)",
-                transition: transitionEnabled
-                  ? `transform ${TRANSITION_TIME}ms cubic-bezier(0.22,1,0.36,1)`
-                  : "none",
+                transform: movementTransform,
+                transition:
+                  transitionEnabled && !reducedMotion
+                    ? `transform ${movement === "auto" ? transitionTime : 560}ms cubic-bezier(0.2,0.82,0.24,1)`
+                    : "none",
               }}
             >
-              {visibleRows.map((row, index) => {
-                const isMiddle = isRolling
-                  ? index === 2
-                  : index === 1;
+              {visiblePills.map((pill) => {
+                const isMiddle = pill.offset === activeOffset;
 
                 return (
                   <div
-                    key={`${row.position}-${row.service}-${currentIndex}`}
-                    className="
-                      flex
-                      items-center
-                      justify-center
-                    "
-                    style={{
-                      height: `${ITEM_HEIGHT}px`,
-                    }}
+                    key={`${pill.offset}-${pill.service}-${currentIndex}`}
+                    className={`flex h-10 w-[var(--service-pill-width)] shrink-0 items-center justify-center rounded-full border px-3 text-center transition-[background-color,border-color,box-shadow,color,opacity,transform] duration-500 sm:h-11 sm:px-4 ${
+                      isMiddle
+                        ? "scale-100 border-[rgba(255,255,255,0.48)] text-gray-950 opacity-100 shadow-[0_12px_32px_rgba(15,23,42,0.12)]"
+                        : "scale-[0.94] border-gray-100/80 bg-white/92 text-gray-500 opacity-72"
+                    }`}
+                    style={
+                      isMiddle
+                        ? {
+                            background: "var(--tbds-accent-gradient)",
+                            boxShadow:
+                              "0 0 0 1px rgba(255,255,255,0.18), 0 12px 32px rgba(15,23,42,0.12)",
+                          }
+                        : undefined
+                    }
+                    aria-hidden={!isMiddle}
                   >
-                    <p
-                      className={`
-                        text-center
-                        text-2xl
-                        font-semibold
-                        leading-none
-                        tracking-[-0.035em]
-
-                        transition-all
-                        duration-500
-
-                        md:text-3xl
-
-                        ${
-                          isMiddle
-                            ? "scale-100 text-black opacity-100 blur-0"
-                            : "scale-[0.94] text-gray-300 opacity-55 blur-[0.2px]"
-                        }
-                      `}
-                    >
-                      {row.service}
-                    </p>
+                    <span className="text-xs font-semibold leading-tight tracking-[-0.02em] sm:text-sm">
+                      {pill.service}
+                    </span>
                   </div>
                 );
               })}

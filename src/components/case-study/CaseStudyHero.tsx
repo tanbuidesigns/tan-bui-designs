@@ -27,6 +27,7 @@ export default function CaseStudyHero({
           </AnimatedLabel>
 
           <AnimatedHeadline
+            as="h1"
             className="
               max-w-5xl
 

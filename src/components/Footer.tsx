@@ -1,186 +1,84 @@
-"use client";
-
 import Link from "next/link";
 
-import Reveal from "@/components/Reveal";
 import AnimatedLabel from "@/components/AnimatedLabel";
-
+import ArtworkBackground from "@/components/ArtworkBackground";
 import Button from "@/components/ui/Button";
-import Container from "@/components/ui/Container";
+import WideShell from "@/components/ui/WideShell";
+import { showPlayground } from "@/lib/site-visibility";
 
-export default function Footer() {
-  const links = [
+const linkColumns = [
+  [
     { label: "Home", href: "/" },
     { label: "Work", href: "/work" },
     { label: "About", href: "/about" },
+    { label: "Blog", href: "/blog" },
+  ],
+  [
+    ...(showPlayground
+      ? [{ label: "Playground", href: "/playground" } as const]
+      : []),
     { label: "Contact", href: "/contact" },
-  ];
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/tanbuidesigns/", external: true },
+    { label: "Privacy", href: "/privacy" },
+  ],
+] as const;
 
+const footerLinkClass =
+  "relative inline-flex min-h-10 items-center text-sm text-white/58 transition-[color,transform] duration-300 hover:-translate-y-px hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-[#07080a] after:absolute after:inset-x-0 after:bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-[image:var(--tbds-accent-gradient)] after:transition-transform hover:after:scale-x-100 focus-visible:after:scale-x-100 motion-reduce:transition-none";
+
+export default function Footer() {
   return (
-    <footer
-      className="
-        mt-auto
-        border-t
-        border-gray-100
-        bg-white
-      "
-    >
-      <Reveal>
-        <Container size="lg">
-          <div
-            className="
-              grid
-              gap-10
+    <footer className="relative mt-auto overflow-clip border-t border-white/10 bg-[#07080a] text-white">
+      <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-[image:var(--tbds-accent-gradient)] opacity-35" />
+      <ArtworkBackground variant="subtle" className="opacity-[0.26]" />
+      <div aria-hidden="true" className="pointer-events-none absolute -right-12 top-7 h-28 w-52 rounded-[1.25rem] border border-white/[0.055] sm:right-[9%] sm:w-64">
+        <span className="absolute inset-x-4 top-4 h-px bg-white/[0.055]" />
+        <span className="absolute bottom-4 left-4 h-10 w-16 rounded-md border border-white/[0.045]" />
+      </div>
 
-              py-10
-
-              sm:grid-cols-[minmax(0,24rem)_auto]
-              sm:items-start
-              sm:gap-12
-              sm:py-12
-
-              lg:grid-cols-[minmax(0,28rem)_auto]
-              lg:gap-16
-
-              2xl:py-14
-            "
-          >
-            {/* LEFT SIDE */}
-
-            <div>
-              <Link
-                href="/design-handbook"
-                className="inline-block"
-                aria-label="View the Tan Bui Design System"
-              >
-                <AnimatedLabel
-                  className="
-                    text-[11px]
-                    sm:text-xs
-                    md:text-sm
-
-                    tracking-[0.22em]
-                    sm:tracking-[0.28em]
-                    md:tracking-[0.34em]
-                  "
-                >
-                  TAN BUI DESIGN SYSTEM
-                </AnimatedLabel>
-              </Link>
-
-              <p
-                className="
-                  mt-4
-
-                  max-w-sm
-
-                  text-sm
-                  sm:text-base
-
-                  text-gray-500
-                  leading-relaxed
-                "
-              >
-                A living design system behind this portfolio, built around
-                layout rules, motion principles, reusable components and
-                responsive experience modes.
-              </p>
-
-              <div className="mt-6">
-                <Button
-                  href="/design-handbook"
-                  variant="accent"
-                  size="md"
-                  expandOnHover
-                  showArrow
-                >
-                  View Design Handbook
-                </Button>
-              </div>
-            </div>
-
-            {/* RIGHT SIDE */}
-
-            <nav
-              className="
-                flex
-                flex-col
-                items-start
-                gap-4
-
-                sm:items-end
-                sm:text-right
-
-                text-sm
-                uppercase
-                tracking-[0.15em]
-              "
-              aria-label="Footer navigation"
-            >
-              {links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="
-                    relative
-
-                    inline-flex
-
-                    text-gray-500
-
-                    transition-all
-                    duration-300
-                    ease-[cubic-bezier(0.22,1,0.36,1)]
-
-                    hover:text-black
-                    hover:-translate-y-[1px]
-
-                    after:absolute
-                    after:left-0
-                    after:-bottom-1
-
-                    after:h-px
-                    after:w-full
-
-                    after:origin-left
-                    after:scale-x-0
-
-                    after:bg-[image:var(--tbds-accent-gradient)]
-
-                    after:transition-transform
-                    after:duration-300
-                    after:ease-[cubic-bezier(0.22,1,0.36,1)]
-
-                    hover:after:scale-x-100
-                  "
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-          {/* LOWER ROW */}
-
-          <div
-            className="
-              border-t
-              border-gray-100
-
-              py-5
-
-              text-xs
-              text-gray-400
-              leading-relaxed
-            "
-          >
-            <p>
-              © {new Date().getFullYear()} Tan Bui Designs - Turning complex
-              ideas into clear visual experiences.
+      <WideShell className="relative py-10 sm:py-12">
+        <div className="grid gap-9 lg:grid-cols-[minmax(0,1fr)_26rem] lg:items-start lg:gap-16">
+          <div>
+            <AnimatedLabel tone="dark" className="text-white/48">Tan Bui Designs</AnimatedLabel>
+            <p className="mt-4 max-w-[29rem] text-sm leading-relaxed text-white/55 sm:text-base">
+              Design, craft and clear thinking across brand, print, digital and physical experiences.
             </p>
+            <div className="mt-6">
+              <Button
+                href="/design-handbook"
+                variant="accent"
+                size="md"
+                showArrow
+                className="focus-visible:ring-white focus-visible:ring-offset-[#07080a] hover:shadow-[0_16px_40px_-20px_rgba(199,210,254,0.8)]"
+              >
+                View the design handbook
+              </Button>
+            </div>
           </div>
-        </Container>
-      </Reveal>
+
+          <nav className="grid grid-cols-2 gap-x-10" aria-label="Footer navigation">
+            {linkColumns.map((column, columnIndex) => (
+              <div key={columnIndex} className="flex flex-col">
+                {column.map((link) =>
+                  "external" in link ? (
+                    <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" className={footerLinkClass}>
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link key={link.href} href={link.href} className={footerLinkClass}>
+                      {link.label}
+                    </Link>
+                  )
+                )}
+              </div>
+            ))}
+          </nav>
+        </div>
+
+        <div className="mt-9 border-t border-white/10 pt-5 text-xs leading-relaxed text-white/36">
+          <p>© {new Date().getFullYear()} Tan Bui Designs — Turning complex ideas into clear visual experiences.</p>
+        </div>
+      </WideShell>
     </footer>
   );
 }
