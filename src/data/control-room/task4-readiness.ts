@@ -12,10 +12,10 @@ export const task4Readiness: readonly ReadinessChecklistItem[] = [
 ];
 
 export const securityReadiness: readonly OperationalReadinessItem[] = [
-  { id: "guard", label: "Development-only production guard", state: "active", explanation: "Every Control Room route returns notFound() in production." },
-  { id: "access", label: "Cloudflare Access application", state: "not-configured", explanation: "No Access policy or application has been created." },
-  { id: "jwt", label: "Access JWT validation", state: "not-enabled", explanation: "Audience and issuer validation are documented but not implemented." },
-  { id: "hostnames", label: "Alternate hostname review", state: "decision-required", explanation: "workers.dev and preview URL requirements still need an account-level decision." },
+  { id: "guard", label: "Exact-host application guard", state: "active", explanation: "Public and unknown hosts cannot render Control Room routes." },
+  { id: "authentication", label: "Private Google Sign-In", state: "planned", explanation: "The local boundary is implemented; OAuth configuration and production verification remain gated." },
+  { id: "authorisation", label: "Exact-user authorisation", state: "active", explanation: "Protected requests require a verified session for the one configured email address." },
+  { id: "hostnames", label: "Alternate hostname review", state: "active", explanation: "workers.dev and Preview URLs are disabled and the application enforces the approved host." },
   { id: "credentials", label: "Private credentials", state: "not-enabled", explanation: "PageSpeed and Search Console configuration is checked only at request time; no credential value is displayed or persisted." },
   { id: "private-data", label: "Private data storage", state: "not-enabled", explanation: "No confidential or personal Control Room data is stored." },
 ];

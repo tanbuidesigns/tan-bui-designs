@@ -308,7 +308,7 @@ export const actionRegister: readonly ActionRecord[] = [
     problemOrOpportunity: "workers.dev and preview URLs are enabled in wrangler.jsonc.",
     reason: "Future Control Room protection must cover every reachable hostname or disable unnecessary alternatives.",
     businessImpact: "Avoids an alternate route around future access controls.",
-    userImpact: "No public-site change unless access policy is introduced later.",
+    userImpact: "No public-site change when the private authentication boundary is activated.",
     technicalRelevance: "Requires Cloudflare account inspection before secure non-local access is designed.",
     priority: "medium",
     effort: "requires-discovery",

@@ -35,18 +35,18 @@ export const decisions: readonly DecisionRecord[] = [
   },
   {
     id: "alternate-hostnames",
-    question: "Are workers.dev and Cloudflare preview URLs required later?",
-    context: "Both are enabled in wrangler.jsonc and would need an explicit access-control decision before remote Control Room access.",
+    question: "How are alternate Worker hostnames handled for the private pilot?",
+    context: "Task 6 explicitly disables workers.dev and Preview URLs; the exact production host is also enforced by the application guard.",
     priority: "medium",
-    verificationStatus: "requires-verification",
+    verificationStatus: "confirmed",
     source: "repository-review",
   },
   {
     id: "control-room-production-host",
-    question: "Should the protected Control Room use dashboard.tanbuidesigns.com or an approved private path?",
-    context: "Task 6 must choose one production address before Cloudflare Access, origin JWT validation and alternate-host protection are configured.",
+    question: "Which hostname is approved for the protected Control Room pilot?",
+    context: "The approved full-host boundary is dashboard.tanbuidesigns.com; public and unknown hosts remain concealed.",
     priority: "high",
-    verificationStatus: "requires-verification",
+    verificationStatus: "confirmed",
     source: "planned-integration",
   },
 ];
@@ -60,7 +60,7 @@ export const leadPrerequisites: readonly LeadPrerequisite[] = [
   { id: "deletion", label: "Deletion process", status: "decision-required", reason: "No operational deletion process is documented." },
   { id: "storage", label: "Secure private storage", status: "not-enabled", reason: "No database or lead store exists." },
   { id: "attribution", label: "Attribution fields", status: "decision-required", reason: "Only necessary, consent-compatible fields should be approved." },
-  { id: "access", label: "Access control", status: "not-enabled", reason: "The Control Room is local-only and has no authentication." },
+  { id: "access", label: "Access control", status: "technical-work-required", reason: "Private Google Sign-In is implemented locally; OAuth configuration and production verification remain behind the Task 6 manual gate." },
   { id: "reporting", label: "Reporting requirements", status: "decision-required", reason: "The questions that lead reporting should answer have not been approved." },
 ];
 

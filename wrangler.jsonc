@@ -1,10 +1,10 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "main": ".open-next/worker.js",
+  "main": "custom-worker.ts",
   "name": "tan-bui-designs",
   "compatibility_date": "2026-06-26",
-  "workers_dev": true,
-  "preview_urls": true,
+  "workers_dev": false,
+  "preview_urls": false,
   "compatibility_flags": [
     "nodejs_compat"
   ],
@@ -20,8 +20,29 @@
     {
       "pattern": "www.tanbuidesigns.com",
       "custom_domain": true
+    },
+    {
+      "pattern": "dashboard.tanbuidesigns.com",
+      "custom_domain": true
     }
   ],
+  "vars": {
+    "CONTROL_ROOM_RUNTIME_MODE": "google-auth-protected-production",
+    "CONTROL_ROOM_PRODUCTION_HOST": "dashboard.tanbuidesigns.com"
+  },
+  "secrets": {
+    "required": [
+      "RESEND_API_KEY",
+      "PAGESPEED_API_KEY",
+      "GSC_SERVICE_ACCOUNT_EMAIL",
+      "GSC_SERVICE_ACCOUNT_PRIVATE_KEY",
+      "GSC_PROPERTY_ID",
+      "GOOGLE_CLIENT_ID",
+      "GOOGLE_CLIENT_SECRET",
+      "BETTER_AUTH_SECRET",
+      "CONTROL_ROOM_ALLOWED_EMAIL"
+    ]
+  },
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",

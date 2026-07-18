@@ -2,7 +2,7 @@
 
 ## Purpose and current state
 
-The Control Room is a private website-management interface for Tan Bui Designs. It combines a curated repository baseline, a prioritised action register and future integration readiness. It is currently available only during local development. The central runtime policy returns `notFound()` for every `/control-room` route in production; there is no override.
+The Control Room is a private website-management interface for Tan Bui Designs. It combines a curated repository baseline, a prioritised action register and integration readiness. Task 6 prepares a controlled production pilot at `dashboard.tanbuidesigns.com`, but it has not been deployed. Local Google OAuth, Better Auth session creation, sign-out and session clearing have been verified on an approved loopback host. Production still fails closed until the exact private host, complete server configuration and a valid application session for the one authorised Google identity are all present.
 
 Current routes:
 
@@ -62,18 +62,19 @@ PageSpeed/Lighthouse is laboratory evidence. CrUX is real-user field evidence. T
 
 The typed configuration manifest documents names and request-time status only. Never display or log keys, service-account identities, signed assertions, authorization headers, cookies, token values, raw private logs or lead payloads. Confidential configuration and personal data must remain server-only. Local values belong only in the ignored `.env.local`; future protected deployment values must use Cloudflare Worker Secrets.
 
-## Cloudflare Access production plan
+## Google authentication production boundary
 
-Production must remain unavailable until a separate approved task provides:
+The private pilot uses Google Sign-In through Better Auth, followed by an application-owned authorisation check. A hidden URL, navigation omission and `noindex` are discovery controls, not authentication. The OAuth client must request only `openid`, `email` and `profile`; it does not grant access to Google Drive, Gmail, Search Console or any other Google API.
 
-1. A Cloudflare Access application and explicit allow policy.
-2. Protection for the chosen custom domain or path.
-3. A keep/protect/disable decision for workers.dev and preview URLs.
-4. Application-side validation of `Cf-Access-Jwt-Assertion`.
-5. Audience-tag and issuer/team-domain validation.
-6. Generic unauthorized responses and no private response caching.
+The first authorisation layer runs before session creation. The Google identity token is verified and must contain a verified email that exactly matches `CONTROL_ROOM_ALLOWED_EMAIL` after lowercase normalisation. The shared Control Room server layout then validates the encrypted Better Auth session and repeats the verified exact-email comparison on every protected request. A valid Google account that does not match the allowlisted address receives only a generic denial.
 
-A hidden URL and `noindex` are not authentication. Task 5 uses `jose` only for Google service-account signing. Do not reuse that token module for Cloudflare Access; Task 6 must implement a separate, explicit Access-token validation boundary.
+The deployment is database-free. Better Auth stores session state in an encrypted, HTTP-only, host-only cookie using its JWE cookie cache. Sessions expire after approximately eight hours and do not use rolling refresh. OAuth state and the short-lived encrypted provider account cookie are used only for the sign-in exchange. No session, token, identity or provider result is written to a database, KV, D1, R2, browser storage, analytics or logs.
+
+The shared Control Room server layout is the protected-page boundary. It checks the request `Host` before session validation. Development requires `NODE_ENV=development` and `localhost`, `127.0.0.1` or IPv6 loopback after safe port removal. Production requires exactly `dashboard.tanbuidesigns.com`, complete request-time configuration and a valid authorised session. Public hosts, workers.dev, Preview URLs, localhost in production and unknown hosts remain concealed. Missing authentication configuration fails closed with a generic unavailable sign-in state. There is no query-string, cookie-value, header or alternate-host override.
+
+The authentication route applies the same exact-host policy and ignores proxy-supplied forwarded host/protocol headers. Control Room and authentication responses are request-time only, private/no-store at browser and CDN layers, and include `X-Robots-Tag`, no-referrer, nosniff and frame denial. Public caching and metadata are unchanged. The public site does not display a Control Room link, and the public navigation and footer are omitted only inside the private interface.
+
+Task 5's Search Console service-account flow remains separate from interactive Google Sign-In. The pilot does not require a paid identity product, a database or a Cloudflare Zero Trust configuration.
 
 ## Storage, scheduling and privacy
 
@@ -111,8 +112,63 @@ Search Console returns top rows rather than a complete export and omits some ano
 
 Reports are server-rendered locally, internal, unpersisted and unscheduled. Nothing is written to a database, browser storage, files, logs, analytics or the action register. Credentials should be rotated or revoked if exposure is suspected and the local key should be deleted when no longer required. Roll back by restoring the disconnected Search Console provider registration and removing the Search route; do not change public routes.
 
-Task 6 must choose `dashboard.tanbuidesigns.com` or an explicitly approved protected path, add a single-user Cloudflare Access policy, validate `Cf-Access-Jwt-Assertion` at the application boundary, protect or disable workers.dev and preview hostnames, prevent private response caching and store PageSpeed/Search Console values as Worker Secrets. Production must remain 404 until unauthorised and authorised access paths are verified. Task 6 adds no database or scheduler.
+Task 6 fixes `dashboard.tanbuidesigns.com` as the only production Control Room host, adds private Google Sign-In with exact-user application authorisation, disables workers.dev and Preview URLs, prevents private response caching and declares required Worker Secret names. The OAuth Web client, exact local and production callbacks, External testing audience, approved test user and local authentication flow are confirmed. All required Worker Secret names and the optional Search Console private-key ID name were confirmed through Cloudflare metadata; their encrypted values were not read back. Production remains undeployed at the Stage B predeployment gate pending the checkpoint commit and explicit deployment approval. Task 6 adds no database or scheduler.
+
+## Task 6 production configuration
+
+Source-controlled non-secret Wrangler variables:
+
+- `CONTROL_ROOM_RUNTIME_MODE=google-auth-protected-production`
+- `CONTROL_ROOM_PRODUCTION_HOST=dashboard.tanbuidesigns.com`
+
+Required Worker Secret names:
+
+- `RESEND_API_KEY`
+- `PAGESPEED_API_KEY`
+- `GSC_SERVICE_ACCOUNT_EMAIL`
+- `GSC_SERVICE_ACCOUNT_PRIVATE_KEY`
+- `GSC_PROPERTY_ID`
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+- `BETTER_AUTH_SECRET`
+- `CONTROL_ROOM_ALLOWED_EMAIL`
+
+`GSC_SERVICE_ACCOUNT_PRIVATE_KEY_ID` remains optional. Cloudflare metadata confirms that all ten expected secret names exist remotely, including that optional name; values remain encrypted and unread. This confirms configuration presence, not availability to an undeployed production runtime. The authorised email, Google client credentials, Better Auth secret and provider values must not appear in source control. `BETTER_AUTH_SECRET` must be a securely generated value of at least 32 characters. Wrangler's `secrets.required` declaration makes a deployment fail when a required secret name is absent. Do not create `.env.production`, copy `.env.local`, or use `wrangler secret put` as part of the controlled deployment; that command creates and immediately deploys a Worker version.
+
+The Wrangler routes preserve `tanbuidesigns.com` and `www.tanbuidesigns.com`, declare `dashboard.tanbuidesigns.com` as a custom domain, and explicitly set `workers_dev` and `preview_urls` to `false`. Cloudflare custom domains create their own DNS record when deployed; do not add a conflicting CNAME.
+
+## Task 6 controlled deployment and verification
+
+The local Stage A manual gate is complete: the operator confirmed the private Google OAuth client, exact authorised identity, approved redirect URIs, local sign-in and sign-out behaviour, and all required Worker Secret names. The [manual gate checklist](./control-room-task6-manual-gate.md) remains the deployment reference. Stage B is still gated before deployment: the reviewed checkpoint commit and explicit deployment approval have not occurred, the private hostname is inactive, and no production authentication or provider runtime has been verified.
+
+Immediately before Stage B deployment:
+
+1. Reconfirm the Task 5 base and Task 6 branch.
+2. Verify remote secret names without reading their values.
+3. Re-run TypeScript, lint, Next.js and OpenNext builds.
+4. Recheck public routes, private headers, `workers_dev=false`, `preview_urls=false` and all three custom domains.
+5. Review the complete diff and secret-pattern scan.
+6. Create the single `feat(control-room): secure production pilot` checkpoint commit.
+7. Run the existing OpenNext `npm run deploy` workflow once.
+
+Post-deployment verification order is deliberate: public apex and `www` health; Control Room denial on both public hosts; unauthenticated private-host sign-in; rejected non-allowlisted Google identity; authorised identity success; exact host and session/email enforcement; one PageSpeed mobile Homepage check; one 28-day Search Console check; private response and CDN cache headers; workers.dev and Preview URL denial; sign-out and session expiry; and responsive review at 1440x900, 1024x768, 768x1024 and 390x844. No Google provider request may originate from protected-page browser code, and no token or provider result is persisted.
+
+## Task 6 rollback
+
+Rollback triggers include public regressions, private-host exposure, failed session or identity validation, missing secrets, authentication loops, provider regression, private HTML caching, alternate-host exposure or deployment instability.
+
+1. Remove or disable the dashboard custom-domain route first when immediate isolation is required.
+2. Disable or restrict the Google OAuth client when identity-level isolation is required.
+3. Restore the previous known-good Worker version.
+4. Confirm both public hosts recover and public `/control-room` remains unavailable.
+5. Do not delete production secrets during emergency rollback unless compromise is suspected.
+6. For suspected compromise, rotate `BETTER_AUTH_SECRET` to invalidate sessions, rotate the Google OAuth client secret, revoke the OAuth client if necessary, revoke the Search Console service-account key, and rotate any affected provider credentials.
+7. Record the reason and outcome. Isolate the private route before investigating application details.
+
+OAuth client restriction or revocation is the identity-level block. Service-account keys should be rotated or revoked on exposure, not routinely copied between environments.
+
+Known limitations before Stage B deployment: Google OAuth, session creation, sign-out and session clearing are verified locally only. Required and optional Worker Secret names are confirmed remotely through metadata, but their encrypted values were not read and their production runtime availability is unverified. The custom domain is declared but inactive. The checkpoint commit, deployment, production authorised and unauthorised identity checks, sign-out, session expiry, PageSpeed and Search Console runs, live cache and noindex checks, responsive review, public-site regression review and rollback verification remain pending. Task 7 readiness is limited to a protected request-scoped identity and serialisable provider results; Task 7 has not started. Task 6 does not add D1, migrations, persistence, history, comparisons, Cron or scheduled collection.
 
 ## Rollback and limitations
 
-The Control Room can be rolled back to the Task 4 checkpoint commit. Do not alter public files during rollback. The baseline is manual, PageSpeed and Search Console are request-time only, every other external provider is disconnected, and no remote access protection exists yet.
+The Stage A code can be discarded back to the Task 5 checkpoint before deployment. After Stage B, use the Task 6 rollback order above and restore the previous known-good Worker version. Do not alter public pages during rollback. The baseline remains manual; PageSpeed and Search Console remain request-time only; every other external provider remains disconnected.
