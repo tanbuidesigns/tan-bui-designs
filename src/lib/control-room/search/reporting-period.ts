@@ -51,3 +51,12 @@ export function resolveSearchPeriod(periodId: SearchPeriodId, now = new Date()):
     searchType: "web",
   };
 }
+
+export function resolvePreviousSearchPeriod(period: SearchPeriod): SearchPeriod {
+  const length = period.id === "90d" ? 90 : 28;
+  const currentStart = new Date(`${period.startDate}T00:00:00.000Z`);
+  if (!Number.isFinite(currentStart.getTime())) throw new Error("The current reporting period is invalid.");
+  const end = new Date(currentStart.getTime() - 86_400_000);
+  const start = new Date(end.getTime() - (length - 1) * 86_400_000);
+  return { ...period, startDate: isoDateFromUtc(start), endDate: isoDateFromUtc(end) };
+}

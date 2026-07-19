@@ -3,6 +3,7 @@ import "server-only";
 import type { IntegrationDescriptor, IntegrationErrorKind, ProviderSourceMetadata } from "@/types/control-room";
 import type {
   SearchPanel,
+  SearchComparisonProviderResult,
   SearchPerformanceProviderResult,
   SearchPerformanceRequest,
   SearchPerformanceSnapshot,
@@ -14,7 +15,7 @@ import { getServiceAccountAccessToken } from "./google-service-account-token";
 import { getSearchConsoleConfiguration } from "./search-console-config";
 import { buildSearchQueryCatalogue, type SearchQueryDefinition } from "./search-console-query-catalogue";
 import { parseSearchDaily, parseSearchDevices, parseSearchPages, parseSearchQueries, parseSearchTotals, type ParsedRows } from "./search-console-response";
-import { resolveSearchPeriod } from "../search/reporting-period";
+import { resolvePreviousSearchPeriod, resolveSearchPeriod } from "../search/reporting-period";
 
 const SEARCH_ANALYTICS_BASE = "https://www.googleapis.com/webmasters/v3/sites";
 const SEARCH_TIMEOUT_MS = 30_000;
@@ -36,6 +37,10 @@ function sourceFrom(descriptor: IntegrationDescriptor): ProviderSourceMetadata {
 }
 
 function safeError(descriptor: IntegrationDescriptor, kind: IntegrationErrorKind, message: string, retryable: boolean): SearchPerformanceProviderResult {
+  return { status: "error", error: { kind, message }, retryable, source: sourceFrom(descriptor) };
+}
+
+function comparisonError(descriptor: IntegrationDescriptor, kind: IntegrationErrorKind, message: string, retryable: boolean): SearchComparisonProviderResult {
   return { status: "error", error: { kind, message }, retryable, source: sourceFrom(descriptor) };
 }
 
@@ -116,6 +121,46 @@ function dataPanel<T>(rows: readonly T[], aggregationType: string | null): Searc
   return rows.length ? { status: "success", data: rows, responseAggregationType: aggregationType } : { status: "empty", data: [], responseAggregationType: aggregationType, message: "Search Console returned no rows for this panel and period." };
 }
 
+async function loadPeriod(
+  configuration: Extract<ReturnType<typeof getSearchConsoleConfiguration>, { status: "ready" }>,
+  descriptor: IntegrationDescriptor,
+  period: ReturnType<typeof resolveSearchPeriod>,
+  accessToken: string,
+): Promise<SearchPerformanceProviderResult> {
+  const catalogue = buildSearchQueryCatalogue(period);
+  const settled = await Promise.allSettled(catalogue.map((query) => runQuery(configuration.property.siteUrl, accessToken, query)));
+  const results: QueryResult[] = settled.map((result, index) => result.status === "fulfilled" ? result.value : ({ ok: false, id: catalogue[index].id, kind: "unknown", message: "A Search Console panel failed safely.", retryable: false }));
+  const byId = (id: SearchQueryId) => results.find((result) => result.id === id) ?? ({ ok: false, id, kind: "unknown", message: "A Search Console panel result is unavailable.", retryable: false } as const);
+  const totalsResult = byId("totals");
+  if (!totalsResult.ok) return safeError(descriptor, totalsResult.kind, totalsResult.message, totalsResult.retryable);
+  const totals = parseSearchTotals(totalsResult.data);
+  if (!totals.ok) return safeError(descriptor, totals.kind, totals.message, totals.retryable);
+  const warnings: string[] = [];
+  let successful = 1;
+  const parsePanel = <T>(id: Exclude<SearchQueryId, "totals">, parse: (input: unknown) => ParsedRows<T>): SearchPanel<T> => {
+    const result = byId(id);
+    if (!result.ok) { warnings.push(`${id}: ${result.message}`); return failedPanel(result) as SearchPanel<T>; }
+    const parsed = parse(result.data);
+    if (!parsed.ok) { warnings.push(`${id}: ${parsed.message}`); return { status: "error", errorKind: parsed.kind, message: parsed.message, retryable: parsed.retryable }; }
+    successful += 1;
+    warnings.push(...parsed.warnings.map((warning) => `${id}: ${warning}`));
+    return dataPanel(parsed.rows, parsed.aggregationType);
+  };
+  const daily = parsePanel("daily", (input) => parseSearchDaily(input, period));
+  const queries = parsePanel("queries", parseSearchQueries);
+  const pages = parsePanel("pages", parseSearchPages);
+  const devices = parsePanel("devices", parseSearchDevices);
+  const failed = 5 - successful;
+  const generatedAt = new Date().toISOString();
+  const snapshot: SearchPerformanceSnapshot = {
+    property: { id: configuration.property.id, displayLabel: configuration.property.displayLabel, propertyType: configuration.property.propertyType, securityClassification: configuration.property.securityClassification },
+    period, totals: totals.totals, daily, queries, pages, devices, totalsAggregationType: totals.aggregationType,
+    providerGeneratedAt: generatedAt, requestCount: { requested: 5, successful, failed, partial: failed > 0 },
+    warnings: warnings.slice(0, 10), limitations: LIMITATIONS, securityClassification: "internal",
+  };
+  return { status: "success", data: snapshot, source: { integrationId: descriptor.id, displayName: descriptor.displayName, dataMode: "live", freshness: { state: "current", generatedAt, lastSuccessfulUpdate: generatedAt, threshold: "One request-time finalised report", explanation: "This result is normalized before any approved persistence." } }, warnings: snapshot.warnings };
+}
+
 export function createGoogleSearchConsoleProvider(baseDescriptor: IntegrationDescriptor): SearchPerformanceProvider {
   return {
     id: "search-console",
@@ -134,55 +179,25 @@ export function createGoogleSearchConsoleProvider(baseDescriptor: IntegrationDes
       const token = await getServiceAccountAccessToken(configuration);
       if (!token.ok) return safeError(descriptor, token.kind, token.message, token.retryable);
 
-      const catalogue = buildSearchQueryCatalogue(period);
-      const settled = await Promise.allSettled(catalogue.map((query) => runQuery(configuration.property.siteUrl, token.accessToken, query)));
-      const results: QueryResult[] = settled.map((result, index) => result.status === "fulfilled" ? result.value : ({ ok: false, id: catalogue[index].id, kind: "unknown", message: "A Search Console panel failed safely.", retryable: false }));
-      const byId = (id: SearchQueryId) => results.find((result) => result.id === id) ?? ({ ok: false, id, kind: "unknown", message: "A Search Console panel result is unavailable.", retryable: false } as const);
-
-      const totalsResult = byId("totals");
-      if (!totalsResult.ok) return safeError(descriptor, totalsResult.kind, totalsResult.message, totalsResult.retryable);
-      const totals = parseSearchTotals(totalsResult.data);
-      if (!totals.ok) return safeError(descriptor, totals.kind, totals.message, totals.retryable);
-
-      const warnings: string[] = [];
-      let successful = 1;
-      const parsePanel = <T>(id: Exclude<SearchQueryId, "totals">, parse: (input: unknown) => ParsedRows<T>): SearchPanel<T> => {
-        const result = byId(id);
-        if (!result.ok) { warnings.push(`${id}: ${result.message}`); return failedPanel(result) as SearchPanel<T>; }
-        const parsed = parse(result.data);
-        if (!parsed.ok) { warnings.push(`${id}: ${parsed.message}`); return { status: "error", errorKind: parsed.kind, message: parsed.message, retryable: parsed.retryable }; }
-        successful += 1;
-        warnings.push(...parsed.warnings.map((warning) => `${id}: ${warning}`));
-        return dataPanel(parsed.rows, parsed.aggregationType);
-      };
-
-      const daily = parsePanel("daily", (input) => parseSearchDaily(input, period));
-      const queries = parsePanel("queries", parseSearchQueries);
-      const pages = parsePanel("pages", parseSearchPages);
-      const devices = parsePanel("devices", parseSearchDevices);
-      const failed = 5 - successful;
-      const generatedAt = new Date().toISOString();
-      const snapshot: SearchPerformanceSnapshot = {
-        property: { id: configuration.property.id, displayLabel: configuration.property.displayLabel, propertyType: configuration.property.propertyType, securityClassification: configuration.property.securityClassification },
-        period,
-        totals: totals.totals,
-        daily,
-        queries,
-        pages,
-        devices,
-        totalsAggregationType: totals.aggregationType,
-        providerGeneratedAt: generatedAt,
-        requestCount: { requested: 5, successful, failed, partial: failed > 0 },
-        warnings: warnings.slice(0, 10),
-        limitations: LIMITATIONS,
-        securityClassification: "internal",
-      };
-      return {
-        status: "success",
-        data: snapshot,
-        source: { integrationId: descriptor.id, displayName: descriptor.displayName, dataMode: "live", freshness: { state: "current", generatedAt, lastSuccessfulUpdate: generatedAt, threshold: "One request-time finalised report", explanation: "This Search Console result is not persisted and will be discarded after rendering." } },
-        warnings: snapshot.warnings,
-      };
+      return loadPeriod(configuration, descriptor, period, token.accessToken);
+    },
+    async loadSearchComparison(request: SearchPerformanceRequest): Promise<SearchComparisonProviderResult> {
+      const descriptor = descriptorForConfiguration(baseDescriptor);
+      const configuration = getSearchConsoleConfiguration();
+      if (configuration.status === "missing") return { status: "unavailable", reason: `Missing server configuration: ${configuration.missingNames.join(", ")}.`, nextRequirement: "Configure the listed Search Console names server-side.", source: sourceFrom(descriptor) };
+      if (configuration.status === "invalid") return comparisonError(descriptor, "configuration", configuration.reason, false);
+      let currentPeriod;
+      try { currentPeriod = resolveSearchPeriod(request.periodId); } catch { return comparisonError(descriptor, "validation", "The comparison periods could not be calculated safely.", false); }
+      const previousPeriod = resolvePreviousSearchPeriod(currentPeriod);
+      const token = await getServiceAccountAccessToken(configuration);
+      if (!token.ok) return comparisonError(descriptor, token.kind, token.message, token.retryable);
+      const [current, previous] = await Promise.all([
+        loadPeriod(configuration, descriptor, currentPeriod, token.accessToken),
+        loadPeriod(configuration, descriptor, previousPeriod, token.accessToken),
+      ]);
+      if (current.status !== "success") return current;
+      if (previous.status !== "success") return previous;
+      return { status: "success", data: { current: current.data, previous: previous.data, tokenExchangeCount: 1, searchRequestCount: 10 }, source: current.source, warnings: [...current.warnings, ...previous.warnings].slice(0, 20) };
     },
   };
 }

@@ -53,6 +53,17 @@
   "images": {
     "binding": "IMAGES"
   },
+  "version_metadata": {
+    "binding": "CF_VERSION_METADATA"
+  },
+  "d1_databases": [
+    {
+      "binding": "CONTROL_ROOM_DB",
+      "database_name": "tan-bui-control-room",
+      "database_id": "7b156091-55fa-4a90-8a73-55552e7b825f",
+      "migrations_dir": "migrations/control-room"
+    }
+  ],
   "observability": {
     "enabled": true
   }

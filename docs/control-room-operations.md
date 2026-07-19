@@ -172,3 +172,89 @@ Known limitations before Stage B deployment: Google OAuth, session creation, sig
 ## Rollback and limitations
 
 The Stage A code can be discarded back to the Task 5 checkpoint before deployment. After Stage B, use the Task 6 rollback order above and restore the previous known-good Worker version. Do not alter public pages during rollback. The baseline remains manual; PageSpeed and Search Console remain request-time only; every other external provider remains disconnected.
+
+## Task 7 Stage A: history, evidence and portability foundation
+
+Task 7 Stage A prepares persistent snapshots without provisioning or changing any remote system. The proposed primary store is Cloudflare D1 because the production application already runs on Workers and D1 uses SQLite semantics. The proposed database name is `tan-bui-control-room`, the future binding is `CONTROL_ROOM_DB`, the migration directory is `migrations/control-room`, and the suggested location hint is Western Europe (`weur`). A location hint is an optimisation hint, not a placement guarantee. No database, identifier, binding or location has been created or invented in Stage A.
+
+The application resolves storage at request time through one server-only boundary. It reports `ready`, `unavailable` or `invalid-binding`. Missing storage is normal during Stage A: History, Evidence and Reports render a truthful unavailable state, capture controls are disabled, and POST handlers return without calling PageSpeed or Search Console. The build does not require a D1 binding.
+
+Business services depend on `ControlRoomHistoryRepository`; only the D1 adapter and binding accessor know the D1-shaped runtime API. SQL is confined to the adapter. Domain records and `ReportingEvidencePacketV1` are provider-neutral, deterministic, JSON-serialisable values with no credentials, raw responses, D1 objects or generated conclusions. This boundary permits a future Turso adapter without changing capture or report services. Turso is a documented fallback only; it is not installed, configured or called.
+
+### Migration and schema
+
+The single initial migration is `migrations/control-room/0001_create_history_foundation.sql`. It uses portable SQLite column types, primary keys, foreign keys, checks, unique constraints and explicit indexes. It does not use D1-only SQL. The schema contains:
+
+- `cr_schema_metadata`: schema key, numeric schema version, migration name, RFC3339 application time and `sqlite` compatibility family.
+- `cr_capture_runs`: UUID idempotency token, source, mode, manual trigger, lifecycle status, bounded safe failure, counts, optional Worker version and retention metadata.
+- `cr_run_warnings`: at most 20 bounded warnings for PageSpeed and 40 for a Search comparison.
+- `cr_pagespeed_snapshots`: bounded normalized scores and metrics only.
+- `cr_pagespeed_diagnostics`: at most 20 selected normalized diagnostics; raw Lighthouse JSON is prohibited.
+- `cr_search_snapshots`: current and previous equal-period summaries.
+- `cr_search_daily_rows`: at most 180 daily rows across a comparison.
+- `cr_search_query_rows`: at most 50 top rows per period, exact query text marked restricted and a SHA-256 key derived from normalized text.
+- `cr_search_page_rows`: at most 50 top rows per period.
+- `cr_search_device_rows`: at most six rows per period.
+- `cr_change_events`: append-only change evidence with optional supersession.
+- `cr_action_evidence`: append-only action evidence with optional supersession.
+
+Foreign keys use restrictive deletion. Corrections point to superseded records; application routes expose no delete or update operation. Capture inserts use prepared statements and D1 `batch()` so each completed provider result and its run status are committed atomically. Multi-row inserts stay within the platform's 100-bound-parameter limit and the complete Search comparison is designed to remain within the Workers Free allowance of 50 D1 queries per invocation. Provider raw payloads are never stored.
+
+### Manual capture policy
+
+History accepts only four protected POST operations: PageSpeed capture, Search comparison capture, change-event append and action-evidence append. Every POST independently rechecks the exact dashboard/loopback host policy, the production Better Auth session, verified exact authorised email, exact same-origin header, supported form content type, bounded content length, field lengths, enumerated values and server-rendered UUID format. Errors remain generic and private/no-store.
+
+The server generates a UUID in each form. `cr_capture_runs.id` is the idempotency key. The run is inserted as `running` before any provider is called. A duplicate UUID returns the existing run and never calls the provider again. Storage is checked before provider configuration or network work. D1 retries, if later required by observed transient failures, are limited to at most two and may wrap only documented idempotent operations; Stage A adds no automatic retry.
+
+PageSpeed persists one registered-target result, summary metrics, up to 20 selected diagnostics and up to 20 safe warnings. Full Lighthouse JSON is forbidden. Search comparison accepts only 28-day or 90-day modes. It calculates finalised Pacific Time periods with a three-day buffer and an immediately preceding equal, non-overlapping period. One service-account token exchange is shared across exactly ten fixed Search Analytics requests: totals, daily, query, page and device for each period. There is no provider retry, pagination or browser-defined query.
+
+History pagination is cursor-based, ordered by request timestamp and UUID, with 25 rows by default and a hard maximum of 50. The routes are `/control-room/history`, `/control-room/history/[runId]`, `/control-room/evidence` and `/control-room/reports`. Reports show only the latest stored 28-day and 90-day evidence packets. They do not offer files, downloads, exports, AI prose or causal claims.
+
+### Sensitivity and retention proposal
+
+Capture summaries, public page URLs and PageSpeed laboratory observations are internal. Exact Search Console query text is restricted because it can expose user intent; it must never enter logs, error messages or evidence summaries. Credentials, tokens, private keys, cookies and raw upstream responses are forbidden in storage. Evidence references carry `internal` or `restricted` sensitivity.
+
+The Stage A retention policy is documentation and row metadata only. There is no deletion job:
+
+- capture summaries: retained indefinitely;
+- Search detail rows: 24 months;
+- PageSpeed diagnostics: 12 months;
+- failed/interrupted details: 90 days.
+
+Before deletion automation exists, the owner must approve evidence needs, recovery window, legal/privacy implications and an auditable deletion procedure. D1 Time Travel is recovery assistance, not a retention or export system.
+
+### Stage B local provisioning checkpoint
+
+Manual Gate A approval created exactly one empty remote D1 database named `tan-bui-control-room` with the Western Europe (`weur`) location hint. The real identifier is recorded only in Wrangler configuration. `CONTROL_ROOM_DB` and `CF_VERSION_METADATA` are configured locally and Cloudflare environment types are generated. The Cloudflare account plan could not be established through Wrangler and is therefore recorded as `unknown`; design and verification use the stricter Workers Free limits.
+
+`0001_create_history_foundation.sql` was applied to Wrangler's local D1 simulation only. The local migration registry, schema metadata, tables, indexes, foreign keys, CHECK constraints, unique idempotency key, transaction rollback, PageSpeed fixture, complete/empty/partial/failed Search fixtures, restricted-query separation, change correction, action evidence, deterministic report inputs, cursor pagination and indexed query plans all passed. The automated worst-case Search capture plan is exactly 41 D1 statements with no statement exceeding 100 bound parameters. The test fails above 45 statements, preserving at least five statements of safety headroom beneath the 50-query Free limit.
+
+At Manual Gate B the remote database remained empty and unmigrated. No deployment, commit, push, scheduler, export or AI work occurred during Stage B. Stage C required separate approval to apply the migration remotely and later deploy. The permanent database name is used for migration commands:
+
+```powershell
+npx wrangler d1 migrations apply tan-bui-control-room --remote
+```
+
+The command was not run before Stage C approval.
+
+### Stage C remote migration checkpoint
+
+Before the remote migration, the current Time Travel recovery bookmark was recorded as `00000002-00000000-000050ad-a1ec7250c90df6dd9e59d5922800c8aa`. Database information confirmed the production D1 backend and Western Europe region. The account plan remains `unknown`, so recovery and query planning continue to use the stricter Workers Free assumptions.
+
+`0001_create_history_foundation.sql` was then applied exactly once using the permanent database name. Remote verification confirmed schema version 1, the `sqlite` compatibility family, all 12 Control Room tables, all 12 explicit indexes, restrictive action-evidence foreign keys and zero PageSpeed or Search capture rows before deployment. No migration remains pending.
+
+Worker rollback and D1 restoration are separate decisions. Restoring a prior Worker version does not revert database state. A D1 Time Travel restore is destructive and must not be run merely because an application rollback is required. The pre-migration bookmark is retained only as a controlled recovery point within the account's available Time Travel window.
+
+Rollback before deployment is source-only: remove the unbound Stage A files. After a future deployment, first disable capture routes or remove the D1 binding while preserving the database, then restore the previous Worker version. Do not delete a database during incident response. Export/backup evidence must exist before any destructive schema operation.
+
+### Task 7.1 scheduling proposal only
+
+No Cron Trigger or scheduler is configured. A later Task 7.1 may consider low-frequency collection only after manual captures demonstrate value, provider quotas and D1 write volume are measured, overlapping runs are prevented, ownership and alerting are defined, and partial/failed runs are handled safely. PageSpeed variability and cost argue against frequent unattended runs. Search Console finalised data should respect Pacific Time and the three-day buffer. Any schedule requires a separate threat, quota, retry and rollback review.
+
+### Task 7.2 export and portability proposal only
+
+No export endpoint, downloadable file or R2 bucket exists. A later Task 7.2 should define a server-only, owner-authorised export process using portable ordered JSON/JSONL and SQLite-compatible tabular data, with schema version, generated time, checksums, row counts and sensitivity labels. Restricted query text should be excluded by default or placed in a separately encrypted restricted package. Import validation must run in a disposable local SQLite database before any restore. A Turso fallback would implement the same repository contract and run the same portable migrations; it must not become a live dual-write system without a separate consistency design.
+
+### Task 8 readiness only
+
+Task 8 may use `ReportingEvidencePacketV1` as bounded evidence for later interpretation. It must not receive raw provider responses, credentials, exact restricted queries by default, D1 bindings or arbitrary SQL access. Evidence packets intentionally separate facts, deltas, references and limitations from conclusions. No model, prompt, AI provider, automated narrative or decision-making feature is implemented in Task 7.

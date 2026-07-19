@@ -1,5 +1,12 @@
 import { Resend } from "resend";
 
+type ContactSubmission = {
+  name: string;
+  email: string;
+  services?: string[];
+  message: string;
+};
+
 const resend = new Resend(
   process.env.RESEND_API_KEY
 );
@@ -13,7 +20,7 @@ export async function POST(
       email,
       services,
       message,
-    } = await request.json();
+    } = await request.json() as ContactSubmission;
 
     await resend.emails.send({
       from:

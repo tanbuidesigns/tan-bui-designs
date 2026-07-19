@@ -7,7 +7,7 @@ import type {
   LabPerformanceRequest,
   ProviderResult,
 } from "@/types/control-room";
-import type { SearchPerformanceProviderResult, SearchPerformanceRequest } from "@/types/control-room-search";
+import type { SearchComparisonProviderResult, SearchPerformanceProviderResult, SearchPerformanceRequest } from "@/types/control-room-search";
 
 export type LocalBaselineSnapshot = Omit<ControlRoomSnapshot, "integrations" | "integrationSummary">;
 
@@ -30,6 +30,7 @@ export interface SearchPerformanceProvider {
   readonly descriptor: IntegrationDescriptor;
   getStatus(): IntegrationDescriptor;
   loadSearchPerformance(request: SearchPerformanceRequest): Promise<SearchPerformanceProviderResult>;
+  loadSearchComparison(request: SearchPerformanceRequest): Promise<SearchComparisonProviderResult>;
 }
 
 export interface DisconnectedProvider {

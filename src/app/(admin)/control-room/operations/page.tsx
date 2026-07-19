@@ -8,8 +8,10 @@ import { task5Readiness, task6CodeReadiness, task6ManualReadiness } from "@/data
 import { getControlRoomSnapshot } from "@/lib/control-room/get-control-room-snapshot";
 import { controlRoomRuntimePolicy } from "@/lib/control-room/runtime/control-room-policy";
 import type { SummaryMetric } from "@/types/control-room";
+import { getHistoryStorage } from "@/lib/control-room/history/storage";
 
-export default function ControlRoomOperationsPage() {
+export default async function ControlRoomOperationsPage() {
+  const historyStorage = await getHistoryStorage();
   const snapshot = getControlRoomSnapshot();
   const summary = snapshot.integrationSummary;
   const pageSpeed = snapshot.integrations.find((integration) => integration.id === "pagespeed-lab");
@@ -52,6 +54,17 @@ export default function ControlRoomOperationsPage() {
       <div className="grid gap-6 xl:grid-cols-2"><Checklist title={`Task 5 readiness · ${completeTask5}/${currentTask5Readiness.length}`} items={currentTask5Readiness} /><Checklist title={`Task 6 code readiness · ${completeTask6Code}/${task6CodeReadiness.length}`} items={task6CodeReadiness} /></div>
       <ReadinessList title="Task 6 verified readiness and production pilot" items={task6ManualReadiness} />
       <ReadinessList title="Storage and scheduling" items={storageReadiness} />
+
+      <section aria-labelledby="task7-storage-title" className="rounded-[1.35rem] border border-black/8 bg-white p-5 shadow-[0_18px_50px_rgba(0,0,0,0.04)] sm:p-7">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">Task 7 · Stage B</p>
+        <h2 id="task7-storage-title" className="mt-2 text-2xl font-bold tracking-[-0.04em] sm:text-3xl">History storage portability</h2>
+        <dl className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="rounded-xl bg-[#f7f7f4] p-4"><dt className="text-xs uppercase text-gray-500">Primary design</dt><dd className="mt-2 font-semibold">Cloudflare D1 · SQLite</dd></div>
+          <div className="rounded-xl bg-[#f7f7f4] p-4"><dt className="text-xs uppercase text-gray-500">Runtime state</dt><dd className="mt-2 font-semibold">{historyStorage.status === "ready" ? "Ready" : "Not configured"}</dd></div>
+          <div className="rounded-xl bg-[#f7f7f4] p-4"><dt className="text-xs uppercase text-gray-500">Future fallback</dt><dd className="mt-2 font-semibold">Turso · documented only</dd></div>
+        </dl>
+        <ul className="mt-5 list-disc space-y-2 pl-5 text-sm leading-relaxed text-gray-600"><li>Remote schema version 1 and the reviewed CONTROL_ROOM_DB binding are verified; the live runtime state is shown above.</li><li>The portable migration, repository boundary and local D1 simulation passed Manual Gate B verification.</li><li>Scheduling, exports and AI interpretation are not implemented.</li></ul>
+      </section>
 
       <section aria-labelledby="configuration-title" className="rounded-[1.35rem] border border-black/8 bg-white p-5 shadow-[0_18px_50px_rgba(0,0,0,0.04)] sm:p-7">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">Names and operating state only · No values shown</p><h2 id="configuration-title" className="mt-2 text-2xl font-bold tracking-[-0.04em] sm:text-3xl">Configuration manifest</h2>
