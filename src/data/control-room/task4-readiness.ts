@@ -21,9 +21,9 @@ export const securityReadiness: readonly OperationalReadinessItem[] = [
 ];
 
 export const storageReadiness: readonly OperationalReadinessItem[] = [
-  { id: "persistence", label: "Persistent storage", state: "not-enabled", explanation: "No integration currently persists results." },
+  { id: "persistence", label: "Persistent storage", state: "active", explanation: "Task 7 storage is bound in source and remote schema version 1 is verified; captures remain deliberate and manual." },
   { id: "schedule", label: "Scheduled collection", state: "not-enabled", explanation: "All future cadences remain planning assumptions." },
-  { id: "d1", label: "Cloudflare D1", state: "not-configured", explanation: "No database binding exists." },
+  { id: "d1", label: "Cloudflare D1", state: "active", explanation: "The Western Europe database has the reviewed migration, binding and generated runtime types." },
   { id: "kv", label: "Cloudflare KV", state: "not-configured", explanation: "No KV namespace or binding exists." },
   { id: "r2", label: "Cloudflare R2", state: "not-configured", explanation: "No Control Room bucket or binding exists." },
   { id: "cron", label: "Cloudflare Cron", state: "not-configured", explanation: "No trigger or scheduled job exists." },

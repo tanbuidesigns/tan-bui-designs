@@ -74,3 +74,9 @@ export type SearchPerformanceSnapshot = {
 export type SearchPerformanceRequest = { periodId: SearchPeriodId };
 
 export type SearchPerformanceProviderResult = ProviderResult<SearchPerformanceSnapshot>;
+export type SearchComparisonProviderResult = ProviderResult<{
+  current: SearchPerformanceSnapshot;
+  previous: SearchPerformanceSnapshot;
+  tokenExchangeCount: 1;
+  searchRequestCount: 10;
+}>;
