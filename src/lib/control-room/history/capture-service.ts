@@ -33,7 +33,7 @@ export async function capturePageSpeed(input: { runId: string; targetId: string;
   const target = getPerformanceTargetById(input.targetId);
   if (!target?.enabled || !target.allowedStrategies.includes(input.strategy)) return { status: "failed", runId: input.runId };
   const now = new Date();
-  const started = await storage.repository.beginRun({ id: input.runId, idempotencyKey: input.runId, source: "pagespeed", captureMode: "single", targetKey: input.targetId, periodKey: null, startedAt: now.toISOString(), workerVersionId: null, workerVersionTag: null, workerVersionCreatedAt: null, detailRetentionUntil: retainedUntilDays(now, 90) });
+  const started = await storage.repository.beginRun({ id: input.runId, idempotencyKey: input.runId, source: "pagespeed", captureMode: "single", targetKey: input.targetId, periodKey: null, startedAt: now.toISOString(), ...storage.workerProvenance, detailRetentionUntil: retainedUntilDays(now, 90) });
   if (!started.created) return { status: "existing", runId: started.run.id };
   const result = await performanceProvider.loadLabPerformance({ targetId: input.targetId, strategy: input.strategy });
   const completedAt = new Date().toISOString();
@@ -53,7 +53,7 @@ export async function captureSearchComparison(input: { runId: string; periodId: 
   const property = searchConsoleProperties.find((item) => item.enabled);
   if (!property) return { status: "failed", runId: input.runId };
   const now = new Date();
-  const started = await storage.repository.beginRun({ id: input.runId, idempotencyKey: input.runId, source: "search_console", captureMode: "comparison_pair", targetKey: property.id, periodKey: input.periodId, startedAt: now.toISOString(), workerVersionId: null, workerVersionTag: null, workerVersionCreatedAt: null, detailRetentionUntil: retainedUntilDays(now, 90) });
+  const started = await storage.repository.beginRun({ id: input.runId, idempotencyKey: input.runId, source: "search_console", captureMode: "comparison_pair", targetKey: property.id, periodKey: input.periodId, startedAt: now.toISOString(), ...storage.workerProvenance, detailRetentionUntil: retainedUntilDays(now, 90) });
   if (!started.created) return { status: "existing", runId: started.run.id };
   const result = await searchPerformanceProvider.loadSearchComparison({ periodId: input.periodId });
   const completedAt = new Date().toISOString();

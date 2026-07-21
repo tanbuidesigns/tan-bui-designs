@@ -245,6 +245,8 @@ Before the remote migration, the current Time Travel recovery bookmark was recor
 
 Worker rollback and D1 restoration are separate decisions. Restoring a prior Worker version does not revert database state. A D1 Time Travel restore is destructive and must not be run merely because an application rollback is required. The pre-migration bookmark is retained only as a controlled recovery point within the account's available Time Travel window.
 
+Capture runs record the current Worker version ID, optional version tag and Worker creation timestamp from the bound `CF_VERSION_METADATA` object when that binding is available. Local or unsupported environments retain explicit null provenance values rather than inferring a deployment. The Task 7 provenance correction recorded recovery bookmark `00000010-00000000-000050af-443a27d21073ee727b657ef3c7f264f2`, then backfilled only the two initial production runs after confirming both were served by Worker version `ab5412d1-d78e-4a49-a812-afff2b3b235f`. The guarded update changed exactly two rows, preserved the absent version tag as null and left no capture run without a Worker version ID. This was an audited data correction, not a schema migration.
+
 Rollback before deployment is source-only: remove the unbound Stage A files. After a future deployment, first disable capture routes or remove the D1 binding while preserving the database, then restore the previous Worker version. Do not delete a database during incident response. Export/backup evidence must exist before any destructive schema operation.
 
 ### Task 7.1 scheduling proposal only
