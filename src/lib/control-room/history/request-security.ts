@@ -3,7 +3,7 @@ import "server-only";
 import { createControlRoomAuth, isAuthorisedControlRoomSession } from "@/lib/control-room/auth/auth";
 import { getControlRoomAuthConfiguration } from "@/lib/control-room/auth/configuration";
 import { classifyControlRoomHost } from "@/lib/control-room/auth/host-policy";
-import { readBoundedUrlEncodedForm, validateUrlEncodedFormHeaders } from "@/lib/control-room/history/bounded-form-request";
+import { isApprovedWriteOrigin, readBoundedUrlEncodedForm, validateUrlEncodedFormHeaders } from "@/lib/control-room/history/bounded-form-request";
 
 export { readBoundedUrlEncodedForm };
 
@@ -19,8 +19,8 @@ function expectedOrigin(request: Request): string | null {
 export async function authoriseControlRoomWrite(request: Request): Promise<WriteAuthorisation> {
   const hostClassification = classifyControlRoomHost(process.env.NODE_ENV, request.headers.get("host"));
   if (hostClassification === "denied") return { ok: false, status: 404 };
-  const origin = request.headers.get("origin");
-  if (!origin || origin !== expectedOrigin(request)) return { ok: false, status: 403 };
+  const requiredOrigin = expectedOrigin(request);
+  if (!requiredOrigin || !isApprovedWriteOrigin(request.headers, requiredOrigin, hostClassification === "production")) return { ok: false, status: 403 };
   const formHeaders = validateUrlEncodedFormHeaders(request.headers);
   if (!formHeaders.ok) return formHeaders;
   if (hostClassification === "development") return { ok: true };

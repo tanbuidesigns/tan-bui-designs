@@ -8,6 +8,23 @@ export type BoundedFormRead =
   | { ok: true; form: URLSearchParams }
   | { ok: false; status: 400 | 413 };
 
+export function isApprovedWriteOrigin(
+  headers: Headers,
+  expectedOrigin: string,
+  allowOpaqueSameOriginNavigation: boolean,
+): boolean {
+  const origin = headers.get("origin");
+  if (origin === expectedOrigin) return true;
+  if (!allowOpaqueSameOriginNavigation || origin !== "null") return false;
+
+  return (
+    headers.get("sec-fetch-site") === "same-origin" &&
+    headers.get("sec-fetch-mode") === "navigate" &&
+    headers.get("sec-fetch-dest") === "document" &&
+    headers.get("sec-fetch-user") === "?1"
+  );
+}
+
 export function validateUrlEncodedFormHeaders(
   headers: Headers,
 ): FormHeaderValidation {

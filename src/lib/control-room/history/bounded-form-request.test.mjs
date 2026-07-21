@@ -3,11 +3,51 @@ import test from "node:test";
 
 import {
   MAX_CONTROL_ROOM_FORM_BYTES,
+  isApprovedWriteOrigin,
   readBoundedUrlEncodedForm,
   validateUrlEncodedFormHeaders,
 } from "./bounded-form-request.ts";
 
 const contentType = "application/x-www-form-urlencoded";
+const productionOrigin = "https://dashboard.tanbuidesigns.com";
+
+test("accepts the exact expected origin", () => {
+  const headers = new Headers({ origin: productionOrigin });
+  assert.equal(isApprovedWriteOrigin(headers, productionOrigin, false), true);
+});
+
+test("accepts an opaque origin only for a user-activated same-origin document navigation", () => {
+  const headers = new Headers({
+    origin: "null",
+    "sec-fetch-site": "same-origin",
+    "sec-fetch-mode": "navigate",
+    "sec-fetch-dest": "document",
+    "sec-fetch-user": "?1",
+  });
+  assert.equal(isApprovedWriteOrigin(headers, productionOrigin, true), true);
+  assert.equal(isApprovedWriteOrigin(headers, productionOrigin, false), false);
+});
+
+test("rejects opaque origins when any browser navigation signal is missing or unsafe", () => {
+  const validMetadata = {
+    origin: "null",
+    "sec-fetch-site": "same-origin",
+    "sec-fetch-mode": "navigate",
+    "sec-fetch-dest": "document",
+    "sec-fetch-user": "?1",
+  };
+  const unsafeVariants = [
+    { ...validMetadata, "sec-fetch-site": "cross-site" },
+    { ...validMetadata, "sec-fetch-mode": "cors" },
+    { ...validMetadata, "sec-fetch-dest": "empty" },
+    { ...validMetadata, "sec-fetch-user": "?0" },
+    { ...validMetadata, origin: "https://example.com" },
+  ];
+
+  for (const variant of unsafeVariants) {
+    assert.equal(isApprovedWriteOrigin(new Headers(variant), productionOrigin, true), false);
+  }
+});
 
 test("allows a valid form when the runtime omits Content-Length", async () => {
   const request = new Request("https://dashboard.tanbuidesigns.com/control-room/history/capture/pagespeed", {
