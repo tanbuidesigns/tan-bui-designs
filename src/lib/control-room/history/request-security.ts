@@ -3,8 +3,9 @@ import "server-only";
 import { createControlRoomAuth, isAuthorisedControlRoomSession } from "@/lib/control-room/auth/auth";
 import { getControlRoomAuthConfiguration } from "@/lib/control-room/auth/configuration";
 import { classifyControlRoomHost } from "@/lib/control-room/auth/host-policy";
+import { readBoundedUrlEncodedForm, validateUrlEncodedFormHeaders } from "@/lib/control-room/history/bounded-form-request";
 
-const MAX_FORM_BYTES = 8_192;
+export { readBoundedUrlEncodedForm };
 
 export type WriteAuthorisation = { ok: true } | { ok: false; status: 400 | 401 | 403 | 404 | 413 | 415 };
 
@@ -20,11 +21,8 @@ export async function authoriseControlRoomWrite(request: Request): Promise<Write
   if (hostClassification === "denied") return { ok: false, status: 404 };
   const origin = request.headers.get("origin");
   if (!origin || origin !== expectedOrigin(request)) return { ok: false, status: 403 };
-  const contentType = request.headers.get("content-type")?.toLowerCase() ?? "";
-  if (!contentType.startsWith("application/x-www-form-urlencoded")) return { ok: false, status: 415 };
-  const contentLength = Number(request.headers.get("content-length"));
-  if (!Number.isFinite(contentLength) || contentLength < 1) return { ok: false, status: 400 };
-  if (contentLength > MAX_FORM_BYTES) return { ok: false, status: 413 };
+  const formHeaders = validateUrlEncodedFormHeaders(request.headers);
+  if (!formHeaders.ok) return formHeaders;
   if (hostClassification === "development") return { ok: true };
 
   const configuration = getControlRoomAuthConfiguration();
@@ -38,7 +36,7 @@ export async function authoriseControlRoomWrite(request: Request): Promise<Write
   }
 }
 
-export function boundedFormValue(form: FormData, name: string, maximum: number): string | null {
+export function boundedFormValue(form: FormData | URLSearchParams, name: string, maximum: number): string | null {
   const value = form.get(name);
   if (typeof value !== "string") return null;
   const normalized = value.replace(/[\u0000-\u001f\u007f]/g, "").trim();

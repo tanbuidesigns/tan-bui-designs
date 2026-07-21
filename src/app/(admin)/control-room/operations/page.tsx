@@ -56,14 +56,14 @@ export default async function ControlRoomOperationsPage() {
       <ReadinessList title="Storage and scheduling" items={storageReadiness} />
 
       <section aria-labelledby="task7-storage-title" className="rounded-[1.35rem] border border-black/8 bg-white p-5 shadow-[0_18px_50px_rgba(0,0,0,0.04)] sm:p-7">
-        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">Task 7 · Stage B</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">Task 7 · Production foundation</p>
         <h2 id="task7-storage-title" className="mt-2 text-2xl font-bold tracking-[-0.04em] sm:text-3xl">History storage portability</h2>
         <dl className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           <div className="rounded-xl bg-[#f7f7f4] p-4"><dt className="text-xs uppercase text-gray-500">Primary design</dt><dd className="mt-2 font-semibold">Cloudflare D1 · SQLite</dd></div>
           <div className="rounded-xl bg-[#f7f7f4] p-4"><dt className="text-xs uppercase text-gray-500">Runtime state</dt><dd className="mt-2 font-semibold">{historyStorage.status === "ready" ? "Ready" : "Not configured"}</dd></div>
           <div className="rounded-xl bg-[#f7f7f4] p-4"><dt className="text-xs uppercase text-gray-500">Future fallback</dt><dd className="mt-2 font-semibold">Turso · documented only</dd></div>
         </dl>
-        <ul className="mt-5 list-disc space-y-2 pl-5 text-sm leading-relaxed text-gray-600"><li>Remote schema version 1 and the reviewed CONTROL_ROOM_DB binding are verified; the live runtime state is shown above.</li><li>The portable migration, repository boundary and local D1 simulation passed Manual Gate B verification.</li><li>Scheduling, exports and AI interpretation are not implemented.</li></ul>
+        <ul className="mt-5 list-disc space-y-2 pl-5 text-sm leading-relaxed text-gray-600"><li>Remote schema version 1 and the reviewed CONTROL_ROOM_DB binding are verified; the live runtime state is shown above.</li><li>The portable migration, repository boundary and production D1 runtime are active; captures remain deliberate and manual.</li><li>Scheduling, exports and AI interpretation are not implemented.</li></ul>
       </section>
 
       <section aria-labelledby="configuration-title" className="rounded-[1.35rem] border border-black/8 bg-white p-5 shadow-[0_18px_50px_rgba(0,0,0,0.04)] sm:p-7">

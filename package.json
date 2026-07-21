@@ -20,6 +20,7 @@
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "test:control-room-d1-budget": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/control-room/history/d1-budget.test.mjs",
+    "test:control-room-write-security": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/control-room/history/bounded-form-request.test.mjs",
     "test:control-room-d1-local": "node scripts/verify-control-room-d1-local.mjs"
   },
   "dependencies": {
