@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@media print {
+  nav, aside, .analysis-brief-controls, .analysis-brief-notice, .analysis-brief-workflow { display: none !important; }
+  body { background: #fff !important; color: #111 !important; }
+  .analysis-brief-report { border: 0 !important; box-shadow: none !important; padding: 0 !important; }
+  .analysis-brief-report * { break-inside: avoid; }
+  a { color: #111 !important; text-decoration: none !important; }
+}
+
 @import "../styles/tokens.css";
 @import "../styles/animations.css";
 @import "../styles/utilities.css";

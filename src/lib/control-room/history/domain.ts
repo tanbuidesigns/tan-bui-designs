@@ -134,6 +134,10 @@ export type ReportingEvidencePacketV1 = {
     lcpValue: number | null;
     clsValue: number | null;
   }[];
+  pageEvidence: readonly { path: string; current: SearchMetricSet | null; previous: SearchMetricSet | null; classification: "present_in_both_returned_sets" | "new_among_current_returned_top_rows" | "no_longer_present_in_current_returned_top_rows"; currentRunId: string | null; previousRunId: string | null }[];
+  deviceEvidence: readonly { device: "MOBILE" | "DESKTOP" | "TABLET"; current: SearchMetricSet | null; previous: SearchMetricSet | null; currentRunId: string | null; previousRunId: string | null }[];
+  changeEvents: readonly { id: string; occurredAt: string; type: ChangeEventInput["eventType"]; title: string; summary: string; affectedPath: string | null; lifecycleState: ChangeEventInput["lifecycleState"]; verificationState: ChangeEventInput["verificationState"]; gitCommit: string | null; workerVersionId: string | null }[];
+  actionEvidence: readonly { id: string; actionId: string; expectedOutcome: string; observedOutcome: string; evaluationStatus: ActionEvidenceInput["evaluationStatus"]; verificationState: ActionEvidenceInput["verificationState"]; baselineRunId: string | null; followupRunId: string | null }[];
   evidenceReferences: readonly EvidenceReference[];
   limitations: readonly string[];
 };

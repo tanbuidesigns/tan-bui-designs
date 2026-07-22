@@ -1,0 +1,11 @@
+"use client";
+
+import { useRef, useState } from "react";
+import { copyAnalysisBriefPayload, printAnalysisBrief, type CopyTarget } from "./analysis-brief-actions";
+
+export default function AnalysisBriefActions({ chatgpt, markdown, json }: { chatgpt: string; markdown: string; json: string }) {
+  const [status, setStatus] = useState(""); const [fallback, setFallback] = useState<string | null>(null); const area = useRef<HTMLTextAreaElement>(null);
+  const payloads = { chatgpt, markdown, json };
+  async function copy(target: CopyTarget) { const result = await copyAnalysisBriefPayload(navigator.clipboard?.writeText?.bind(navigator.clipboard), payloads, target); setStatus(result.status); setFallback(result.fallback); if (result.fallback !== null) window.setTimeout(() => area.current?.focus(), 0); }
+  return <section className="analysis-brief-controls rounded-[1.35rem] border border-black/8 bg-white p-5 sm:p-7"><h2 className="text-xl font-bold">Copy or print</h2><div className="mt-4 flex flex-wrap gap-3"><button onClick={() => void copy("chatgpt")} className="min-h-11 rounded-lg bg-black px-4 text-sm font-semibold text-white">Copy for ChatGPT</button><button onClick={() => void copy("markdown")} className="min-h-11 rounded-lg border border-black/15 px-4 text-sm font-semibold">Copy brief as Markdown</button><button onClick={() => void copy("json")} className="min-h-11 rounded-lg border border-black/15 px-4 text-sm font-semibold">Copy evidence as JSON</button><button onClick={() => printAnalysisBrief(() => window.print())} className="min-h-11 rounded-lg border border-black/15 px-4 text-sm font-semibold">Print / Save as PDF</button></div><p className="mt-3 text-sm text-gray-600">Use your browser’s print dialog and choose Save as PDF.</p><p role="status" aria-live="polite" className="mt-3 text-sm font-medium">{status}</p>{fallback !== null ? <div className="mt-4"><label className="block text-sm font-semibold" htmlFor="analysis-brief-manual-copy">Manual copy</label><textarea ref={area} id="analysis-brief-manual-copy" readOnly value={fallback} rows={10} className="mt-2 w-full rounded-lg border p-3 font-mono text-xs" /><button onClick={() => setFallback(null)} className="mt-2 min-h-11 rounded-lg border border-black/15 px-4 text-sm font-semibold">Close manual copy</button></div> : null}</section>;
+}

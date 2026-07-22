@@ -22,6 +22,7 @@
     "test:control-room-d1-budget": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/control-room/history/d1-budget.test.mjs",
     "test:control-room-write-security": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/control-room/history/bounded-form-request.test.mjs",
     "test:control-room-worker-provenance": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/control-room/history/worker-provenance.test.mjs",
+    "test:analysis-brief": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/control-room/analysis-brief/imports.test.mjs tests/control-room/analysis-brief/builder.test.mjs tests/control-room/analysis-brief/security.test.mjs tests/control-room/analysis-brief/links.test.mjs tests/control-room/analysis-brief/formatters.test.mjs tests/control-room/analysis-brief/helpers.test.mjs",
     "test:control-room-d1-local": "node scripts/verify-control-room-d1-local.mjs"
   },
   "dependencies": {
