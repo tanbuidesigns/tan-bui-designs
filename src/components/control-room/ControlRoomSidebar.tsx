@@ -10,6 +10,7 @@ const sections = [
   { id: "history", label: "History", href: "/control-room/history" },
   { id: "evidence", label: "Evidence", href: "/control-room/evidence" },
   { id: "reports", label: "Reports", href: "/control-room/reports" },
+  { id: "analysis-brief", label: "Analysis brief", href: "/control-room/analysis-brief" },
   { id: "operations", label: "Operations", href: "/control-room/operations" },
   { id: "leads", label: "Leads", href: "/control-room/leads" },
   { id: "change-log", label: "Change log", href: "/control-room/change-log" },

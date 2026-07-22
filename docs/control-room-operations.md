@@ -260,3 +260,11 @@ No export endpoint, downloadable file or R2 bucket exists. A later Task 7.2 shou
 ### Task 8 readiness only
 
 Task 8 may use `ReportingEvidencePacketV1` as bounded evidence for later interpretation. It must not receive raw provider responses, credentials, exact restricted queries by default, D1 bindings or arbitrary SQL access. Evidence packets intentionally separate facts, deltas, references and limitations from conclusions. No model, prompt, AI provider, automated narrative or decision-making feature is implemented in Task 7.
+
+## Task 8: Webmaster Analysis Brief
+
+Task 8 formats the existing `ReportingEvidencePacketV1` as a private, deterministic brief. It never contacts an AI provider, creates an API key, incurs AI billing, writes a report to D1, or creates an action. The webmaster chooses the latest 28-day or 90-day packet and whether bounded page-level evidence is included, reviews the exact result, then copies Markdown, JSON or a fixed ChatGPT instruction plus the brief. Clipboard permission failures provide a keyboard-accessible manual-copy fallback. Browser printing is the only PDF method; no PDF library or server-side PDF exists.
+
+Automated checks cover exact copy payloads, clipboard success and fallback results, and print-function invocation. Final print-preview appearance, Save as PDF output, and system-clipboard readback remain manual browser checks because the lightweight test setup intentionally has no DOM or print-dialog framework.
+
+Exact Search query text, credentials, identity, raw provider responses, database details and local paths are excluded. Evidence references resolve only to approved private Control Room routes. The brief uses deterministic factual wording, explains data-quality limits, treats Lighthouse as a laboratory measurement, and does not infer causality. The manual workflow is: capture evidence, generate and review the brief, copy it into ChatGPT, approve one action, prepare one narrow Codex task, implement and verify it, record the change, then measure it later. Task 9 remains a future human-reviewed action workflow only.
