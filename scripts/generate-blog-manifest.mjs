@@ -1,5 +1,6 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { normalizeLineEndings } from "./line-endings.mjs";
 
 const root = process.cwd();
 const blogDirectory = path.join(root, "content", "blog");
@@ -58,7 +59,7 @@ for (const directoryEntry of directoryEntries) {
   const articleDirectory = path.join(blogDirectory, slug);
   const [indexSource, bodySource] = await Promise.all([
     readFile(path.join(articleDirectory, "index.yaml"), "utf8"),
-    readFile(path.join(articleDirectory, "body.mdoc"), "utf8"),
+    readFile(path.join(articleDirectory, "body.mdoc"), "utf8").then(normalizeLineEndings),
   ]);
 
   records.push({
