@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Preparing a design project</title>
+  <desc id="desc">Loose interface ideas flow through collaborative design paths into an organised selected artboard on a dark technical grid.</desc>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c7d2fe"/><stop offset=".48" stop-color="#f9a8d4"/><stop offset="1" stop-color="#fef3c7"/></linearGradient>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse"><path d="M64 0H0V64" fill="none" stroke="#fff" stroke-opacity=".055"/></pattern>
+    <filter id="blur"><feGaussianBlur stdDeviation="34"/></filter>
+  </defs>
+  <rect width="1600" height="900" fill="#08090b"/><rect width="1600" height="900" fill="url(#grid)"/>
+  <ellipse cx="940" cy="430" rx="460" ry="260" fill="#f9a8d4" opacity=".07" filter="url(#blur)"/>
+  <g fill="#12141b" stroke="#fff" stroke-opacity=".25">
+    <rect x="135" y="238" width="250" height="150" rx="18"/><rect x="276" y="478" width="205" height="118" rx="16" transform="rotate(7 276 478)"/>
+  </g>
+  <g stroke="url(#g)" stroke-width="4" opacity=".72"><path d="M170 282h125M170 320h176M310 514h116M310 550h78"/></g>
+  <path d="M118 180l30 52H88z" fill="#fef3c7" opacity=".82"/><path d="M410 155l28 16v32l-28 16-28-16v-32z" fill="none" stroke="#f9a8d4" stroke-width="3"/>
+  <path d="M255 666l18-40 18 40-18 18z" fill="none" stroke="#fff" stroke-opacity=".58" stroke-width="3"/><circle cx="273" cy="652" r="4" fill="#f9a8d4"/>
+  <g fill="none" stroke-linecap="round">
+    <path d="M360 620C555 180 700 710 900 390S1175 215 1360 330" stroke="#f9a8d4" stroke-opacity=".14" stroke-width="28" filter="url(#blur)"/>
+    <path d="M360 620C555 180 700 710 900 390S1175 215 1360 330" stroke="url(#g)" stroke-width="6"/>
+    <path d="M405 660C590 350 725 685 925 475S1155 320 1300 390" stroke="#fff" stroke-opacity=".2" stroke-width="2"/>
+  </g>
+  <g fill="#08090b" stroke="#fff" stroke-width="2"><circle cx="360" cy="620" r="9"/><circle cx="585" cy="270" r="7"/><circle cx="900" cy="390" r="9"/><circle cx="1100" cy="230" r="7"/><circle cx="1360" cy="330" r="9"/></g>
+  <g fill="none" stroke="#fff" stroke-opacity=".2" stroke-width="2" stroke-dasharray="7 9"><path d="M360 620L585 270M900 390L1100 230M1360 330L1240 250"/></g>
+  <g transform="translate(1040 180)">
+    <rect width="410" height="540" rx="24" fill="#11131a" stroke="#fff" stroke-opacity=".34" stroke-width="2"/><path d="M0 72h410" stroke="#fff" stroke-opacity=".14"/>
+    <g fill="#fff" opacity=".25"><circle cx="35" cy="36" r="6"/><circle cx="57" cy="36" r="6"/><circle cx="79" cy="36" r="6"/></g>
+    <rect x="42" y="116" width="220" height="180" fill="#c7d2fe" fill-opacity=".12" stroke="#f9a8d4" stroke-width="3"/>
+    <g fill="#08090b" stroke="#fef3c7" stroke-width="2"><rect x="37" y="111" width="10" height="10"/><rect x="257" y="111" width="10" height="10"/><rect x="37" y="291" width="10" height="10"/><rect x="257" y="291" width="10" height="10"/></g>
+    <g stroke="#fff" stroke-opacity=".3" stroke-width="4"><path d="M298 128h70M298 162h52M298 196h64"/><path d="M42 354h296M42 393h210"/></g>
+    <rect x="292" y="444" width="78" height="34" rx="17" fill="url(#g)" opacity=".88"/><path d="M42 505h328" stroke="#fff" stroke-opacity=".16"/>
+    <path d="M22 95v390M15 95h14M15 485h14" stroke="#fff" stroke-opacity=".18" stroke-dasharray="5 7"/>
+  </g>
+  <g transform="translate(520 700)" fill="#08090b" stroke="#c7d2fe" stroke-width="2"><path d="M0 0h250" stroke="#fff" stroke-opacity=".2"/><circle cx="0" cy="0" r="6"/><circle cx="82" cy="0" r="6"/><circle cx="166" cy="0" r="6"/><circle cx="250" cy="0" r="6"/></g>
+</svg>

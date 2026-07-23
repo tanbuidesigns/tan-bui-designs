@@ -6,9 +6,11 @@ import React from "react";
 
 import AnimatedHeadline from "@/components/AnimatedHeadline";
 import BlogCover from "@/components/blog/BlogCover";
+import HomepageScrollHoverPlayback from "@/components/home/HomepageScrollHoverPlayback";
 import styles from "@/components/blog/Blog.module.css";
 import Button from "@/components/ui/Button";
 import WideShell from "@/components/ui/WideShell";
+import { blogMarkdocComponents, blogMarkdocConfig } from "@/lib/blog-markdoc";
 import {
   formatBlogDate,
   getBlogCoverPath,
@@ -62,9 +64,9 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
     getPublishedBlogPosts(),
   ]);
   const node = Markdoc.parse(post.bodySource);
-  const errors = Markdoc.validate(node);
+  const errors = Markdoc.validate(node, blogMarkdocConfig);
   if (errors.length) throw new Error(`Invalid Markdoc in ${slug}`);
-  const renderedContent = Markdoc.renderers.react(Markdoc.transform(node), React);
+  const renderedContent = Markdoc.renderers.react(Markdoc.transform(node, blogMarkdocConfig), React, { components: blogMarkdocComponents });
   const content = highlightStatement(renderedContent, highlightedStatements[slug]);
   const contentSections = groupArticleSections(content);
   const related = allPosts.filter((item) => item.slug !== slug).slice(0, 2);
@@ -84,6 +86,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
 
   return (
     <main className="min-h-screen overflow-x-clip bg-white text-black">
+      <HomepageScrollHoverPlayback />
       <article>
         <header className={styles.articleHeader}>
           <WideShell>
@@ -126,6 +129,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
                   <BlogCover
                     src={getBlogCoverPath(post.cover)}
                     alt={post.coverAlt}
+                    artwork={post.coverArtwork}
                     priority
                     sizes="(max-width: 767px) calc(100vw - 32px), (max-width: 1279px) 38vw, 28rem"
                     className={styles.heroCover}
@@ -184,7 +188,7 @@ function toSentenceCase(title: string) {
     (result, acronym) =>
       result.replace(new RegExp(`\\b${acronym.toLowerCase()}\\b`, "g"), acronym),
     sentenceCase
-  );
+  ).replace(/\bi\b/g, "I");
 }
 
 function highlightStatement(content: React.ReactNode, statement?: string) {

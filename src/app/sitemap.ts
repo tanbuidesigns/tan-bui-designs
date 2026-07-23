@@ -27,7 +27,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     .filter((post) => !post.entry.draft)
     .map((post) => ({
       url: `${siteUrl}/blog/${post.slug}`,
-      lastModified: post.entry.updatedDate || post.entry.publishedDate,
+      lastModified: post.entry.updatedDate,
     }));
 
   return [...staticEntries, ...projectEntries, ...blogEntries];

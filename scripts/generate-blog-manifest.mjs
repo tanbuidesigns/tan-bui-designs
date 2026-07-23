@@ -66,6 +66,7 @@ for (const directoryEntry of directoryEntries) {
     slug,
     entry: {
       ...parseIndexYaml(indexSource, slug),
+      coverArtwork: parseIndexYaml(indexSource, slug).coverArtwork || null,
       bodySource,
     },
   });
@@ -83,6 +84,7 @@ export type BlogPostEntry = {
   readonly updatedDate: string;
   readonly author: string;
   readonly cover: string | null;
+  readonly coverArtwork: string | null;
   readonly coverAlt: string;
   readonly tags: readonly string[];
   readonly featured: boolean;
