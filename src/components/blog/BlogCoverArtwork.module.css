@@ -1,0 +1,42 @@
+.artwork { --ink:#08090b; --line:rgb(255 255 255 / .24); --lavender:#c7d2fe; --pink:#f9a8d4; --cream:#fef3c7; position:absolute; inset:0; overflow:hidden; background-color:var(--ink); background-image:linear-gradient(rgb(255 255 255 / .055) 1px,transparent 1px),linear-gradient(90deg,rgb(255 255 255 / .055) 1px,transparent 1px); background-size:clamp(2rem,6vw,4.5rem) clamp(2rem,6vw,4.5rem); }
+.glow { position:absolute; inset:15% 20%; background:radial-gradient(circle at 54% 48%,rgb(249 168 212 / .18),transparent 58%),radial-gradient(circle at 78% 38%,rgb(199 210 254 / .14),transparent 48%); filter:blur(22px); }
+.inputs { position:absolute; left:8%; top:20%; width:26%; height:62%; }
+.triangle { position:absolute; left:4%; top:4%; width:0; height:0; border-left:clamp(.35rem,1vw,.7rem) solid transparent; border-right:clamp(.35rem,1vw,.7rem) solid transparent; border-bottom:clamp(.65rem,1.7vw,1.2rem) solid var(--cream); opacity:.8; transform:rotate(-18deg); }
+.hexagon { position:absolute; right:6%; top:14%; width:clamp(.8rem,2.1vw,1.45rem); aspect-ratio:1; border:1px solid rgb(249 168 212 / .7); clip-path:polygon(25% 7%,75% 7%,100% 50%,75% 93%,25% 93%,0 50%); }
+.miniCard { position:absolute; display:grid; gap:10%; padding:10%; border:1px solid var(--line); border-radius:clamp(.35rem,1vw,.75rem); background:rgb(18 20 27 / .86); box-shadow:0 12px 28px rgb(0 0 0 / .3); }
+.miniCard i { display:block; height:2px; border-radius:99px; background:linear-gradient(90deg,var(--lavender),var(--pink)); opacity:.7; }
+.miniCardOne { left:13%; top:24%; width:52%; height:29%; transform:rotate(-5deg); }
+.miniCardTwo { right:2%; bottom:10%; width:44%; height:24%; transform:rotate(7deg); }
+.miniCardTwo i:last-child { width:60%; }
+.penNib { position:absolute; left:3%; bottom:9%; width:clamp(.7rem,1.8vw,1.2rem); aspect-ratio:.8; border:1px solid rgb(255 255 255 / .52); clip-path:polygon(50% 0,100% 72%,50% 100%,0 72%); transform:rotate(24deg); }
+.penNib::after { position:absolute; left:42%; top:30%; width:20%; aspect-ratio:1; border-radius:50%; background:var(--pink); content:""; }
+.cursor { position:absolute; right:12%; top:50%; width:clamp(.55rem,1.4vw,.95rem); height:clamp(.8rem,2vw,1.35rem); border-left:1px solid var(--cream); border-top:1px solid var(--cream); transform:skew(-18deg) rotate(-28deg); opacity:.85; animation:tbds-cursor-drift 9s ease-in-out infinite; }
+.flow { position:absolute; inset:5% 2% 3%; width:96%; height:92%; overflow:visible; }
+.flowShadow { fill:none; stroke:rgb(249 168 212 / .18); stroke-width:22; filter:blur(13px); }
+.flowLine { fill:none; stroke:url(#designer-preparation-flow); stroke-width:4; stroke-linecap:round; stroke-dasharray:16 10; animation:tbds-flow-drift 18s linear infinite; }
+.secondaryLine { fill:none; stroke:rgb(255 255 255 / .22); stroke-width:1.5; stroke-linecap:round; }
+.handles path { fill:none; stroke:rgb(255 255 255 / .18); stroke-width:1.2; stroke-dasharray:5 7; }
+.handles circle { fill:var(--ink); stroke:rgb(255 255 255 / .7); stroke-width:1.5; }
+.handles circle:nth-of-type(3) { fill:var(--pink); animation:tbds-anchor-pulse 5s ease-in-out infinite; }
+.artboard { position:absolute; right:8%; top:17%; width:31%; height:65%; border:1px solid rgb(255 255 255 / .34); border-radius:clamp(.6rem,1.5vw,1.1rem); background:linear-gradient(145deg,rgb(26 28 37 / .96),rgb(12 13 18 / .92)); box-shadow:0 24px 60px rgb(0 0 0 / .34); }
+.artboardBar { position:absolute; inset:0 0 auto; display:flex; gap:4%; align-items:center; height:13%; padding-inline:7%; border-bottom:1px solid rgb(255 255 255 / .12); }
+.artboardBar i { width:5%; aspect-ratio:1; border-radius:50%; background:var(--line); }
+.selectedRegion { position:absolute; left:9%; top:22%; width:54%; height:35%; border:1px solid var(--pink); background:linear-gradient(135deg,rgb(199 210 254 / .2),rgb(249 168 212 / .12)); }
+.selectedRegion > i { position:absolute; width:5px; aspect-ratio:1; border:1px solid var(--cream); background:var(--ink); }
+.selectedRegion > i:nth-child(1){left:-3px;top:-3px}.selectedRegion > i:nth-child(2){right:-3px;top:-3px}.selectedRegion > i:nth-child(3){left:-3px;bottom:-3px}.selectedRegion > i:nth-child(4){right:-3px;bottom:-3px}
+.navModule { position:absolute; right:8%; top:24%; display:flex; flex-direction:column; gap:15%; width:20%; height:28%; }
+.navModule i { height:2px; background:rgb(255 255 255 / .32); }.navModule i:nth-child(2){width:70%}
+.contentBlock,.contentBlockShort { position:absolute; left:9%; bottom:25%; width:68%; height:4px; border-radius:99px; background:linear-gradient(90deg,var(--lavender),rgb(255 255 255 / .12)); }
+.contentBlockShort { bottom:18%; width:45%; opacity:.62; }
+.buttonModule { position:absolute; right:9%; bottom:12%; width:23%; height:9%; border-radius:999px; background:linear-gradient(90deg,var(--pink),var(--cream)); opacity:.84; }
+.measureHorizontal { position:absolute; left:9%; right:9%; bottom:7%; border-top:1px solid rgb(255 255 255 / .16); }
+.measureHorizontal::before,.measureHorizontal::after { position:absolute; top:-4px; height:7px; border-left:1px solid rgb(255 255 255 / .3); content:""; }.measureHorizontal::after{right:0}
+.measureVertical { position:absolute; right:4%; top:18%; bottom:12%; border-left:1px dashed rgb(255 255 255 / .15); }
+.nodes { position:absolute; left:33%; bottom:13%; display:flex; gap:clamp(.6rem,2vw,1.3rem); align-items:center; }
+.nodes::before { position:absolute; left:0; right:0; border-top:1px solid rgb(255 255 255 / .2); content:""; }
+.nodes i { position:relative; z-index:1; width:clamp(.3rem,.7vw,.5rem); aspect-ratio:1; border:1px solid var(--lavender); border-radius:50%; background:var(--ink); }
+@keyframes tbds-flow-drift { to { stroke-dashoffset:-260; } }
+@keyframes tbds-cursor-drift { 0%,100%{transform:translate(0,0) skew(-18deg) rotate(-28deg)}50%{transform:translate(7px,-5px) skew(-18deg) rotate(-28deg)} }
+@keyframes tbds-anchor-pulse { 0%,100%{opacity:.62}50%{opacity:1} }
+@media (max-width:520px) { .inputs { left:6%; width:30%; }.miniCardTwo,.hexagon,.nodes { display:none; }.artboard { right:5%; width:38%; }.flow { inset-inline:-8%; width:116%; }.selectedRegion { width:58%; } }
+@media (prefers-reduced-motion:reduce) { .flowLine,.cursor,.handles circle:nth-of-type(3) { animation:none; } }

@@ -40,6 +40,7 @@ export default config({
           label: "Cover alternative text",
           validation: { isRequired: true },
         }),
+        coverArtwork: fields.text({ label: "CSS cover artwork", defaultValue: "" }),
         tags: fields.array(fields.text({ label: "Tag" }), {
           label: "Tags",
           itemLabel: (props) => props.value || "Tag",

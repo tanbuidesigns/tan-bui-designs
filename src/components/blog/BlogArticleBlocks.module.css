@@ -1,0 +1,20 @@
+.cardGrid { display: grid; gap: 1rem; margin-top: 1.5rem; }
+.card { position: relative; min-width: 0; overflow: hidden; padding: 1.35rem; border: 1px solid rgb(17 24 39 / .13); border-radius: 1rem; background: rgb(255 255 255 / .82); box-shadow: 0 12px 35px rgb(0 0 0 / .035); transition: transform 500ms cubic-bezier(.22,1,.36,1),border-color 500ms ease,box-shadow 500ms ease; }
+.card::before { position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(135deg,rgb(216 180 254 / .18),transparent 38%,rgb(254 243 199 / .18)); content: ""; opacity: .35; pointer-events: none; transition: opacity 400ms ease; }
+.marker { position: absolute; top: 1rem; right: 1rem; width: .6rem; height: .6rem; border: 1px solid rgb(17 24 39 / .35); transform: rotate(45deg); transition: transform 500ms cubic-bezier(.22,1,.36,1); }
+.card h3 { margin: 0 0 .65rem !important; font-size: 1.15rem !important; }
+.card > div { position: relative; color: #4b5563; font-size: .94rem; line-height: 1.6; }
+.card > div > :first-child { margin-top: 0; }
+.card > div > :last-child { margin-bottom: 0; }
+.card[data-scroll-hover-playing="true"] { transform: translateY(-4px); border-color: #111827; box-shadow: 0 22px 55px rgb(0 0 0 / .075); }
+.card[data-scroll-hover-playing="true"]::before { opacity: 1; }
+.card[data-scroll-hover-playing="true"] .marker { transform: translate(-3px,3px) rotate(135deg); }
+.accordion > div > :first-child { margin-top: 0; }
+.accordion > div > :last-child { margin-bottom: 0; }
+@media (hover:hover) { .card:hover { transform: translateY(-4px); border-color: #111827; box-shadow: 0 22px 55px rgb(0 0 0 / .075); } .card:hover::before { opacity: 1; } .card:hover .marker { transform: translate(-3px,3px) rotate(135deg); } }
+.accordionGroup { margin-top: 1.5rem; border-top: 1px solid rgb(17 24 39 / .15); }
+.accordion { border-bottom: 1px solid rgb(17 24 39 / .15); }
+.accordion summary { padding: 1.05rem 2rem 1.05rem 0; cursor: pointer; color: #111827; font-weight: 700; }
+.accordion > div { padding: 0 0 1.1rem; color: #4b5563; }
+@media (min-width: 640px) { .cardGrid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (prefers-reduced-motion: reduce) { .card,.marker { transition: none; } .card:hover,.card[data-scroll-hover-playing="true"] { transform: none; } }

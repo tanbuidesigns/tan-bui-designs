@@ -47,6 +47,7 @@ export default async function BlogPage() {
                 <BlogCover
                   src={getBlogCoverPath(featured.entry.cover)}
                   alt={featured.entry.coverAlt}
+                  artwork={featured.entry.coverArtwork}
                   priority
                   sizes="(max-width: 1023px) calc(100vw - 32px), 56vw"
                   className="aspect-[16/10] lg:aspect-auto lg:min-h-[30rem]"
