@@ -380,42 +380,17 @@
 
 .logoFrame {
   position: relative;
-  width: calc(100% - (var(--tbds-page-padding-compact) * 2));
-  max-width: calc(96rem - (var(--tbds-page-padding-compact) * 2));
-  margin: clamp(2.75rem, 6vw, 4.5rem) auto 0;
-  overflow: hidden;
-  border: 1px solid rgb(17 24 39 / 0.09);
-  border-radius: 1.35rem;
-  background: rgb(255 255 255 / 0.48);
-  box-shadow: 0 24px 80px rgb(0 0 0 / 0.045);
-}
-
-.logoFrame::before,
-.logoFrame::after {
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  bottom: 0;
-  width: clamp(1.5rem, 5vw, 5rem);
-  content: "";
-  pointer-events: none;
-}
-
-.logoFrame::before {
-  left: 0;
-  background: linear-gradient(90deg, #f7f7f4, transparent);
-}
-
-.logoFrame::after {
-  right: 0;
-  background: linear-gradient(270deg, #f7f7f4, transparent);
+  width: 100vw;
+  margin: clamp(2.75rem, 6vw, 4.5rem) 0 0;
+  margin-left: calc(50% - 50vw);
+  overflow: visible;
 }
 
 .logoViewport {
   width: 100%;
   overflow-x: auto;
   overflow-y: clip;
-  padding: clamp(1rem, 2.5vw, 1.75rem);
+  padding: clamp(3.5rem, 6vw, 4.5rem) clamp(1rem, 2.5vw, 1.75rem);
   cursor: grab;
   overscroll-behavior-inline: contain;
   scrollbar-width: none;
@@ -441,6 +416,8 @@
 }
 
 .logoButton {
+  --tbds-logo-arc-offset: 0px;
+
   position: relative;
   display: flex;
   width: clamp(8.75rem, 13vw, 11.75rem);
@@ -455,6 +432,7 @@
   box-shadow: 0 10px 32px rgb(0 0 0 / 0.035);
   cursor: default;
   touch-action: pan-x pan-y;
+  transform: translateY(var(--tbds-logo-arc-offset));
   transition:
     transform 420ms var(--tbds-ease),
     border-color 420ms ease,
@@ -465,13 +443,13 @@
   z-index: 3;
   outline: 2px solid #111827;
   outline-offset: 4px;
-  transform: scale(1.045);
+  transform: translateY(var(--tbds-logo-arc-offset)) scale(1.045);
   box-shadow: 0 18px 48px rgb(0 0 0 / 0.09);
 }
 
 .logoButtonActive {
   z-index: 3;
-  transform: scale(1.045);
+  transform: translateY(var(--tbds-logo-arc-offset)) scale(1.045);
   border-color: rgb(17 24 39 / 0.24);
   box-shadow: 0 18px 48px rgb(0 0 0 / 0.09);
 }
@@ -527,7 +505,7 @@
     z-index: 3;
     border-color: rgb(17 24 39 / 0.2);
     box-shadow: 0 18px 48px rgb(0 0 0 / 0.09);
-    transform: scale(1.045);
+    transform: translateY(var(--tbds-logo-arc-offset)) scale(1.045);
   }
 }
 
@@ -558,8 +536,7 @@
   }
 
   .logoFrame {
-    width: calc(100% - (var(--tbds-page-padding-comfortable) * 2));
-    max-width: calc(96rem - (var(--tbds-page-padding-comfortable) * 2));
+    width: 100vw;
   }
 }
 
@@ -589,8 +566,7 @@
   }
 
   .logoFrame {
-    width: calc(100% - (var(--tbds-page-padding-expanded) * 2));
-    max-width: calc(96rem - (var(--tbds-page-padding-expanded) * 2));
+    width: 100vw;
   }
 }
 
@@ -601,8 +577,7 @@
   }
 
   .logoFrame {
-    width: calc(100% - (var(--tbds-page-padding-immersive) * 2));
-    max-width: calc(96rem - (var(--tbds-page-padding-immersive) * 2));
+    width: 100vw;
   }
 }
 
@@ -626,9 +601,61 @@
     display: none;
   }
 
-  .logoFrame::before,
-  .logoFrame::after {
-    width: 1.5rem;
+}
+
+@media (max-width: 639px) and (orientation: portrait) {
+  .logoViewport {
+    padding-block: 1.75rem;
+  }
+
+  .logoButton,
+  .logoButton:focus-visible,
+  .logoButtonActive {
+    box-shadow: none !important;
+  }
+
+  .logoButton:nth-child(1),
+  .logoButton:nth-child(17) {
+    --tbds-logo-arc-offset: -1.25rem;
+  }
+
+  .logoButton:nth-child(2),
+  .logoButton:nth-child(16) {
+    --tbds-logo-arc-offset: -0.75rem;
+  }
+
+  .logoButton:nth-child(3),
+  .logoButton:nth-child(15) {
+    --tbds-logo-arc-offset: -0.25rem;
+  }
+
+  .logoButton:nth-child(4),
+  .logoButton:nth-child(14) {
+    --tbds-logo-arc-offset: 0.2rem;
+  }
+
+  .logoButton:nth-child(5),
+  .logoButton:nth-child(13) {
+    --tbds-logo-arc-offset: 0.5rem;
+  }
+
+  .logoButton:nth-child(6),
+  .logoButton:nth-child(12) {
+    --tbds-logo-arc-offset: 0.75rem;
+  }
+
+  .logoButton:nth-child(7),
+  .logoButton:nth-child(11) {
+    --tbds-logo-arc-offset: 1rem;
+  }
+
+  .logoButton:nth-child(8),
+  .logoButton:nth-child(10) {
+    --tbds-logo-arc-offset: 1.15rem;
+  }
+
+  .logoButton:nth-child(9) {
+    --tbds-logo-arc-offset: 1.25rem;
   }
 }
 
@@ -674,11 +701,6 @@
   .heroHighlight {
     --tbds-highlight-progress: 1;
     transition: none;
-  }
-
-  .logoFrame::before,
-  .logoFrame::after {
-    display: none;
   }
 
   .logoViewport {
