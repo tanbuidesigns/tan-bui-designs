@@ -16,8 +16,22 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://tanbuidesigns.com"),
-  title: "Tan Bui Designs",
-  description: "Multimedia design consultant.",
+  title: {
+    default: "Tan Bui Designs | Multidisciplinary Design Consultant",
+    template: "%s | Tan Bui Designs",
+  },
+  description:
+    "Tan Bui is a multidisciplinary design consultant creating clear, useful and memorable brand, packaging, publication, website and exhibition design.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: "https://tanbuidesigns.com/",
+    siteName: "Tan Bui Designs",
+    title: "Tan Bui Designs | Multidisciplinary Design Consultant",
+    description:
+      "Clear, useful and memorable design across brand, print, digital and physical experiences.",
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
