@@ -11,7 +11,9 @@ import HomepageScrollHoverPlayback from "@/components/home/HomepageScrollHoverPl
 import FeaturedWorkSection from "@/components/FeaturedWorkSection";
 
 export const metadata: Metadata = {
-  title: "Multidisciplinary Design Consultant",
+  title: {
+    absolute: "Tan Bui Designs | Multidisciplinary Design Consultant",
+  },
   description:
     "Tan Bui Designs helps organisations turn complex briefs into clear design systems across branding, packaging, publications, websites and exhibitions.",
   alternates: { canonical: "/" },

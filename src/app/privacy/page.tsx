@@ -6,7 +6,7 @@ import AnimatedLabel from "@/components/AnimatedLabel";
 import WideShell from "@/components/ui/WideShell";
 
 export const metadata: Metadata = {
-  title: "Privacy notice | Tan Bui Designs",
+  title: "Privacy notice",
   description: "How Tan Bui Designs collects, uses and protects personal information submitted through this website.",
   alternates: { canonical: "/privacy" },
 };

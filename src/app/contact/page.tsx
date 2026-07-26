@@ -7,7 +7,7 @@ import ContactForm from "@/components/ContactForm";
 import WideShell from "@/components/ui/WideShell";
 
 export const metadata: Metadata = {
-  title: "Contact | Tan Bui Designs",
+  title: "Contact",
   description:
     "Start a conversation with Tan Bui Designs about branding, packaging, publications, websites, exhibitions or creative direction.",
   alternates: {

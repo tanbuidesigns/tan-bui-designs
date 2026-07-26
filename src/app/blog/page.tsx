@@ -11,7 +11,7 @@ import WideShell from "@/components/ui/WideShell";
 import { formatBlogDate, getBlogCoverPath, getPublishedBlogPosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
-  title: "Blog | Tan Bui Designs",
+  title: "Blog",
   description: "Practical writing from Tan Bui about design craft, production, websites, creative technology and making complex work clearer.",
   alternates: { canonical: "/blog" },
   openGraph: {

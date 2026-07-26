@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Islamiyah Series Case Study | Publication and Educational Design",
+  title: {
+    absolute:
+      "Islamiyah Series Case Study | Publication and Educational Design | Tan Bui Designs",
+  },
   description:
     "The Islamiyah Series case study: a connected publication, branding and interactive learning system designed by Tan Bui.",
   alternates: { canonical: "/work/islamiyah-series" },
