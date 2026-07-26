@@ -70,7 +70,7 @@ export async function POST(
 
     const { error } = await resend.emails.send({
       from:
-        "Tan Bui Designs <onboarding@resend.dev>",
+        "Tan Bui Designs <hello@tanbuidesigns.com>",
 
       to: [
         "tanbuidesigns@gmail.com",
