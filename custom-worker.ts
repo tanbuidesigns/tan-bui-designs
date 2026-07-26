@@ -5,6 +5,8 @@ import generatedWorker from "./.open-next/worker.js";
 const CONTROL_ROOM_CACHE_CONTROL =
   "private, no-store, max-age=0, must-revalidate";
 const CONTROL_ROOM_PRODUCTION_HOST = "dashboard.tanbuidesigns.com";
+const PUBLIC_PRODUCTION_HOST = "tanbuidesigns.com";
+const PUBLIC_WWW_HOST = "www.tanbuidesigns.com";
 
 const DASHBOARD_ASSET_PATHS = new Set([
   "/apple-icon.png",
@@ -43,6 +45,33 @@ function isDashboardHost(request: Request) {
   if (!/^\d{1,5}$/.test(portValue)) return false;
   const port = Number(portValue);
   return Number.isInteger(port) && port >= 1 && port <= 65_535;
+}
+
+function canonicalPublicRedirect(requestUrl: URL) {
+  const isPublicHost =
+    requestUrl.hostname === PUBLIC_PRODUCTION_HOST ||
+    requestUrl.hostname === PUBLIC_WWW_HOST;
+
+  if (!isPublicHost) return null;
+  if (
+    requestUrl.protocol === "https:" &&
+    requestUrl.hostname === PUBLIC_PRODUCTION_HOST
+  ) {
+    return null;
+  }
+
+  const destination = new URL(requestUrl);
+  destination.protocol = "https:";
+  destination.hostname = PUBLIC_PRODUCTION_HOST;
+  destination.port = "";
+
+  return new Response(null, {
+    status: 308,
+    headers: {
+      Location: destination.toString(),
+      "Cache-Control": "public, max-age=3600",
+    },
+  });
 }
 
 function isPrivateControlRoomPath(pathname: string) {
@@ -87,6 +116,25 @@ function withPrivateResponseHeaders(response: Response) {
   });
 }
 
+function withPublicResponseHeaders(response: Response, requestUrl: URL) {
+  const headers = new Headers(response.headers);
+  headers.set("Content-Security-Policy", "frame-ancestors 'self'");
+  headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  headers.set("X-Content-Type-Options", "nosniff");
+  headers.set("X-Frame-Options", "SAMEORIGIN");
+
+  if (requestUrl.protocol === "https:") {
+    headers.set("Strict-Transport-Security", "max-age=31536000");
+  }
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 function concealedNotFound() {
   return withPrivateResponseHeaders(new Response(null, { status: 404 }));
 }
@@ -108,6 +156,9 @@ const controlRoomWorker = {
   ) {
     const requestUrl = new URL(request.url);
     const requestUsesDashboardHost = isDashboardHost(request);
+    const publicRedirect = canonicalPublicRedirect(requestUrl);
+
+    if (publicRedirect) return publicRedirect;
 
     if (requestUsesDashboardHost && requestUrl.pathname === "/") {
       return request.method === "GET" || request.method === "HEAD"
@@ -126,7 +177,7 @@ const controlRoomWorker = {
     const response = await generatedFetch(request, environment, context);
 
     if (!isPrivateControlRoomPath(requestUrl.pathname)) {
-      return response;
+      return withPublicResponseHeaders(response, requestUrl);
     }
 
     return withPrivateResponseHeaders(response);

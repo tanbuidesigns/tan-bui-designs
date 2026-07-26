@@ -19,6 +19,21 @@ export const metadata: Metadata = {
     description: "Writing about design craft, production, websites and creative technology.",
     type: "website",
     url: "/blog",
+    images: [
+      {
+        url: "/social/tan-bui-designs.png",
+        width: 1200,
+        height: 630,
+        alt: "Ideas and practical writing from Tan Bui Designs",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog | Tan Bui Designs",
+    description:
+      "Practical writing about design craft, production, websites and creative technology.",
+    images: ["/social/tan-bui-designs.png"],
   },
 };
 

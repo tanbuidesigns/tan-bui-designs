@@ -30,6 +30,21 @@ export const metadata: Metadata = {
     title: "Tan Bui Designs | Multidisciplinary Design Consultant",
     description:
       "Clear, useful and memorable design across brand, print, digital and physical experiences.",
+    images: [
+      {
+        url: "/social/tan-bui-designs.png",
+        width: 1200,
+        height: 630,
+        alt: "Tan Bui Designs — multidisciplinary design consultant",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tan Bui Designs | Multidisciplinary Design Consultant",
+    description:
+      "Clear, useful and memorable design across brand, print, digital and physical experiences.",
+    images: ["/social/tan-bui-designs.png"],
   },
   robots: { index: true, follow: true },
 };

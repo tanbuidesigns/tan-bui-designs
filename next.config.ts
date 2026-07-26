@@ -14,6 +14,7 @@ const controlRoomHeaders = [
 ] as const;
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   async headers() {
     return [
       { source: "/control-room", headers: [...controlRoomHeaders] },

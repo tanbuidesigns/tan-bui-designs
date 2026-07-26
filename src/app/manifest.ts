@@ -4,7 +4,8 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Tan Bui Designs",
     short_name: "Tan Bui Designs",
-    description: "Multimedia design consultant.",
+    description:
+      "Tan Bui Designs creates clear, useful and memorable design across brand, print, digital and physical experiences.",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

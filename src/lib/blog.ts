@@ -40,3 +40,7 @@ export function getBlogCoverPath(value: string | null) {
   if (!value) return null;
   return value.startsWith("/") ? value : `/blog/covers/${value}`;
 }
+
+export function getBlogSocialImagePath(slug: string) {
+  return `/social/blog/${slug}.png`;
+}

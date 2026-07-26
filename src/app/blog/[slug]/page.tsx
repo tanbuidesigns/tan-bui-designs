@@ -14,6 +14,7 @@ import { blogMarkdocComponents, blogMarkdocConfig } from "@/lib/blog-markdoc";
 import {
   formatBlogDate,
   getBlogCoverPath,
+  getBlogSocialImagePath,
   getPublishedBlogPost,
   getPublishedBlogPosts,
   getReadingTime,
@@ -49,7 +50,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       publishedTime: post.publishedDate,
       modifiedTime: post.updatedDate,
       authors: [post.author],
-      images: post.cover ? [{ url: getBlogCoverPath(post.cover)!, alt: post.coverAlt }] : undefined,
+      images: [{ url: getBlogSocialImagePath(slug), alt: post.coverAlt }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.seoTitle,
+      description: post.seoDescription,
+      images: [getBlogSocialImagePath(slug)],
     },
   };
 }
@@ -73,15 +80,26 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
   const articleUrl = `https://tanbuidesigns.com/blog/${slug}`;
   const structuredData = {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: post.title,
-    description: post.seoDescription,
-    image: post.cover ? `https://tanbuidesigns.com${getBlogCoverPath(post.cover)}` : undefined,
-    datePublished: post.publishedDate,
-    dateModified: post.updatedDate,
-    author: { "@type": "Person", name: post.author, url: "https://tanbuidesigns.com/about" },
-    publisher: { "@type": "Organization", name: "Tan Bui Designs", url: "https://tanbuidesigns.com" },
-    mainEntityOfPage: articleUrl,
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        headline: post.title,
+        description: post.seoDescription,
+        image: `https://tanbuidesigns.com${getBlogSocialImagePath(slug)}`,
+        datePublished: post.publishedDate,
+        dateModified: post.updatedDate,
+        author: { "@type": "Person", name: post.author, url: "https://tanbuidesigns.com/about" },
+        publisher: { "@type": "Organization", name: "Tan Bui Designs", url: "https://tanbuidesigns.com" },
+        mainEntityOfPage: articleUrl,
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Blog", item: "https://tanbuidesigns.com/blog" },
+          { "@type": "ListItem", position: 2, name: post.title, item: articleUrl },
+        ],
+      },
+    ],
   };
 
   return (
