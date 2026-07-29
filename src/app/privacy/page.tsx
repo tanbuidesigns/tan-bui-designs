@@ -21,7 +21,7 @@ export default function PrivacyPage() {
             Privacy notice
           </AnimatedHeadline>
           <p className="mt-7 max-w-3xl text-lg leading-relaxed text-gray-600">
-            This draft explains what personal information Tan Bui Designs handles through this website and how it is used.
+            This notice explains what personal information Tan Bui Designs handles through this website and how it is used.
           </p>
         </WideShell>
       </section>
@@ -29,11 +29,11 @@ export default function PrivacyPage() {
       <WideShell className="py-14 sm:py-18 lg:py-20">
         <div className="grid gap-10 lg:grid-cols-[16rem_minmax(0,48rem)] lg:gap-16">
           <aside className="lg:sticky lg:top-28 lg:self-start">
-            <div className="rounded-[1.1rem] border border-amber-300/45 bg-amber-50 p-5 text-sm leading-relaxed text-amber-950">
-              <strong className="block">Owner review needed</strong>
-              Confirm the final retention schedule, Cloudflare and Resend account terms, international-transfer safeguards, and whether any production cookies or analytics are enabled before treating this as final legal copy.
+            <div className="rounded-[1.1rem] border border-black/10 bg-white p-5 text-sm leading-relaxed text-gray-700">
+              <strong className="block text-black">Privacy-first enquiry handling</strong>
+              The private lead register stores only the information needed to follow up. The full message remains in the email system and is not copied into the register.
             </div>
-            <p className="mt-5 text-sm text-gray-500">Last updated: 14 July 2026</p>
+            <p className="mt-5 text-sm text-gray-500">Last updated: 29 July 2026</p>
           </aside>
 
           <div className="space-y-12 text-base leading-relaxed text-gray-700 sm:text-lg">
@@ -43,7 +43,9 @@ export default function PrivacyPage() {
             </NoticeSection>
 
             <NoticeSection title="Information collected">
-              <p>If you use the contact form, the site collects your name, email address, selected service interests and the message you submit. If you contact Tan Bui Designs another way, the information you choose to include may also be handled.</p>
+              <p>If you use the contact form, the site collects your name, email address, selected service interests and the message you submit. The message is delivered to the Tan Bui Designs email account.</p>
+              <p>A minimal record is also kept in the private Control Room so the enquiry can be followed up. That record contains your name, email address, selected services, the page where the enquiry started, lead status, follow-up date and relevant record dates. It does not contain your full message, IP address, browser or device details, budget, estimated value or free-form internal notes.</p>
+              <p>If you contact Tan Bui Designs another way, the information you choose to include may also be handled.</p>
               <p>The hosting and security infrastructure may process technical request information such as IP address, device or browser details, requested pages, timestamps and diagnostic or security events.</p>
             </NoticeSection>
 
@@ -58,17 +60,17 @@ export default function PrivacyPage() {
             </NoticeSection>
 
             <NoticeSection title="Service providers and sharing">
-              <p>The website is hosted using Cloudflare infrastructure. Contact-form submissions are sent using Resend and delivered to the Tan Bui Designs email account. These providers may process information on behalf of Tan Bui Designs under their own service and data-protection terms.</p>
+              <p>The website is hosted using Cloudflare infrastructure. Minimal lead records are stored in Cloudflare D1. Contact-form submissions are sent using Resend and delivered to the Tan Bui Designs Gmail account. These providers may process information on behalf of Tan Bui Designs under their service and data-protection terms.</p>
               <p>Information may also be disclosed where required by law, to establish or defend legal rights, or to professional advisers who need it for their work. Personal information is not sold.</p>
             </NoticeSection>
 
             <NoticeSection title="International processing">
-              <p>Cloudflare, Resend and email infrastructure may process information in the UK or other countries. Where personal information is transferred internationally, an appropriate legal transfer mechanism and safeguards should be used. The precise account regions and contractual safeguards need to be confirmed by the site owner before this notice is final.</p>
+              <p>Cloudflare, Resend and email infrastructure may process information in the UK or other countries. Where personal information is transferred internationally, provider contractual safeguards and an appropriate legal transfer mechanism are relied upon where required.</p>
             </NoticeSection>
 
             <NoticeSection title="Retention">
-              <p>Enquiry information is kept only for as long as reasonably needed to respond, follow up and administer the relationship. If an enquiry becomes client work, relevant correspondence and records may be retained longer where needed for contractual, tax, accounting or legal purposes. Unsuccessful or inactive enquiries should be deleted when they are no longer useful, subject to any reason they must be preserved.</p>
-              <p>A fixed retention schedule has not been confirmed and must be set by the site owner.</p>
+              <p>Active enquiry records are kept while discussions continue. When an enquiry is closed and does not become a project, its private Control Room record is scheduled for automatic deletion 12 months after it is closed.</p>
+              <p>The original message remains in the Tan Bui Designs email account and is reviewed separately so correspondence is not kept longer than needed. If an enquiry becomes client work, relevant correspondence and records may be retained longer where needed for contractual, tax, accounting, legal or dispute purposes.</p>
             </NoticeSection>
 
             <NoticeSection title="Cookies and similar technologies">

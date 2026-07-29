@@ -1,7 +1,7 @@
 import type { PageBaselineRecord } from "@/types/control-room";
 
-export const BASELINE_REVIEW_DATE = "17 July 2026";
-export const BASELINE_DATE_ISO = "2026-07-17";
+export const BASELINE_REVIEW_DATE = "29 July 2026";
+export const BASELINE_DATE_ISO = "2026-07-29";
 
 const inheritedMetadata = {
   metadataTitle: "inherited",
@@ -15,7 +15,8 @@ const dedicatedMetadata = {
   metadataTitle: "dedicated",
   metadataDescription: "dedicated",
   canonical: "present",
-  twitter: "absent",
+  openGraph: "present",
+  twitter: "present",
 } as const;
 
 const confirmedPageDefaults = {
@@ -31,21 +32,21 @@ const confirmedPageDefaults = {
 export const siteBaseline: readonly PageBaselineRecord[] = [
   {
     ...confirmedPageDefaults,
-    ...inheritedMetadata,
+    ...dedicatedMetadata,
     id: "home",
     name: "Homepage",
     route: "/",
     category: "core",
     intendedIndexability: "index",
-    structuredData: "absent",
+    structuredData: "present",
     content: "complete",
     reviewPriority: "high",
     evidencePaths: ["src/app/page.tsx", "src/app/layout.tsx", "src/components/home/HomepageHero.tsx"],
-    notes: "The route has a confirmed H1 but inherits the generic root title and description. No route canonical or social metadata is defined.",
+    notes: "Dedicated title, description and canonical are present. Site-wide social previews and Person, ProfessionalService and WebSite structured data are active.",
   },
   {
     ...confirmedPageDefaults,
-    ...inheritedMetadata,
+    ...dedicatedMetadata,
     id: "work",
     name: "Work",
     route: "/work",
@@ -55,11 +56,11 @@ export const siteBaseline: readonly PageBaselineRecord[] = [
     content: "complete",
     reviewPriority: "high",
     evidencePaths: ["src/app/work/page.tsx", "src/app/layout.tsx", "src/data/projects.ts"],
-    notes: "The route is public and linked in the primary navigation, but has no route-specific metadata export.",
+    notes: "The route has dedicated title, description, canonical and social preview metadata and is linked in the primary navigation.",
   },
   {
     ...confirmedPageDefaults,
-    ...inheritedMetadata,
+    ...dedicatedMetadata,
     id: "about",
     name: "About",
     route: "/about",
@@ -69,7 +70,7 @@ export const siteBaseline: readonly PageBaselineRecord[] = [
     content: "complete",
     reviewPriority: "high",
     evidencePaths: ["src/app/about/page.tsx", "src/app/layout.tsx"],
-    notes: "Person and ProfessionalService JSON-LD are present. The page still inherits generic root metadata and uses two remote Unsplash images.",
+    notes: "Dedicated metadata plus Person and ProfessionalService JSON-LD are present. Two atmosphere images still use remote Unsplash URLs and remain a production dependency to review.",
   },
   {
     ...confirmedPageDefaults,
@@ -79,12 +80,11 @@ export const siteBaseline: readonly PageBaselineRecord[] = [
     route: "/contact",
     category: "core",
     intendedIndexability: "index",
-    openGraph: "absent",
     structuredData: "absent",
     content: "complete",
     reviewPriority: "medium",
     evidencePaths: ["src/app/contact/page.tsx", "src/components/ContactForm.tsx", "src/app/api/contact/route.ts"],
-    notes: "Dedicated title, description and canonical are present. Social metadata and structured data are not defined.",
+    notes: "Dedicated metadata and social previews are present. The endpoint validates a stream-bounded payload, uses the verified branded sender and records only the approved minimal lead fields after email delivery succeeds.",
   },
   {
     ...confirmedPageDefaults,
@@ -94,12 +94,11 @@ export const siteBaseline: readonly PageBaselineRecord[] = [
     route: "/privacy",
     category: "legal",
     intendedIndexability: "index",
-    openGraph: "absent",
     structuredData: "not-applicable",
-    content: "review",
-    reviewPriority: "high",
+    content: "complete",
+    reviewPriority: "medium",
     evidencePaths: ["src/app/privacy/page.tsx"],
-    notes: "The visible notice explicitly identifies owner decisions that remain outstanding, including retention and service-provider terms.",
+    notes: "The visible notice documents the minimal private lead record, the 12-month closed-enquiry retention rule and the separate email record.",
   },
   {
     ...confirmedPageDefaults,
@@ -109,26 +108,25 @@ export const siteBaseline: readonly PageBaselineRecord[] = [
     route: "/work/urban-eat",
     category: "case-study",
     intendedIndexability: "index",
-    openGraph: "absent",
-    structuredData: "absent",
+    structuredData: "present",
     content: "complete",
     reviewPriority: "medium",
     evidencePaths: ["src/app/work/urban-eat/page.tsx", "src/app/work/urban-eat/UrbanEatClient.tsx"],
-    notes: "Dedicated metadata and canonical are present. Project structured data and route-specific social metadata are absent.",
+    notes: "Dedicated metadata, route-specific social previews, CreativeWork and breadcrumb structured data are present.",
   },
   {
     ...confirmedPageDefaults,
-    ...inheritedMetadata,
+    ...dedicatedMetadata,
     id: "islamiyah-series",
     name: "Islamiyah Series",
     route: "/work/islamiyah-series",
     category: "case-study",
     intendedIndexability: "index",
-    structuredData: "absent",
+    structuredData: "present",
     content: "complete",
     reviewPriority: "high",
     evidencePaths: ["src/app/work/islamiyah-series/page.tsx", "src/data/caseStudies/islamiyah.ts", "src/app/layout.tsx"],
-    notes: "The case study is public and complete but is a client component with no dedicated metadata or project structured data.",
+    notes: "Dedicated metadata, route-specific social previews, CreativeWork and breadcrumb structured data are present while the approved client interaction remains unchanged.",
   },
   {
     ...confirmedPageDefaults,
@@ -143,12 +141,13 @@ export const siteBaseline: readonly PageBaselineRecord[] = [
     content: "complete",
     reviewPriority: "low",
     evidencePaths: ["src/app/blog/page.tsx", "src/data/blog.generated.ts"],
-    notes: "Dedicated metadata, canonical and Open Graph fields are present. Twitter metadata is not defined.",
+    notes: "Dedicated metadata, canonical and route-specific Open Graph and Twitter previews are present.",
   },
   ...[
     ["blog-trendslop", "Avoiding trendslop: design taste in the age of AI", "/blog/avoiding-trendslop-design-taste-ai"],
     ["blog-foundations", "Why design foundations still matter", "/blog/design-foundations-still-matter"],
     ["blog-vibe-coding", "Vibe coding custom websites", "/blog/vibe-coding-custom-websites"],
+    ["blog-hiring-designer", "What should I prepare before hiring a designer?", "/blog/what-should-i-prepare-before-hiring-a-designer"],
   ].map(([id, name, route]): PageBaselineRecord => ({
     ...confirmedPageDefaults,
     ...dedicatedMetadata,
@@ -162,7 +161,7 @@ export const siteBaseline: readonly PageBaselineRecord[] = [
     content: "complete",
     reviewPriority: "low",
     evidencePaths: ["src/app/blog/[slug]/page.tsx", "src/data/blog.generated.ts", `content/blog/${route.split("/").at(-1)}/body.mdoc`],
-    notes: "Generated route metadata, canonical, article Open Graph data and Article JSON-LD are present.",
+    notes: "Generated route metadata, canonical, social previews, BlogPosting and breadcrumb structured data are present.",
   })),
   {
     ...confirmedPageDefaults,
@@ -208,13 +207,12 @@ export const siteBaseline: readonly PageBaselineRecord[] = [
     category: "experimental",
     intendedIndexability: "noindex",
     availability: "unavailable",
-    openGraph: "absent",
     structuredData: "not-applicable",
     content: "unavailable",
     internalLinks: "unlinked",
     productionVisibility: "conditionally-hidden",
     reviewPriority: "medium",
     evidencePaths: ["src/app/playground/page.tsx", "src/lib/site-visibility.ts", "src/data/playground.generated.ts"],
-    notes: "The route calls notFound() in production while no published playground items exist. Its metadata does not currently declare noindex.",
+    notes: "The route calls notFound() in production while no published playground items exist. Dedicated metadata exists for a future launch, but it does not currently declare noindex.",
   },
 ];

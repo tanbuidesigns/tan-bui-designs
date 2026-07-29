@@ -339,7 +339,7 @@ export type OperationalReadinessItem = {
 export type ChangeLogEntry = {
   id: string;
   date: string;
-  changeType: "prototype" | "baseline" | "inventory" | "planning-system" | "integration-foundation";
+  changeType: "prototype" | "baseline" | "inventory" | "planning-system" | "integration-foundation" | "deployment" | "seo" | "security" | "email";
   summary: string;
   reason: string;
   affectedArea: string;
@@ -362,7 +362,7 @@ export type DecisionRecord = {
 export type LeadPrerequisite = {
   id: string;
   label: string;
-  status: "not-enabled" | "decision-required" | "technical-work-required";
+  status: "implemented" | "partially-implemented" | "not-enabled" | "decision-required" | "technical-work-required";
   reason: string;
 };
 

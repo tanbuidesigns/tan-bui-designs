@@ -27,6 +27,11 @@
       "custom_domain": true
     }
   ],
+  "triggers": {
+    "crons": [
+      "17 4 * * *"
+    ]
+  },
   "vars": {
     "CONTROL_ROOM_RUNTIME_MODE": "google-auth-protected-production",
     "CONTROL_ROOM_PRODUCTION_HOST": "dashboard.tanbuidesigns.com"

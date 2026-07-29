@@ -18,12 +18,8 @@ const DASHBOARD_ASSET_PATHS = new Set([
   "/manifest.webmanifest",
 ]);
 
-type WorkerEnvironment = Record<string, unknown>;
-
-type WorkerExecutionContext = {
-  passThroughOnException(): void;
-  waitUntil(promise: Promise<unknown>): void;
-};
+type WorkerEnvironment = CloudflareEnv;
+type WorkerExecutionContext = ExecutionContext;
 
 type GeneratedFetch = (
   request: Request,
@@ -139,6 +135,41 @@ function concealedNotFound() {
   return withPrivateResponseHeaders(new Response(null, { status: 404 }));
 }
 
+async function purgeExpiredClosedLeads(
+  database: D1Database,
+  now: string,
+) {
+  const maximumBatches = 10;
+  const rowsPerBatch = 100;
+  let deleted = 0;
+
+  for (let batch = 0; batch < maximumBatches; batch += 1) {
+    const result = await database
+      .prepare(
+        `DELETE FROM cr_leads
+        WHERE id IN (
+          SELECT id FROM cr_leads
+          WHERE status = 'closed' AND retention_delete_after <= ?
+          ORDER BY retention_delete_after ASC
+          LIMIT ?
+        )`,
+      )
+      .bind(now, rowsPerBatch)
+      .run();
+    const batchDeleted = result.meta.changes ?? 0;
+    deleted += batchDeleted;
+    if (batchDeleted < rowsPerBatch) break;
+  }
+
+  console.log(
+    JSON.stringify({
+      event: "lead_retention_completed",
+      deleted,
+      completedAt: now,
+    }),
+  );
+}
+
 function dashboardRootRedirect(requestUrl: URL) {
   return withPrivateResponseHeaders(
     new Response(null, {
@@ -182,6 +213,18 @@ const controlRoomWorker = {
 
     return withPrivateResponseHeaders(response);
   },
-};
+  async scheduled(
+    _controller: ScheduledController,
+    environment: WorkerEnvironment,
+    context: WorkerExecutionContext,
+  ) {
+    context.waitUntil(
+      purgeExpiredClosedLeads(
+        environment.CONTROL_ROOM_DB,
+        new Date().toISOString(),
+      ),
+    );
+  },
+} satisfies ExportedHandler<WorkerEnvironment>;
 
 export default controlRoomWorker;

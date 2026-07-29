@@ -1,5 +1,8 @@
 import { Resend } from "resend";
 
+import { recordContactLead } from "@/lib/control-room/leads/service";
+import { readBoundedJsonRequest } from "@/lib/contact/bounded-json-request";
+
 type ContactSubmission = {
   name?: unknown;
   email?: unknown;
@@ -24,38 +27,58 @@ function textValue(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
-const resend = new Resend(
-  process.env.RESEND_API_KEY
-);
+function jsonResponse(success: boolean, status = 200) {
+  return Response.json(
+    { success },
+    {
+      status,
+      headers: { "Cache-Control": "no-store" },
+    },
+  );
+}
 
-export async function POST(
-  request: Request
-) {
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+export async function POST(request: Request) {
   try {
     if (!request.headers.get("content-type")?.includes("application/json")) {
-      return Response.json({ success: false }, { status: 415 });
+      return jsonResponse(false, 415);
     }
 
-    const contentLength = Number(request.headers.get("content-length") ?? 0);
-    if (contentLength > maximumRequestBytes) {
-      return Response.json({ success: false }, { status: 413 });
+    const declaredLength = request.headers.get("content-length");
+    if (declaredLength !== null) {
+      const contentLength = Number(declaredLength);
+      if (!Number.isInteger(contentLength) || contentLength < 1) {
+        return jsonResponse(false, 400);
+      }
+      if (contentLength > maximumRequestBytes) {
+        return jsonResponse(false, 413);
+      }
     }
 
-    const submission = await request.json() as ContactSubmission;
+    const body = await readBoundedJsonRequest(request, maximumRequestBytes);
+    if (!body.ok) return jsonResponse(false, body.status);
+    if (!body.value || typeof body.value !== "object") {
+      return jsonResponse(false, 400);
+    }
+
+    const submission = body.value as ContactSubmission;
     const name = textValue(submission.name);
     const email = textValue(submission.email);
     const message = textValue(submission.message);
     const website = textValue(submission.website);
     const services = Array.isArray(submission.services)
-      ? submission.services.filter(
-          (service): service is string =>
-            typeof service === "string" && allowedServices.has(service),
+      ? Array.from(
+          new Set(
+            submission.services.filter(
+              (service): service is string =>
+                typeof service === "string" && allowedServices.has(service),
+            ),
+          ),
         )
       : [];
 
-    if (website) {
-      return Response.json({ success: true });
-    }
+    if (website) return jsonResponse(true);
 
     if (
       name.length < 2 ||
@@ -65,21 +88,14 @@ export async function POST(
       message.length < 10 ||
       message.length > 5_000
     ) {
-      return Response.json({ success: false }, { status: 400 });
+      return jsonResponse(false, 400);
     }
 
     const { error } = await resend.emails.send({
-      from:
-        "Tan Bui Designs <hello@tanbuidesigns.com>",
-
-      to: [
-        "tanbuidesigns@gmail.com",
-      ],
-
+      from: "Tan Bui Designs <hello@tanbuidesigns.com>",
+      to: ["tanbuidesigns@gmail.com"],
       replyTo: email,
-
       subject: `New Website Enquiry from ${name}`,
-
       text: `
 Name:
 ${name}
@@ -88,7 +104,7 @@ Email:
 ${email}
 
 Services:
-${Array.isArray(services) && services.length ? services.join(", ") : "Not specified"}
+${services.length ? services.join(", ") : "Not specified"}
 
 Message:
 ${message}
@@ -96,23 +112,41 @@ ${message}
     });
 
     if (error) {
-      console.error("Contact email delivery failed", error.name);
-      return Response.json({ success: false }, { status: 502 });
+      console.error(
+        JSON.stringify({
+          event: "contact_email_delivery_failed",
+          errorType: error.name,
+        }),
+      );
+      return jsonResponse(false, 502);
     }
 
-    return Response.json({
-      success: true,
+    const createdAt = new Date().toISOString();
+    const leadResult = await recordContactLead({
+      id: crypto.randomUUID(),
+      name,
+      email,
+      services,
+      sourcePath: "/contact",
+      createdAt,
     });
-  } catch (error) {
-    console.error(error);
+    if (leadResult.status !== "recorded") {
+      console.error(
+        JSON.stringify({
+          event: "contact_lead_storage_failed",
+          storageStatus: leadResult.status,
+        }),
+      );
+    }
 
-    return Response.json(
-      {
-        success: false,
-      },
-      {
-        status: 500,
-      }
+    return jsonResponse(true);
+  } catch (error) {
+    console.error(
+      JSON.stringify({
+        event: "contact_submission_failed",
+        errorType: error instanceof Error ? error.name : "unknown",
+      }),
     );
+    return jsonResponse(false, 500);
   }
 }

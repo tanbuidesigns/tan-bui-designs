@@ -52,26 +52,25 @@ export const decisions: readonly DecisionRecord[] = [
 ];
 
 export const leadPrerequisites: readonly LeadPrerequisite[] = [
-  { id: "validation", label: "Server-side validation", status: "technical-work-required", reason: "The current endpoint parses and forwards fields without a server-side validation schema." },
-  { id: "spam", label: "Spam protection", status: "technical-work-required", reason: "No explicit abuse protection is present in the repository." },
+  { id: "validation", label: "Server-side validation", status: "implemented", reason: "The production endpoint validates content type, payload size, field types, lengths, email shape and approved service values before delivery." },
+  { id: "spam", label: "Spam protection", status: "partially-implemented", reason: "A hidden honeypot and strict request validation provide a low-friction baseline; stronger abuse controls remain subject to measured need." },
   { id: "rate-limit", label: "Rate limiting", status: "technical-work-required", reason: "A deployment-aware rate-limiting approach has not been selected." },
-  { id: "consent", label: "Consent and privacy decision", status: "decision-required", reason: "The purpose and lawful basis for future attribution fields must be approved." },
-  { id: "retention", label: "Retention policy", status: "decision-required", reason: "The current privacy notice says a fixed retention schedule is not confirmed." },
-  { id: "deletion", label: "Deletion process", status: "decision-required", reason: "No operational deletion process is documented." },
-  { id: "storage", label: "Secure private storage", status: "not-enabled", reason: "No database or lead store exists." },
-  { id: "attribution", label: "Attribution fields", status: "decision-required", reason: "Only necessary, consent-compatible fields should be approved." },
-  { id: "access", label: "Access control", status: "technical-work-required", reason: "Private Google Sign-In is implemented locally; OAuth configuration and production verification remain behind the Task 6 manual gate." },
-  { id: "reporting", label: "Reporting requirements", status: "decision-required", reason: "The questions that lead reporting should answer have not been approved." },
+  { id: "consent", label: "Purpose and privacy decision", status: "implemented", reason: "Lead data is limited to enquiry follow-up and the visible privacy notice documents the approved use." },
+  { id: "retention", label: "Retention policy", status: "implemented", reason: "Closed enquiries that do not become projects receive a deletion date 12 months after closure." },
+  { id: "deletion", label: "Deletion process", status: "implemented", reason: "A daily Cloudflare Cron job deletes due closed-lead records in bounded batches." },
+  { id: "storage", label: "Secure private storage", status: "implemented", reason: "Minimal lead records use the existing bound D1 database and are visible only inside the protected Control Room." },
+  { id: "attribution", label: "Attribution fields", status: "implemented", reason: "Attribution is limited to the originating public page; tracking parameters and technical identifiers are not retained." },
+  { id: "access", label: "Access control", status: "implemented", reason: "The live Control Room uses the approved private hostname, Google Sign-In and exact-email authorisation boundary." },
+  { id: "reporting", label: "Reporting requirements", status: "implemented", reason: "The first release reports only pipeline counts, status and follow-up dates, without budget or estimated-value fields." },
 ];
 
-export const proposedLeadFields = [
-  "date",
-  "enquiry source",
+export const approvedLeadFields = [
+  "received date",
+  "name",
+  "email",
+  "selected services",
   "originating page",
-  "service",
-  "budget range",
-  "status",
-  "estimated value",
+  "lead status",
   "follow-up date",
-  "consent status",
+  "retention deletion date",
 ] as const;
