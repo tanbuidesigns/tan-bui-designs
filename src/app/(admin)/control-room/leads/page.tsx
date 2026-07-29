@@ -56,7 +56,7 @@ export default async function ControlRoomLeadsPage({
       title="Private enquiry follow-up"
       description="A deliberately minimal lead register. The full enquiry message remains in Gmail and is never copied into this database."
       baselineReviewDate={snapshot.baselineReviewDate}
-      lastUpdatedDate="29 July 2026"
+      lastUpdatedDate={snapshot.lastUpdatedDate}
     >
       {params.state ? (
         <p

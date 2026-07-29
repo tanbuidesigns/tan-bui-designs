@@ -15,7 +15,7 @@ export type GoogleControlRoomIdentity = {
 
 export const controlRoomRuntimePolicy = {
   activeMode: (process.env.NODE_ENV === "development" ? "development-local" : "google-auth-protected-production") satisfies ControlRoomMode,
-  productionPilotState: "code-ready-manual-gate" as const,
+  productionPilotState: "active-verification" as const,
   description: "Localhost is allowed only in development. Production requires the private host, valid Better Auth configuration and an authorised Google session.",
 };
 

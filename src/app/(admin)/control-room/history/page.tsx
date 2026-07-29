@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import ControlRoomShell from "@/components/control-room/ControlRoomShell";
 import HistoryStorageNotice from "@/components/control-room/HistoryStorageNotice";
+import { getControlRoomSnapshot } from "@/lib/control-room/get-control-room-snapshot";
 import { performanceTargets } from "@/lib/control-room/performance/targets";
 import { getHistoryStorage } from "@/lib/control-room/history/storage";
 
@@ -17,11 +18,12 @@ function decodeCursor(value: string | undefined) {
 
 export default async function ControlRoomHistoryPage({ searchParams }: { searchParams: Promise<{ cursor?: string; state?: string }> }) {
   const params = await searchParams;
+  const snapshot = getControlRoomSnapshot();
   const storage = await getHistoryStorage();
   const page = storage.status === "ready" ? await storage.repository.listRuns({ limit: 25, cursor: decodeCursor(params.cursor) }) : null;
   const nextCursor = page?.nextCursor ? Buffer.from(JSON.stringify(page.nextCursor), "utf8").toString("base64url") : null;
   return (
-    <ControlRoomShell activeSection="history" eyebrow="TBD Control Room · History" title="Persistent measurement history" description="Manual, idempotent captures with bounded evidence and explicit status. Persistent storage is active; collection remains deliberate and on demand." baselineReviewDate="18 July 2026" lastUpdatedDate="21 July 2026">
+    <ControlRoomShell activeSection="history" eyebrow="TBD Control Room · History" title="Persistent measurement history" description="Manual, idempotent captures with bounded evidence and explicit status. Persistent storage is active; collection remains deliberate and on demand." baselineReviewDate={snapshot.baselineReviewDate} lastUpdatedDate={snapshot.lastUpdatedDate}>
       {params.state ? <p role="status" className="rounded-xl border border-black/8 bg-white p-4 text-sm">Request state: {params.state.replaceAll("-", " ")}.</p> : null}
       {storage.status !== "ready" ? <><HistoryStorageNotice reason={storage.reason} /><section aria-labelledby="disabled-capture-title" className="rounded-[1.35rem] border border-black/8 bg-white p-5 sm:p-7"><h2 id="disabled-capture-title" className="text-2xl font-bold">Manual capture</h2><p className="mt-2 text-sm text-gray-600">Capture controls remain disabled until approved storage is bound.</p><div className="mt-5 flex flex-wrap gap-3"><button disabled className="min-h-11 rounded-lg bg-black px-5 text-sm font-semibold text-white opacity-40">Capture PageSpeed</button><button disabled className="min-h-11 rounded-lg bg-black px-5 text-sm font-semibold text-white opacity-40">Capture Search comparison</button></div></section></> : (
         <>

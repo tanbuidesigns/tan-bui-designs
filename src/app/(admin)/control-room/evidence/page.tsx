@@ -1,10 +1,11 @@
 import ControlRoomShell from "@/components/control-room/ControlRoomShell";
 import HistoryStorageNotice from "@/components/control-room/HistoryStorageNotice";
+import { getControlRoomSnapshot } from "@/lib/control-room/get-control-room-snapshot";
 import { getHistoryStorage } from "@/lib/control-room/history/storage";
 
 export default async function EvidencePage({ searchParams }: { searchParams: Promise<{ state?: string }> }) {
-  const { state } = await searchParams; const storage = await getHistoryStorage(); const disabled = storage.status !== "ready";
-  return <ControlRoomShell activeSection="evidence" eyebrow="TBD Control Room · Evidence" title="Change and action evidence" description="Append-only internal records. Corrections supersede earlier entries; they never delete or rewrite them." baselineReviewDate="18 July 2026" lastUpdatedDate="18 July 2026">
+  const { state } = await searchParams; const snapshot = getControlRoomSnapshot(); const storage = await getHistoryStorage(); const disabled = storage.status !== "ready";
+  return <ControlRoomShell activeSection="evidence" eyebrow="TBD Control Room · Evidence" title="Change and action evidence" description="Append-only internal records. Corrections supersede earlier entries; they never delete or rewrite them." baselineReviewDate={snapshot.baselineReviewDate} lastUpdatedDate={snapshot.lastUpdatedDate}>
     {state ? <p role="status" className="rounded-xl border border-black/8 bg-white p-4 text-sm">Request state: {state.replaceAll("-", " ")}.</p> : null}
     {disabled ? <HistoryStorageNotice reason={storage.reason} /> : null}
     <div className="grid gap-6 xl:grid-cols-2">

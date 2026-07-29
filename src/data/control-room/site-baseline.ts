@@ -1,7 +1,7 @@
 import type { PageBaselineRecord } from "@/types/control-room";
 
-export const BASELINE_REVIEW_DATE = "29 July 2026";
-export const BASELINE_DATE_ISO = "2026-07-29";
+export const BASELINE_REVIEW_DATE = "30 July 2026";
+export const BASELINE_DATE_ISO = "2026-07-30";
 
 const inheritedMetadata = {
   metadataTitle: "inherited",

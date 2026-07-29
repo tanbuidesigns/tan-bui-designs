@@ -1,5 +1,6 @@
 import ControlRoomShell from "@/components/control-room/ControlRoomShell";
 import HistoryStorageNotice from "@/components/control-room/HistoryStorageNotice";
+import { getControlRoomSnapshot } from "@/lib/control-room/get-control-room-snapshot";
 import { getHistoryStorage } from "@/lib/control-room/history/storage";
 import type { ReportingEvidencePacketV1 } from "@/lib/control-room/history/domain";
 
@@ -9,7 +10,8 @@ function Packet({ packet }: { packet: ReportingEvidencePacketV1 }) {
 }
 
 export default async function ReportsPage() {
+  const snapshot = getControlRoomSnapshot();
   const storage = await getHistoryStorage();
   const packets = storage.status === "ready" ? await Promise.all([storage.repository.buildEvidencePacket("28d", new Date().toISOString()), storage.repository.buildEvidencePacket("90d", new Date().toISOString())]) : null;
-  return <ControlRoomShell activeSection="reports" eyebrow="TBD Control Room · Reports" title="Reporting evidence" description="Latest bounded 28-day and 90-day evidence packets. They contain observations only: no generated conclusions, downloads or raw provider rows." baselineReviewDate="18 July 2026" lastUpdatedDate="18 July 2026">{storage.status !== "ready" ? <HistoryStorageNotice reason={storage.reason} /> : packets?.map((packet) => <Packet key={packet.periodId} packet={packet} />)}</ControlRoomShell>;
+  return <ControlRoomShell activeSection="reports" eyebrow="TBD Control Room · Reports" title="Reporting evidence" description="Latest bounded 28-day and 90-day evidence packets. They contain observations only: no generated conclusions, downloads or raw provider rows." baselineReviewDate={snapshot.baselineReviewDate} lastUpdatedDate={snapshot.lastUpdatedDate}>{storage.status !== "ready" ? <HistoryStorageNotice reason={storage.reason} /> : packets?.map((packet) => <Packet key={packet.periodId} packet={packet} />)}</ControlRoomShell>;
 }

@@ -144,4 +144,17 @@ export const changeLog: readonly ChangeLogEntry[] = [
     reviewDate: "29 July 2026",
     notes: "Turnstile, an edge rate limit, Cloudflare Web Analytics automatic setup and the exact hello@ forwarding rule are configured without adding IP or device data to lead records.",
   },
+  {
+    id: "control-room-truth-refresh-2026-07-30",
+    date: "30 July 2026",
+    changeType: "baseline",
+    summary: "Control Room operational truth refreshed",
+    reason: "Remove the remaining hard-coded prototype dates and outdated production, analytics and content-integration wording before further automation is added.",
+    affectedArea: "Control Room reports, history, evidence, content, runtime policy and configuration records",
+    expectedOutcome: "Every current dashboard view describes the deployed production foundation accurately and uses one shared review date where possible.",
+    verificationStatus: "confirmed",
+    source: "repository-review",
+    reviewDate: "30 July 2026",
+    notes: "This maintenance pass changes private operational records only; public portfolio content and approved interactions are unchanged.",
+  },
 ];
