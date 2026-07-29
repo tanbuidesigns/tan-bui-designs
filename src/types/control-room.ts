@@ -339,7 +339,7 @@ export type OperationalReadinessItem = {
 export type ChangeLogEntry = {
   id: string;
   date: string;
-  changeType: "prototype" | "baseline" | "inventory" | "planning-system" | "integration-foundation" | "deployment" | "seo" | "security" | "email";
+  changeType: "prototype" | "baseline" | "inventory" | "planning-system" | "integration-foundation" | "deployment" | "seo" | "security" | "email" | "analytics";
   summary: string;
   reason: string;
   affectedArea: string;

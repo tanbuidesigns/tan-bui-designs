@@ -5,6 +5,7 @@ import {
   capturePageSpeedWithDependencies,
   captureSearchComparisonWithDependencies,
 } from "./src/lib/control-room/history/capture-service";
+import { writePortableControlRoomBackup } from "./src/lib/control-room/backups/r2-backup";
 import { D1ControlRoomHistoryRepository } from "./src/lib/control-room/history/d1-repository";
 import {
   resolveScheduledControlRoomTask,
@@ -192,6 +193,23 @@ async function runScheduledControlRoomTask(
       environment.CONTROL_ROOM_DB,
       new Date(scheduledTime).toISOString(),
     );
+    return;
+  }
+
+  if (task.kind === "portable-backup") {
+    const result = await writePortableControlRoomBackup({
+      database: environment.CONTROL_ROOM_DB,
+      bucket: environment.CONTROL_ROOM_BACKUPS,
+      generatedAt: new Date(scheduledTime).toISOString(),
+    });
+    console.log(JSON.stringify({
+      event: "control_room_portable_backup_completed",
+      key: result.key,
+      rowCount: result.rowCount,
+      schemaVersion: result.schemaVersion,
+      size: result.size,
+      completedAt: new Date().toISOString(),
+    }));
     return;
   }
 

@@ -170,4 +170,17 @@ export const changeLog: readonly ChangeLogEntry[] = [
     reviewDate: "30 July 2026",
     notes: "The schedules use UTC, retain manual capture paths and do not expose provider credentials, raw upstream responses or public portfolio behavior.",
   },
+  {
+    id: "control-room-recoverability-2026-07-30",
+    date: "30 July 2026",
+    changeType: "integration-foundation",
+    summary: "Report downloads and portable backup recovery implemented",
+    reason: "Make bounded evidence portable and add a longer-lived recovery layer beyond D1 Time Travel without exposing restricted or personal data.",
+    affectedArea: "Control Room Reports, private R2 binding, weekly Worker backup and restore-validation runbook",
+    expectedOutcome: "The owner can download safe evidence packets, verify private archive integrity and rehearse a restore in disposable local D1 state before any production recovery decision.",
+    verificationStatus: "requires-verification",
+    source: "repository-review",
+    reviewDate: "30 July 2026",
+    notes: "Code verification is automated. Account-level R2 activation and the first production archive remain required before this entry can be marked confirmed.",
+  },
 ];

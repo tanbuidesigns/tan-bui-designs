@@ -32,7 +32,8 @@
       "17 4 * * *",
       "31 5 * * *",
       "13 6 * * SUN",
-      "47 6 * * MON"
+      "47 6 * * MON",
+      "13 7 * * SUN"
     ]
   },
   "vars": {
@@ -81,6 +82,12 @@
       "database_name": "tan-bui-control-room",
       "database_id": "7b156091-55fa-4a90-8a73-55552e7b825f",
       "migrations_dir": "migrations/control-room"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "CONTROL_ROOM_BACKUPS",
+      "bucket_name": "tan-bui-control-room-backups"
     }
   ],
   "observability": {

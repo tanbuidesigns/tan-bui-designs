@@ -12,6 +12,7 @@ test("maps each configured cron to one bounded task", () => {
   assert.deepEqual(resolveScheduledControlRoomTask(CONTROL_ROOM_CRONS.search28Days), { kind: "search-comparison", periodId: "28d" });
   assert.deepEqual(resolveScheduledControlRoomTask(CONTROL_ROOM_CRONS.search90Days), { kind: "search-comparison", periodId: "90d" });
   assert.deepEqual(resolveScheduledControlRoomTask(CONTROL_ROOM_CRONS.homePageSpeedMobile), { kind: "pagespeed", targetId: "performance-home", strategy: "mobile" });
+  assert.deepEqual(resolveScheduledControlRoomTask(CONTROL_ROOM_CRONS.portableBackup), { kind: "portable-backup" });
   assert.equal(resolveScheduledControlRoomTask("0 0 * * *"), null);
 });
 

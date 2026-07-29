@@ -9,9 +9,14 @@ import { getControlRoomSnapshot } from "@/lib/control-room/get-control-room-snap
 import { controlRoomRuntimePolicy } from "@/lib/control-room/runtime/control-room-policy";
 import type { SummaryMetric } from "@/types/control-room";
 import { getHistoryStorage } from "@/lib/control-room/history/storage";
+import { getBackupStorage } from "@/lib/control-room/backups/storage";
 
 export default async function ControlRoomOperationsPage() {
   const historyStorage = await getHistoryStorage();
+  const backupStorage = await getBackupStorage();
+  const latestBackup = backupStorage.status === "ready"
+    ? await backupStorage.bucket.head("control-room/v1/latest.json").catch(() => null)
+    : null;
   const recentHistory = historyStorage.status === "ready"
     ? await historyStorage.repository.listRuns({ limit: 50, cursor: null })
     : null;
@@ -80,12 +85,13 @@ export default async function ControlRoomOperationsPage() {
       <section aria-labelledby="task7-storage-title" className="rounded-[1.35rem] border border-black/8 bg-white p-5 shadow-[0_18px_50px_rgba(0,0,0,0.04)] sm:p-7">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">Task 7 · Production foundation</p>
         <h2 id="task7-storage-title" className="mt-2 text-2xl font-bold tracking-[-0.04em] sm:text-3xl">History storage portability</h2>
-        <dl className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        <dl className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <div className="rounded-xl bg-[#f7f7f4] p-4"><dt className="text-xs uppercase text-gray-500">Primary design</dt><dd className="mt-2 font-semibold">Cloudflare D1 · SQLite</dd></div>
           <div className="rounded-xl bg-[#f7f7f4] p-4"><dt className="text-xs uppercase text-gray-500">Runtime state</dt><dd className="mt-2 font-semibold">{historyStorage.status === "ready" ? "Ready" : "Not configured"}</dd></div>
           <div className="rounded-xl bg-[#f7f7f4] p-4"><dt className="text-xs uppercase text-gray-500">Future fallback</dt><dd className="mt-2 font-semibold">Turso · documented only</dd></div>
+          <div className="rounded-xl bg-[#f7f7f4] p-4"><dt className="text-xs uppercase text-gray-500">Private R2 backup</dt><dd className="mt-2 font-semibold">{backupStorage.status !== "ready" ? "Binding unavailable" : latestBackup ? `Latest · ${latestBackup.uploaded.toISOString()}` : "Ready · awaiting first archive"}</dd></div>
         </dl>
-        <ul className="mt-5 list-disc space-y-2 pl-5 text-sm leading-relaxed text-gray-600"><li>Remote schema version 2 and the reviewed CONTROL_ROOM_DB binding are verified; the live runtime state is shown above.</li><li>The portable migrations, repository boundaries and production D1 runtime support measurement history and the approved minimal lead register.</li><li>Search comparisons, homepage mobile PageSpeed and lead retention now have bounded UTC schedules. Manual captures remain available and AI interpretation remains unimplemented.</li></ul>
+        <ul className="mt-5 list-disc space-y-2 pl-5 text-sm leading-relaxed text-gray-600"><li>Remote schema version 2 and the reviewed CONTROL_ROOM_DB binding are verified; the live runtime state is shown above.</li><li>The portable migrations, repository boundaries and production D1 runtime support measurement history and the approved minimal lead register.</li><li>A weekly private R2 archive includes schema metadata, checksums and row counts, then reads the object back for validation. D1 Time Travel remains the first recovery option for recent incidents.</li><li>Search comparisons, homepage mobile PageSpeed and lead retention have bounded UTC schedules. Manual captures remain available and AI interpretation remains unimplemented.</li></ul>
       </section>
 
       <section className="rounded-[1.35rem] border border-black/8 bg-white p-5 shadow-[0_18px_50px_rgba(0,0,0,0.04)] sm:p-7"><p className="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">Task 8 · Webmaster Analysis Brief</p><h2 className="mt-2 text-2xl font-bold tracking-[-0.04em] sm:text-3xl">Manual analysis workflow</h2><dl className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><div className="rounded-xl bg-[#f7f7f4] p-4"><dt className="text-xs uppercase text-gray-500">Source</dt><dd className="mt-2 font-semibold">ReportingEvidencePacketV1</dd></div><div className="rounded-xl bg-[#f7f7f4] p-4"><dt className="text-xs uppercase text-gray-500">Generation</dt><dd className="mt-2 font-semibold">Deterministic, on demand</dd></div><div className="rounded-xl bg-[#f7f7f4] p-4"><dt className="text-xs uppercase text-gray-500">Formats</dt><dd className="mt-2 font-semibold">Markdown, JSON, ChatGPT copy</dd></div><div className="rounded-xl bg-[#f7f7f4] p-4"><dt className="text-xs uppercase text-gray-500">PDF method</dt><dd className="mt-2 font-semibold">Browser print only</dd></div></dl><p className="mt-5 text-sm leading-relaxed text-gray-600">No external AI provider, AI request, report storage, D1 write, scheduling or automatic action exists. Restricted Search queries are excluded and Task 9 has not started.</p></section>

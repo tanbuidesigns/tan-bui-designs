@@ -25,6 +25,6 @@ export const storageReadiness: readonly OperationalReadinessItem[] = [
   { id: "schedule", label: "Scheduled collection", state: "active", explanation: "Bounded UTC schedules collect 28-day Search evidence daily, 90-day Search evidence weekly and homepage mobile PageSpeed evidence weekly." },
   { id: "d1", label: "Cloudflare D1", state: "active", explanation: "The Western Europe database has the reviewed migration, binding and generated runtime types." },
   { id: "kv", label: "Cloudflare KV", state: "not-configured", explanation: "No KV namespace or binding exists." },
-  { id: "r2", label: "Cloudflare R2", state: "not-configured", explanation: "No Control Room bucket or binding exists." },
-  { id: "cron", label: "Cloudflare Cron", state: "active", explanation: "Four UTC triggers run lead retention plus retry-safe scheduled Search and homepage PageSpeed captures, with outcomes recorded in D1 History." },
+  { id: "r2", label: "Cloudflare R2", state: "planned", explanation: "The private backup binding and weekly archive workflow are implemented; account-level R2 activation and bucket provisioning remain the external gate." },
+  { id: "cron", label: "Cloudflare Cron", state: "active", explanation: "Five UTC triggers run lead retention, retry-safe Search and homepage PageSpeed captures, plus a weekly checksum-verified portable backup." },
 ];
