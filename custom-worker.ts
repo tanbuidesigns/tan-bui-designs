@@ -1,6 +1,17 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore The OpenNext worker is generated before Wrangler bundles this entry point.
 import generatedWorker from "./.open-next/worker.js";
+import {
+  capturePageSpeedWithDependencies,
+  captureSearchComparisonWithDependencies,
+} from "./src/lib/control-room/history/capture-service";
+import { D1ControlRoomHistoryRepository } from "./src/lib/control-room/history/d1-repository";
+import {
+  resolveScheduledControlRoomTask,
+  scheduledCaptureIdentity,
+  type ScheduledControlRoomTask,
+} from "./src/lib/control-room/history/scheduled-capture";
+import { normalizeWorkerVersionMetadata } from "./src/lib/control-room/history/worker-provenance";
 
 const CONTROL_ROOM_CACHE_CONTROL =
   "private, no-store, max-age=0, must-revalidate";
@@ -171,6 +182,50 @@ async function purgeExpiredClosedLeads(
   );
 }
 
+async function runScheduledControlRoomTask(
+  task: ScheduledControlRoomTask,
+  scheduledTime: number,
+  environment: WorkerEnvironment,
+) {
+  if (task.kind === "lead-retention") {
+    await purgeExpiredClosedLeads(
+      environment.CONTROL_ROOM_DB,
+      new Date(scheduledTime).toISOString(),
+    );
+    return;
+  }
+
+  const identity = await scheduledCaptureIdentity(task, scheduledTime);
+  const dependencies = {
+    repository: new D1ControlRoomHistoryRepository(environment.CONTROL_ROOM_DB),
+    workerProvenance: normalizeWorkerVersionMetadata(environment.CF_VERSION_METADATA),
+  };
+  const outcome = task.kind === "search-comparison"
+    ? await captureSearchComparisonWithDependencies(dependencies, {
+        runId: identity.runId,
+        idempotencyKey: identity.idempotencyKey,
+        startedAt: identity.startedAt,
+        triggerKind: "scheduled",
+        periodId: task.periodId,
+      })
+    : await capturePageSpeedWithDependencies(dependencies, {
+        runId: identity.runId,
+        idempotencyKey: identity.idempotencyKey,
+        startedAt: identity.startedAt,
+        triggerKind: "scheduled",
+        targetId: task.targetId,
+        strategy: task.strategy,
+      });
+
+  console.log(JSON.stringify({
+    event: "control_room_scheduled_capture_completed",
+    task: task.kind,
+    runId: outcome.status === "storage-unavailable" ? identity.runId : outcome.runId,
+    outcome: outcome.status,
+    completedAt: new Date().toISOString(),
+  }));
+}
+
 function dashboardRootRedirect(requestUrl: URL) {
   return withPrivateResponseHeaders(
     new Response(null, {
@@ -241,16 +296,29 @@ const controlRoomWorker = {
     return withPrivateResponseHeaders(response);
   },
   async scheduled(
-    _controller: ScheduledController,
+    controller: ScheduledController,
     environment: WorkerEnvironment,
     context: WorkerExecutionContext,
   ) {
-    context.waitUntil(
-      purgeExpiredClosedLeads(
-        environment.CONTROL_ROOM_DB,
-        new Date().toISOString(),
-      ),
-    );
+    const task = resolveScheduledControlRoomTask(controller.cron);
+    if (!task) {
+      console.warn(JSON.stringify({
+        event: "control_room_unknown_cron",
+        cron: controller.cron,
+        scheduledTime: controller.scheduledTime,
+      }));
+      controller.noRetry();
+      return;
+    }
+
+    context.waitUntil(runScheduledControlRoomTask(task, controller.scheduledTime, environment).catch(() => {
+      console.error(JSON.stringify({
+        event: "control_room_scheduled_task_failed",
+        task: task.kind,
+        scheduledTime: controller.scheduledTime,
+      }));
+      throw new Error("The scheduled Control Room task failed.");
+    }));
   },
 } satisfies ExportedHandler<WorkerEnvironment>;
 

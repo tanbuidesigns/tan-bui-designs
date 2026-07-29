@@ -22,9 +22,9 @@ export const securityReadiness: readonly OperationalReadinessItem[] = [
 
 export const storageReadiness: readonly OperationalReadinessItem[] = [
   { id: "persistence", label: "Persistent storage", state: "active", explanation: "The source-controlled D1 binding and schema version 2 support measurement history plus minimal private lead records." },
-  { id: "schedule", label: "Scheduled collection", state: "not-enabled", explanation: "All future cadences remain planning assumptions." },
+  { id: "schedule", label: "Scheduled collection", state: "active", explanation: "Bounded UTC schedules collect 28-day Search evidence daily, 90-day Search evidence weekly and homepage mobile PageSpeed evidence weekly." },
   { id: "d1", label: "Cloudflare D1", state: "active", explanation: "The Western Europe database has the reviewed migration, binding and generated runtime types." },
   { id: "kv", label: "Cloudflare KV", state: "not-configured", explanation: "No KV namespace or binding exists." },
   { id: "r2", label: "Cloudflare R2", state: "not-configured", explanation: "No Control Room bucket or binding exists." },
-  { id: "cron", label: "Cloudflare Cron", state: "active", explanation: "A daily UTC maintenance trigger deletes closed lead records whose approved 12-month retention period has elapsed; it does not collect analytics." },
+  { id: "cron", label: "Cloudflare Cron", state: "active", explanation: "Four UTC triggers run lead retention plus retry-safe scheduled Search and homepage PageSpeed captures, with outcomes recorded in D1 History." },
 ];

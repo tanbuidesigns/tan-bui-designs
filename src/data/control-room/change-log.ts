@@ -157,4 +157,17 @@ export const changeLog: readonly ChangeLogEntry[] = [
     reviewDate: "30 July 2026",
     notes: "This maintenance pass changes private operational records only; public portfolio content and approved interactions are unchanged.",
   },
+  {
+    id: "control-room-scheduled-monitoring-2026-07-30",
+    date: "30 July 2026",
+    changeType: "analytics",
+    summary: "Scheduled Search Console and PageSpeed monitoring implemented",
+    reason: "Replace manual-only evidence collection with bounded, repeatable captures that preserve safe failure evidence and can be reviewed inside the private dashboard.",
+    affectedArea: "Cloudflare Cron, Worker scheduled handler, D1 capture history and Control Room Operations",
+    expectedOutcome: "Daily and weekly organic-search comparisons plus weekly homepage mobile lab evidence are recorded automatically with retry-safe identities and visible provenance.",
+    verificationStatus: "confirmed",
+    source: "repository-review",
+    reviewDate: "30 July 2026",
+    notes: "The schedules use UTC, retain manual capture paths and do not expose provider credentials, raw upstream responses or public portfolio behavior.",
+  },
 ];

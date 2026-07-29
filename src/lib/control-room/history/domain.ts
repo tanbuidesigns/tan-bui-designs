@@ -4,6 +4,7 @@ import type { SearchDailyPoint, SearchDeviceRow, SearchMetricSet, SearchPageRow,
 
 export type CaptureSource = "pagespeed" | "search_console";
 export type CaptureMode = "single" | "comparison_pair";
+export type CaptureTriggerKind = "manual" | "scheduled";
 export type CaptureStatus = "running" | "complete" | "partial" | "empty" | "failed";
 export type PeriodRole = "current" | "previous";
 export type EvidenceSensitivity = "internal" | "restricted";
@@ -13,6 +14,7 @@ export type CaptureRun = {
   idempotencyKey: string;
   source: CaptureSource;
   captureMode: CaptureMode;
+  triggerKind: CaptureTriggerKind;
   status: CaptureStatus;
   targetKey: string;
   periodKey: "28d" | "90d" | null;
@@ -31,7 +33,7 @@ export type CaptureRun = {
   detailRetentionUntil: string | null;
 };
 
-export type CaptureRunDraft = Pick<CaptureRun, "id" | "idempotencyKey" | "source" | "captureMode" | "targetKey" | "periodKey" | "startedAt" | "workerVersionId" | "workerVersionTag" | "workerVersionCreatedAt" | "detailRetentionUntil">;
+export type CaptureRunDraft = Pick<CaptureRun, "id" | "idempotencyKey" | "source" | "captureMode" | "triggerKind" | "targetKey" | "periodKey" | "startedAt" | "workerVersionId" | "workerVersionTag" | "workerVersionCreatedAt" | "detailRetentionUntil">;
 export type CaptureRunCompletion = Pick<CaptureRun, "id" | "status" | "completedAt" | "providerGeneratedAt" | "requestCount" | "successfulRequestCount" | "failedRequestCount" | "warningCount" | "safeErrorCode" | "detailRetentionUntil">;
 
 export type StoredSearchPeriod = {

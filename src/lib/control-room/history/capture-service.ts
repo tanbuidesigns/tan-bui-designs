@@ -6,12 +6,25 @@ import { searchConsoleProperties } from "@/data/control-room/search-console-prop
 import type { PerformanceStrategy } from "@/types/control-room";
 import type { SearchPeriodId } from "@/types/control-room-search";
 
-import type { CaptureRunCompletion } from "./domain";
+import type { CaptureRunCompletion, CaptureTriggerKind } from "./domain";
+import type { ControlRoomHistoryRepository } from "./repository";
 import { getHistoryStorage } from "./storage";
+import type { WorkerProvenance } from "./worker-provenance";
 
 export type CaptureOutcome =
   | { status: "storage-unavailable"; reason: string }
   | { status: "existing" | "captured" | "failed"; runId: string };
+
+export type CaptureDependencies = {
+  repository: ControlRoomHistoryRepository;
+  workerProvenance: WorkerProvenance;
+};
+
+type CaptureControl = {
+  triggerKind?: CaptureTriggerKind;
+  idempotencyKey?: string;
+  startedAt?: string;
+};
 
 function retainedUntil(now: Date, months: number): string {
   const date = new Date(now);
@@ -27,45 +40,73 @@ function failedCompletion(id: string, now: string, kind: string): CaptureRunComp
   return { id, status: "failed", completedAt: now, providerGeneratedAt: null, requestCount: 1, successfulRequestCount: 0, failedRequestCount: 1, warningCount: 0, safeErrorCode: kind.slice(0, 80), detailRetentionUntil: retainedUntilDays(new Date(now), 90) };
 }
 
-export async function capturePageSpeed(input: { runId: string; targetId: string; strategy: PerformanceStrategy }): Promise<CaptureOutcome> {
-  const storage = await getHistoryStorage();
-  if (storage.status !== "ready") return { status: "storage-unavailable", reason: storage.reason };
+export async function capturePageSpeedWithDependencies(
+  dependencies: CaptureDependencies,
+  input: { runId: string; targetId: string; strategy: PerformanceStrategy } & CaptureControl,
+): Promise<CaptureOutcome> {
   const target = getPerformanceTargetById(input.targetId);
   if (!target?.enabled || !target.allowedStrategies.includes(input.strategy)) return { status: "failed", runId: input.runId };
-  const now = new Date();
-  const started = await storage.repository.beginRun({ id: input.runId, idempotencyKey: input.runId, source: "pagespeed", captureMode: "single", targetKey: input.targetId, periodKey: null, startedAt: now.toISOString(), ...storage.workerProvenance, detailRetentionUntil: retainedUntilDays(now, 90) });
+  const now = input.startedAt ? new Date(input.startedAt) : new Date();
+  const started = await dependencies.repository.beginRun({ id: input.runId, idempotencyKey: input.idempotencyKey ?? input.runId, source: "pagespeed", captureMode: "single", triggerKind: input.triggerKind ?? "manual", targetKey: input.targetId, periodKey: null, startedAt: now.toISOString(), ...dependencies.workerProvenance, detailRetentionUntil: retainedUntilDays(now, 90) });
   if (!started.created) return { status: "existing", runId: started.run.id };
-  const result = await performanceProvider.loadLabPerformance({ targetId: input.targetId, strategy: input.strategy });
+  let result: Awaited<ReturnType<typeof performanceProvider.loadLabPerformance>>;
+  try {
+    result = await performanceProvider.loadLabPerformance({ targetId: input.targetId, strategy: input.strategy });
+  } catch {
+    const completedAt = new Date().toISOString();
+    await dependencies.repository.completeFailedRun(failedCompletion(input.runId, completedAt, "provider_exception"), ["The provider request ended unexpectedly."]);
+    return { status: "failed", runId: input.runId };
+  }
   const completedAt = new Date().toISOString();
   if (result.status !== "success") {
     const kind = result.status === "error" ? result.error.kind : "unavailable";
     const message = result.status === "error" ? result.error.message : result.reason;
-    await storage.repository.completeFailedRun(failedCompletion(input.runId, completedAt, kind), [message]);
+    await dependencies.repository.completeFailedRun(failedCompletion(input.runId, completedAt, kind), [message]);
     return { status: "failed", runId: input.runId };
   }
-  await storage.repository.completePageSpeedRun({ id: input.runId, status: "complete", completedAt, providerGeneratedAt: result.data.providerGeneratedAt, requestCount: 1, successfulRequestCount: 1, failedRequestCount: 0, warningCount: Math.min(result.warnings.length, 20), safeErrorCode: null, detailRetentionUntil: retainedUntil(new Date(completedAt), 12) }, result.data, result.warnings);
+  await dependencies.repository.completePageSpeedRun({ id: input.runId, status: "complete", completedAt, providerGeneratedAt: result.data.providerGeneratedAt, requestCount: 1, successfulRequestCount: 1, failedRequestCount: 0, warningCount: Math.min(result.warnings.length, 20), safeErrorCode: null, detailRetentionUntil: retainedUntil(new Date(completedAt), 12) }, result.data, result.warnings);
   return { status: "captured", runId: input.runId };
 }
 
-export async function captureSearchComparison(input: { runId: string; periodId: SearchPeriodId }): Promise<CaptureOutcome> {
-  const storage = await getHistoryStorage();
-  if (storage.status !== "ready") return { status: "storage-unavailable", reason: storage.reason };
+export async function captureSearchComparisonWithDependencies(
+  dependencies: CaptureDependencies,
+  input: { runId: string; periodId: SearchPeriodId } & CaptureControl,
+): Promise<CaptureOutcome> {
   const property = searchConsoleProperties.find((item) => item.enabled);
   if (!property) return { status: "failed", runId: input.runId };
-  const now = new Date();
-  const started = await storage.repository.beginRun({ id: input.runId, idempotencyKey: input.runId, source: "search_console", captureMode: "comparison_pair", targetKey: property.id, periodKey: input.periodId, startedAt: now.toISOString(), ...storage.workerProvenance, detailRetentionUntil: retainedUntilDays(now, 90) });
+  const now = input.startedAt ? new Date(input.startedAt) : new Date();
+  const started = await dependencies.repository.beginRun({ id: input.runId, idempotencyKey: input.idempotencyKey ?? input.runId, source: "search_console", captureMode: "comparison_pair", triggerKind: input.triggerKind ?? "manual", targetKey: property.id, periodKey: input.periodId, startedAt: now.toISOString(), ...dependencies.workerProvenance, detailRetentionUntil: retainedUntilDays(now, 90) });
   if (!started.created) return { status: "existing", runId: started.run.id };
-  const result = await searchPerformanceProvider.loadSearchComparison({ periodId: input.periodId });
+  let result: Awaited<ReturnType<typeof searchPerformanceProvider.loadSearchComparison>>;
+  try {
+    result = await searchPerformanceProvider.loadSearchComparison({ periodId: input.periodId });
+  } catch {
+    const completedAt = new Date().toISOString();
+    await dependencies.repository.completeFailedRun({ ...failedCompletion(input.runId, completedAt, "provider_exception"), requestCount: 10 }, ["The provider request ended unexpectedly."]);
+    return { status: "failed", runId: input.runId };
+  }
   const completedAt = new Date().toISOString();
   if (result.status !== "success") {
     const kind = result.status === "error" ? result.error.kind : "unavailable";
     const message = result.status === "error" ? result.error.message : result.reason;
-    await storage.repository.completeFailedRun({ ...failedCompletion(input.runId, completedAt, kind), requestCount: 10 }, [message]);
+    await dependencies.repository.completeFailedRun({ ...failedCompletion(input.runId, completedAt, kind), requestCount: 10 }, [message]);
     return { status: "failed", runId: input.runId };
   }
   const failed = result.data.current.requestCount.failed + result.data.previous.requestCount.failed;
   const successful = result.data.current.requestCount.successful + result.data.previous.requestCount.successful;
   const empty = result.data.current.totals === null && result.data.previous.totals === null;
-  await storage.repository.completeSearchRun({ id: input.runId, status: empty ? "empty" : failed ? "partial" : "complete", completedAt, providerGeneratedAt: result.data.current.providerGeneratedAt, requestCount: 10, successfulRequestCount: successful, failedRequestCount: failed, warningCount: Math.min(result.warnings.length, 40), safeErrorCode: null, detailRetentionUntil: retainedUntil(new Date(completedAt), 24) }, [{ role: "current", snapshot: result.data.current }, { role: "previous", snapshot: result.data.previous }], result.warnings);
+  await dependencies.repository.completeSearchRun({ id: input.runId, status: empty ? "empty" : failed ? "partial" : "complete", completedAt, providerGeneratedAt: result.data.current.providerGeneratedAt, requestCount: 10, successfulRequestCount: successful, failedRequestCount: failed, warningCount: Math.min(result.warnings.length, 40), safeErrorCode: null, detailRetentionUntil: retainedUntil(new Date(completedAt), 24) }, [{ role: "current", snapshot: result.data.current }, { role: "previous", snapshot: result.data.previous }], result.warnings);
   return { status: "captured", runId: input.runId };
+}
+
+export async function capturePageSpeed(input: { runId: string; targetId: string; strategy: PerformanceStrategy }): Promise<CaptureOutcome> {
+  const storage = await getHistoryStorage();
+  if (storage.status !== "ready") return { status: "storage-unavailable", reason: storage.reason };
+  return capturePageSpeedWithDependencies(storage, input);
+}
+
+export async function captureSearchComparison(input: { runId: string; periodId: SearchPeriodId }): Promise<CaptureOutcome> {
+  const storage = await getHistoryStorage();
+  if (storage.status !== "ready") return { status: "storage-unavailable", reason: storage.reason };
+  return captureSearchComparisonWithDependencies(storage, input);
 }

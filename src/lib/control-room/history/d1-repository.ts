@@ -35,7 +35,7 @@ export interface D1DatabaseLike {
 }
 
 type CaptureRunRow = {
-  id: string; idempotency_key: string; source: CaptureRun["source"]; capture_mode: CaptureRun["captureMode"]; status: CaptureRun["status"];
+  id: string; idempotency_key: string; source: CaptureRun["source"]; capture_mode: CaptureRun["captureMode"]; trigger_kind: CaptureRun["triggerKind"]; status: CaptureRun["status"];
   target_key: string; period_key: "28d" | "90d" | null; started_at: string; completed_at: string | null; provider_generated_at: string | null;
   request_count: number; successful_request_count: number; failed_request_count: number; warning_count: number; safe_error_code: string | null; schema_version: number;
   worker_version_id: string | null; worker_version_tag: string | null; worker_version_created_at: string | null; detail_retention_until: string | null;
@@ -43,7 +43,7 @@ type CaptureRunRow = {
 
 function runFromRow(row: CaptureRunRow): CaptureRun {
   return {
-    id: row.id, idempotencyKey: row.idempotency_key, source: row.source, captureMode: row.capture_mode, status: row.status,
+    id: row.id, idempotencyKey: row.idempotency_key, source: row.source, captureMode: row.capture_mode, triggerKind: row.trigger_kind, status: row.status,
     targetKey: row.target_key, periodKey: row.period_key, startedAt: row.started_at, completedAt: row.completed_at,
     providerGeneratedAt: row.provider_generated_at, requestCount: row.request_count, successfulRequestCount: row.successful_request_count,
     failedRequestCount: row.failed_request_count, warningCount: row.warning_count, safeErrorCode: row.safe_error_code,
@@ -143,9 +143,9 @@ export class D1ControlRoomHistoryRepository implements ControlRoomHistoryReposit
   async beginRun(draft: CaptureRunDraft): Promise<{ created: boolean; run: CaptureRun }> {
     const now = draft.startedAt;
     const [insert, selected] = await this.db.batch([
-      this.db.prepare("INSERT OR IGNORE INTO cr_capture_runs(id, idempotency_key, source, capture_mode, trigger_kind, status, target_key, period_key, started_at, worker_version_id, worker_version_tag, worker_version_created_at, detail_retention_until, created_at) VALUES (?, ?, ?, ?, 'manual', 'running', ?, ?, ?, ?, ?, ?, ?, ?)")
-        .bind(draft.id, draft.idempotencyKey, draft.source, draft.captureMode, draft.targetKey, draft.periodKey, draft.startedAt, draft.workerVersionId, draft.workerVersionTag, draft.workerVersionCreatedAt, draft.detailRetentionUntil, now),
-      this.db.prepare("SELECT * FROM cr_capture_runs WHERE id = ? LIMIT 1").bind(draft.id),
+      this.db.prepare("INSERT OR IGNORE INTO cr_capture_runs(id, idempotency_key, source, capture_mode, trigger_kind, status, target_key, period_key, started_at, worker_version_id, worker_version_tag, worker_version_created_at, detail_retention_until, created_at) VALUES (?, ?, ?, ?, ?, 'running', ?, ?, ?, ?, ?, ?, ?, ?)")
+        .bind(draft.id, draft.idempotencyKey, draft.source, draft.captureMode, draft.triggerKind, draft.targetKey, draft.periodKey, draft.startedAt, draft.workerVersionId, draft.workerVersionTag, draft.workerVersionCreatedAt, draft.detailRetentionUntil, now),
+      this.db.prepare("SELECT * FROM cr_capture_runs WHERE idempotency_key = ? LIMIT 1").bind(draft.idempotencyKey),
     ]);
     const row = (selected.results?.[0] ?? null) as CaptureRunRow | null;
     if (!row) throw new Error("The capture run could not be read after its idempotent insert.");
