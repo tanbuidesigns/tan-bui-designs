@@ -2,6 +2,7 @@ import { Resend } from "resend";
 
 import { recordContactLead } from "@/lib/control-room/leads/service";
 import { readBoundedJsonRequest } from "@/lib/contact/bounded-json-request";
+import { verifyContactTurnstile } from "@/lib/contact/turnstile";
 
 type ContactSubmission = {
   name?: unknown;
@@ -9,6 +10,7 @@ type ContactSubmission = {
   services?: unknown;
   message?: unknown;
   website?: unknown;
+  turnstileToken?: unknown;
 };
 
 const allowedServices = new Set([
@@ -67,6 +69,7 @@ export async function POST(request: Request) {
     const email = textValue(submission.email);
     const message = textValue(submission.message);
     const website = textValue(submission.website);
+    const turnstileToken = textValue(submission.turnstileToken);
     const services = Array.isArray(submission.services)
       ? Array.from(
           new Set(
@@ -90,6 +93,13 @@ export async function POST(request: Request) {
     ) {
       return jsonResponse(false, 400);
     }
+
+    const turnstileVerified = await verifyContactTurnstile({
+      token: turnstileToken,
+      secret: process.env.TURNSTILE_SECRET,
+      remoteIp: request.headers.get("CF-Connecting-IP"),
+    });
+    if (!turnstileVerified) return jsonResponse(false, 403);
 
     const { error } = await resend.emails.send({
       from: "Tan Bui Designs <hello@tanbuidesigns.com>",

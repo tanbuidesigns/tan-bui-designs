@@ -39,12 +39,14 @@ export default function PrivacyPage() {
           <div className="space-y-12 text-base leading-relaxed text-gray-700 sm:text-lg">
             <NoticeSection title="Who is responsible for your information">
               <p>Tan Bui Designs is the data controller for personal information collected through this website.</p>
-              <p>For privacy questions or requests, email <a href="mailto:tanbuidesigns@gmail.com" className="text-black underline underline-offset-4">tanbuidesigns@gmail.com</a>.</p>
+              <p>For privacy questions or requests, email <a href="mailto:hello@tanbuidesigns.com" className="text-black underline underline-offset-4">hello@tanbuidesigns.com</a>.</p>
             </NoticeSection>
 
             <NoticeSection title="Information collected">
               <p>If you use the contact form, the site collects your name, email address, selected service interests and the message you submit. The message is delivered to the Tan Bui Designs email account.</p>
               <p>A minimal record is also kept in the private Control Room so the enquiry can be followed up. That record contains your name, email address, selected services, the page where the enquiry started, lead status, follow-up date and relevant record dates. It does not contain your full message, IP address, browser or device details, budget, estimated value or free-form internal notes.</p>
+              <p>The contact form uses Cloudflare Turnstile to distinguish genuine submissions from automated abuse. Cloudflare may process browser and request signals, including the submitting IP address, to verify the security check. Tan Bui Designs does not add this technical information to the private lead register.</p>
+              <p>Cloudflare Web Analytics provides aggregate page-view, visit and performance information. It is configured without advertising trackers and does not use cookies, local storage or fingerprinting to identify visitors.</p>
               <p>If you contact Tan Bui Designs another way, the information you choose to include may also be handled.</p>
               <p>The hosting and security infrastructure may process technical request information such as IP address, device or browser details, requested pages, timestamps and diagnostic or security events.</p>
             </NoticeSection>
@@ -54,13 +56,14 @@ export default function PrivacyPage() {
                 <li>To read and respond to enquiries and discuss possible work.</li>
                 <li>To take steps you request before entering into a contract, or to manage a client relationship.</li>
                 <li>To operate, protect and diagnose the website.</li>
+                <li>To understand aggregate website use and improve content and performance.</li>
                 <li>To keep records where required for legal, tax, accounting or dispute purposes.</li>
               </ul>
               <p>The likely lawful bases are steps taken at your request before a contract, performance of a contract, legitimate interests in responding to genuine enquiries and operating a secure website, and legal obligations where records must be kept. Tan Bui Designs does not use contact-form details for unrelated marketing without an appropriate basis.</p>
             </NoticeSection>
 
             <NoticeSection title="Service providers and sharing">
-              <p>The website is hosted using Cloudflare infrastructure. Minimal lead records are stored in Cloudflare D1. Contact-form submissions are sent using Resend and delivered to the Tan Bui Designs Gmail account. These providers may process information on behalf of Tan Bui Designs under their service and data-protection terms.</p>
+              <p>The website is hosted using Cloudflare infrastructure. Cloudflare also provides Turnstile security checks, privacy-focused Web Analytics, Email Routing and minimal lead storage in D1. Contact-form submissions are sent using Resend and delivered to the Tan Bui Designs Gmail account. These providers may process information on behalf of Tan Bui Designs under their service and data-protection terms.</p>
               <p>Information may also be disclosed where required by law, to establish or defend legal rights, or to professional advisers who need it for their work. Personal information is not sold.</p>
             </NoticeSection>
 
@@ -74,8 +77,8 @@ export default function PrivacyPage() {
             </NoticeSection>
 
             <NoticeSection title="Cookies and similar technologies">
-              <p>The application code currently has no optional advertising, marketing or audience-analytics service configured. Cloudflare or another essential service may use limited storage or technical mechanisms for security, load balancing or delivery when necessary.</p>
-              <p>If optional analytics, embedded media or other non-essential storage is added, this notice and the site&apos;s consent controls must be reviewed before it is enabled.</p>
+              <p>Cloudflare Web Analytics is enabled to provide aggregate audience and performance information. Cloudflare states that this service does not use cookies, local storage or fingerprinting, and it is not used here for advertising or individual visitor profiles.</p>
+              <p>Cloudflare or another essential service may use limited technical mechanisms for security, load balancing or delivery when necessary. If advertising analytics, embedded media or other non-essential storage is added later, this notice and the site&apos;s consent controls will be reviewed before it is enabled.</p>
             </NoticeSection>
 
             <NoticeSection title="External links and content">

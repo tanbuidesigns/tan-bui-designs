@@ -40,7 +40,7 @@ const structuredData = {
         "Design consultancy across branding, packaging, publications, websites, exhibitions and creative systems.",
       founder: { "@id": "https://tanbuidesigns.com/about#tan-bui" },
       areaServed: "Worldwide",
-      email: "tanbuidesigns@gmail.com",
+      email: "hello@tanbuidesigns.com",
       sameAs: ["https://www.linkedin.com/in/tanbuidesigns/"],
     },
     {

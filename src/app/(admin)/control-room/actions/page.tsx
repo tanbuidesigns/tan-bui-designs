@@ -1,4 +1,5 @@
 import ActionRegister from "@/components/control-room/ActionRegister";
+import Link from "next/link";
 import ControlRoomFilters from "@/components/control-room/ControlRoomFilters";
 import ControlRoomShell from "@/components/control-room/ControlRoomShell";
 import MetricCard from "@/components/control-room/MetricCard";
@@ -12,6 +13,12 @@ export default async function ControlRoomActionsPage({ searchParams }: { searchP
   const snapshot = getControlRoomSnapshot();
   const actions = sortActions(filterActions(snapshot.actions, params));
   const summary = snapshot.actionSummary;
+  const exportParams = new URLSearchParams();
+  for (const key of ["category", "priority", "effort", "status", "approval", "verification"] as const) {
+    const value = firstParam(params, key);
+    if (value) exportParams.set(key, value);
+  }
+  const exportHref = `/control-room/actions/export${exportParams.size ? `?${exportParams}` : ""}`;
   const metrics: readonly SummaryMetric[] = [
     { id: "priority", label: "Critical / high open", value: summary.openCriticalHigh, description: "Open actions currently curated as critical or high priority." },
     { id: "ready", label: "Ready", value: summary.ready, description: "Actions recorded as ready to begin." },
@@ -24,6 +31,11 @@ export default async function ControlRoomActionsPage({ searchParams }: { searchP
     <ControlRoomShell activeSection="actions" eyebrow="TBD Control Room · Actions" title="Prioritised website action register" description="Recorded improvements remain separate from implementation, with explicit impact, effort, dependencies, evidence and approval needs." baselineReviewDate={snapshot.baselineReviewDate} lastUpdatedDate={snapshot.lastUpdatedDate}>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">{metrics.map((metric) => <MetricCard key={metric.id} metric={metric} />)}</div>
       <p className="rounded-xl border border-black/8 bg-white px-5 py-4 text-sm leading-relaxed text-gray-600"><strong className="text-black">How priority works:</strong> Priority reflects current evidence, likely impact, effort and dependency. It is a planning aid, not an automated SEO guarantee.</p>
+      <div className="flex justify-end">
+        <Link href={exportHref} className="inline-flex min-h-11 items-center rounded-lg border border-black/15 bg-white px-4 text-sm font-semibold hover:border-black/40">
+          Export filtered actions as CSV
+        </Link>
+      </div>
       <ControlRoomFilters action="/control-room/actions" fields={[
         { name: "category", label: "Category", value: firstParam(params, "category"), options: ["SEO", "Content", "Performance", "Security", "Analytics", "Infrastructure", "Accessibility", "Privacy", "Conversion"].map((value) => ({ value, label: value })) },
         { name: "priority", label: "Priority", value: firstParam(params, "priority"), options: ["critical", "high", "medium", "low"].map((value) => ({ value, label: value })) },

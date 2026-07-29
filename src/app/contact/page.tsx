@@ -40,10 +40,10 @@ export default function ContactPage() {
               <div className="flex min-w-0 flex-col items-start gap-3">
                 <AnimatedLabel tone="dark" className="text-white/45">Email</AnimatedLabel>
                 <a
-                  href="mailto:tanbuidesigns@gmail.com"
+                  href="mailto:hello@tanbuidesigns.com"
                   className="max-w-full break-words text-base text-white/78 underline decoration-white/25 underline-offset-4 transition-colors [overflow-wrap:anywhere] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-black"
                 >
-                  tanbuidesigns@gmail.com
+                  hello@tanbuidesigns.com
                 </a>
               </div>
               <div className="flex min-w-0 flex-col items-start gap-3">

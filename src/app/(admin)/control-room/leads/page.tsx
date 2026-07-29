@@ -92,6 +92,14 @@ export default async function ControlRoomLeadsPage({
                 deleted after 12 months by the daily retention job.
               </p>
             </div>
+            <div className="mt-5 flex justify-end">
+              <Link
+                href={`/control-room/leads/export${selectedStatus ? `?status=${selectedStatus}` : ""}`}
+                className="inline-flex min-h-11 items-center rounded-lg border border-black/15 bg-white px-4 text-sm font-semibold hover:border-black/40"
+              >
+                Export {selectedStatus ? `${statusLabel(selectedStatus).toLowerCase()} ` : ""}leads as CSV
+              </Link>
+            </div>
             <nav aria-label="Filter leads by status" className="mt-6 flex flex-wrap gap-2">
               <Link
                 href="/control-room/leads"

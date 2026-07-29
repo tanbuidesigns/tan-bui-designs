@@ -1,9 +1,36 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import Script from "next/script";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import Button from "@/components/ui/Button";
+import {
+  CONTACT_TURNSTILE_ACTION,
+  CONTACT_TURNSTILE_SITE_KEY,
+} from "@/lib/contact/turnstile-config";
+
+type TurnstileApi = {
+  render: (
+    container: HTMLElement,
+    options: {
+      sitekey: string;
+      action: string;
+      theme: "light";
+      callback: (token: string) => void;
+      "expired-callback": () => void;
+      "error-callback": () => void;
+    },
+  ) => string;
+  reset: (widgetId: string) => void;
+  remove: (widgetId: string) => void;
+};
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi;
+  }
+}
 
 const services = [
   "Brand Identity",
@@ -18,12 +45,53 @@ export default function ContactForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const turnstileWidgetIdRef = useRef<string | null>(null);
+
+  const renderTurnstile = useCallback(() => {
+    if (
+      !window.turnstile ||
+      !turnstileContainerRef.current ||
+      turnstileWidgetIdRef.current
+    ) {
+      return;
+    }
+
+    turnstileWidgetIdRef.current = window.turnstile.render(
+      turnstileContainerRef.current,
+      {
+        sitekey: CONTACT_TURNSTILE_SITE_KEY,
+        action: CONTACT_TURNSTILE_ACTION,
+        theme: "light",
+        callback: setTurnstileToken,
+        "expired-callback": () => setTurnstileToken(""),
+        "error-callback": () => setTurnstileToken(""),
+      },
+    );
+  }, []);
+
+  useEffect(() => {
+    renderTurnstile();
+    return () => {
+      if (turnstileWidgetIdRef.current && window.turnstile) {
+        window.turnstile.remove(turnstileWidgetIdRef.current);
+        turnstileWidgetIdRef.current = null;
+      }
+    };
+  }, [renderTurnstile]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
     setSuccess(false);
     setError(false);
+
+    if (!turnstileToken) {
+      setLoading(false);
+      setError(true);
+      return;
+    }
 
     const form = event.currentTarget;
     const formData = new FormData(form);
@@ -38,6 +106,7 @@ export default function ContactForm() {
           services: formData.getAll("services"),
           message: formData.get("message"),
           website: formData.get("website"),
+          turnstileToken,
         }),
       });
 
@@ -47,6 +116,10 @@ export default function ContactForm() {
     } catch {
       setError(true);
     } finally {
+      if (turnstileWidgetIdRef.current && window.turnstile) {
+        window.turnstile.reset(turnstileWidgetIdRef.current);
+      }
+      setTurnstileToken("");
       setLoading(false);
     }
   }
@@ -55,7 +128,13 @@ export default function ContactForm() {
     "w-full border-0 border-b border-black/20 bg-transparent px-0 py-3 text-base text-black outline-none transition-colors placeholder:text-gray-400 focus:border-black focus-visible:ring-0";
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <>
+      <Script
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+        strategy="afterInteractive"
+        onReady={renderTurnstile}
+      />
+      <form onSubmit={handleSubmit} className="space-y-5">
       <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
         <label htmlFor="contact-website">Website</label>
         <input
@@ -96,8 +175,15 @@ export default function ContactForm() {
         <textarea id="contact-message" name="message" rows={4} required className={`${fieldClass} resize-y`} />
       </div>
 
+      <div>
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
+          Security check
+        </p>
+        <div ref={turnstileContainerRef} className="min-h-[65px]" />
+      </div>
+
       <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
-        <Button type="submit" disabled={loading} variant="primary" size="md" showArrow>
+        <Button type="submit" disabled={loading || !turnstileToken} variant="primary" size="md" showArrow>
           {loading ? "Sending..." : "Send message"}
         </Button>
         <p className="max-w-sm text-xs leading-relaxed text-gray-500">
@@ -106,8 +192,9 @@ export default function ContactForm() {
       </div>
 
       <p aria-live="polite" className={`min-h-5 text-sm ${error ? "text-red-700" : "text-green-700"}`}>
-        {success ? "Thanks. Your message has been sent." : error ? "Something went wrong. Please email tanbuidesigns@gmail.com instead." : null}
+        {success ? "Thanks. Your message has been sent." : error ? "Something went wrong. Please email hello@tanbuidesigns.com instead." : null}
       </p>
-    </form>
+      </form>
+    </>
   );
 }

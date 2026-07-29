@@ -7,7 +7,8 @@ import { isApprovedWriteOrigin, readBoundedUrlEncodedForm, validateUrlEncodedFor
 
 export { readBoundedUrlEncodedForm };
 
-export type WriteAuthorisation = { ok: true } | { ok: false; status: 400 | 401 | 403 | 404 | 413 | 415 };
+export type ControlRoomAuthorisation = { ok: true } | { ok: false; status: 400 | 401 | 403 | 404 | 413 | 415 };
+export type WriteAuthorisation = ControlRoomAuthorisation;
 
 function expectedOrigin(request: Request): string | null {
   const host = request.headers.get("host");
@@ -31,6 +32,29 @@ export async function authoriseControlRoomWrite(request: Request): Promise<Write
     const auth = createControlRoomAuth(configuration);
     const session = await auth.api.getSession({ headers: request.headers });
     return isAuthorisedControlRoomSession(session, configuration.allowedEmail) ? { ok: true } : { ok: false, status: 401 };
+  } catch {
+    return { ok: false, status: 401 };
+  }
+}
+
+export async function authoriseControlRoomRead(
+  request: Request,
+): Promise<ControlRoomAuthorisation> {
+  const hostClassification = classifyControlRoomHost(
+    process.env.NODE_ENV,
+    request.headers.get("host"),
+  );
+  if (hostClassification === "denied") return { ok: false, status: 404 };
+  if (hostClassification === "development") return { ok: true };
+
+  const configuration = getControlRoomAuthConfiguration();
+  if (configuration.status !== "ready") return { ok: false, status: 403 };
+  try {
+    const auth = createControlRoomAuth(configuration);
+    const session = await auth.api.getSession({ headers: request.headers });
+    return isAuthorisedControlRoomSession(session, configuration.allowedEmail)
+      ? { ok: true }
+      : { ok: false, status: 401 };
   } catch {
     return { ok: false, status: 401 };
   }

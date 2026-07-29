@@ -19,11 +19,11 @@ export const decisions: readonly DecisionRecord[] = [
   },
   {
     id: "analytics-model",
-    question: "Which privacy-aware analytics model, if any, should be approved?",
-    context: "No public analytics service is currently present and the privacy implications are undecided.",
+    question: "Which analytics model is approved for the public site?",
+    context: "Cloudflare Web Analytics is approved and active through automatic setup for aggregate, cookie-free audience and performance reporting.",
     priority: "medium",
-    verificationStatus: "requires-verification",
-    source: "planned-integration",
+    verificationStatus: "confirmed",
+    source: "repository-review",
   },
   {
     id: "public-tool-data",
@@ -53,8 +53,8 @@ export const decisions: readonly DecisionRecord[] = [
 
 export const leadPrerequisites: readonly LeadPrerequisite[] = [
   { id: "validation", label: "Server-side validation", status: "implemented", reason: "The production endpoint validates content type, payload size, field types, lengths, email shape and approved service values before delivery." },
-  { id: "spam", label: "Spam protection", status: "partially-implemented", reason: "A hidden honeypot and strict request validation provide a low-friction baseline; stronger abuse controls remain subject to measured need." },
-  { id: "rate-limit", label: "Rate limiting", status: "technical-work-required", reason: "A deployment-aware rate-limiting approach has not been selected." },
+  { id: "spam", label: "Spam protection", status: "implemented", reason: "A hidden honeypot, strict validation and Cloudflare Turnstile verification protect the public form while keeping friction low for genuine enquiries." },
+  { id: "rate-limit", label: "Rate limiting", status: "implemented", reason: "The Cloudflare Worker applies a ten-request-per-minute edge limit to the contact endpoint without retaining IP addresses in the lead register." },
   { id: "consent", label: "Purpose and privacy decision", status: "implemented", reason: "Lead data is limited to enquiry follow-up and the visible privacy notice documents the approved use." },
   { id: "retention", label: "Retention policy", status: "implemented", reason: "Closed enquiries that do not become projects receive a deletion date 12 months after closure." },
   { id: "deletion", label: "Deletion process", status: "implemented", reason: "A daily Cloudflare Cron job deletes due closed-lead records in bounded batches." },

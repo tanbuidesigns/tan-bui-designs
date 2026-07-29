@@ -7,6 +7,7 @@ const CONTROL_ROOM_CACHE_CONTROL =
 const CONTROL_ROOM_PRODUCTION_HOST = "dashboard.tanbuidesigns.com";
 const PUBLIC_PRODUCTION_HOST = "tanbuidesigns.com";
 const PUBLIC_WWW_HOST = "www.tanbuidesigns.com";
+const CONTACT_API_PATH = "/api/contact";
 
 const DASHBOARD_ASSET_PATHS = new Set([
   "/apple-icon.png",
@@ -190,6 +191,32 @@ const controlRoomWorker = {
     const publicRedirect = canonicalPublicRedirect(requestUrl);
 
     if (publicRedirect) return publicRedirect;
+
+    if (
+      request.method === "POST" &&
+      requestUrl.pathname === CONTACT_API_PATH
+    ) {
+      const rateLimitKey =
+        request.headers.get("CF-Connecting-IP") ?? "unidentified-requester";
+      const rateLimit = await environment.CONTACT_RATE_LIMITER.limit({
+        key: rateLimitKey,
+      });
+      if (!rateLimit.success) {
+        return withPublicResponseHeaders(
+          Response.json(
+            { success: false },
+            {
+              status: 429,
+              headers: {
+                "Cache-Control": "no-store",
+                "Retry-After": "60",
+              },
+            },
+          ),
+          requestUrl,
+        );
+      }
+    }
 
     if (requestUsesDashboardHost && requestUrl.pathname === "/") {
       return request.method === "GET" || request.method === "HEAD"

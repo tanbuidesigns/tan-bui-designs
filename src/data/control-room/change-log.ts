@@ -131,4 +131,17 @@ export const changeLog: readonly ChangeLogEntry[] = [
     reviewDate: "29 July 2026",
     notes: "The lead table excludes full messages, IP/browser/device details, budget, estimated value and free-form notes.",
   },
+  {
+    id: "contact-analytics-email-release-2026-07-29",
+    date: "29 July 2026",
+    changeType: "security",
+    summary: "Contact protection, privacy-aware analytics and business email routing completed",
+    reason: "Protect the public enquiry path, establish trustworthy aggregate measurement and make the branded contact address usable for inbound email.",
+    affectedArea: "Contact form and API, Cloudflare Worker configuration, Web Analytics, Email Routing, protected Control Room exports and public privacy notice",
+    expectedOutcome: "Genuine enquiries can use hello@tanbuidesigns.com, automated abuse is constrained, aggregate site evidence is available and authorised operational records can be exported safely.",
+    verificationStatus: "confirmed",
+    source: "repository-review",
+    reviewDate: "29 July 2026",
+    notes: "Turnstile, an edge rate limit, Cloudflare Web Analytics automatic setup and the exact hello@ forwarding rule are configured without adding IP or device data to lead records.",
+  },
 ];
