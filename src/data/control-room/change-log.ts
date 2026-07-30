@@ -196,4 +196,17 @@ export const changeLog: readonly ChangeLogEntry[] = [
     reviewDate: "30 July 2026",
     notes: "The additive production migration was verified from recovery bookmark 00000025-00000000-000050b8-48ee839ff16b2681c0a92230117209bc and seeded no fabricated action rows.",
   },
+  {
+    id: "control-room-analytics-evidence-2026-07-30",
+    date: "30 July 2026",
+    changeType: "analytics",
+    summary: "Aggregate RUM and conversion evidence workflow added",
+    reason: "Connect privacy-focused audience and performance evidence to enquiry origins, selected services and workflow outcomes without creating visitor profiles.",
+    affectedArea: "Contact attribution, Control Room Analytics, Cloudflare Web Analytics snapshots and D1 schema version 4",
+    expectedOutcome: "The owner can preserve reviewed page-view, visit and p75 performance evidence and compare it with aggregate enquiry outcomes by internal referring page and service.",
+    verificationStatus: "confirmed",
+    source: "repository-review",
+    reviewDate: "30 July 2026",
+    notes: "Attribution uses only the immediate same-origin referrer at form submission; no cookie, local storage, IP address, browser or device identifier is added. Production recovery bookmark before schema version 4: 00000026-00000000-000050b8-a2539eada4913750383344c797e5766e.",
+  },
 ];

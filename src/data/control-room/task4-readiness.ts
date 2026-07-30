@@ -21,7 +21,7 @@ export const securityReadiness: readonly OperationalReadinessItem[] = [
 ];
 
 export const storageReadiness: readonly OperationalReadinessItem[] = [
-  { id: "persistence", label: "Persistent storage", state: "active", explanation: "The source-controlled D1 binding and schema version 3 support measurement history, minimal private lead records and editable action workflow state." },
+  { id: "persistence", label: "Persistent storage", state: "active", explanation: "The source-controlled D1 binding and schema version 4 support measurement history, minimal private lead records, editable action workflow state and aggregate analytics snapshots." },
   { id: "schedule", label: "Scheduled collection", state: "active", explanation: "Bounded UTC schedules collect 28-day Search evidence daily, 90-day Search evidence weekly and homepage mobile PageSpeed evidence weekly." },
   { id: "d1", label: "Cloudflare D1", state: "active", explanation: "The Western Europe database has the reviewed migration, binding and generated runtime types." },
   { id: "kv", label: "Cloudflare KV", state: "not-configured", explanation: "No KV namespace or binding exists." },

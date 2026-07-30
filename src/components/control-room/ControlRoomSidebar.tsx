@@ -7,6 +7,7 @@ const sections = [
   { id: "content", label: "Content", href: "/control-room/content" },
   { id: "performance", label: "Performance", href: "/control-room/performance" },
   { id: "search", label: "Search", href: "/control-room/search" },
+  { id: "analytics", label: "Analytics", href: "/control-room/analytics" },
   { id: "history", label: "History", href: "/control-room/history" },
   { id: "evidence", label: "Evidence", href: "/control-room/evidence" },
   { id: "reports", label: "Reports", href: "/control-room/reports" },

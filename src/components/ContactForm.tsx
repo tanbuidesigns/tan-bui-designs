@@ -95,6 +95,13 @@ export default function ContactForm() {
 
     const form = event.currentTarget;
     const formData = new FormData(form);
+    let sourcePath = "/contact";
+    try {
+      const referrer = new URL(document.referrer);
+      if (referrer.origin === window.location.origin) sourcePath = referrer.pathname;
+    } catch {
+      // A direct visit has no internal referring page.
+    }
 
     try {
       const response = await fetch("/api/contact", {
@@ -107,6 +114,7 @@ export default function ContactForm() {
           message: formData.get("message"),
           website: formData.get("website"),
           turnstileToken,
+          sourcePath,
         }),
       });
 

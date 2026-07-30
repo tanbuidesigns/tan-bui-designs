@@ -3,6 +3,7 @@ import { Resend } from "resend";
 import { recordContactLead } from "@/lib/control-room/leads/service";
 import { readBoundedJsonRequest } from "@/lib/contact/bounded-json-request";
 import { verifyContactTurnstile } from "@/lib/contact/turnstile";
+import { normalizeContactSourcePath } from "@/lib/contact/source-attribution";
 
 type ContactSubmission = {
   name?: unknown;
@@ -11,6 +12,7 @@ type ContactSubmission = {
   message?: unknown;
   website?: unknown;
   turnstileToken?: unknown;
+  sourcePath?: unknown;
 };
 
 const allowedServices = new Set([
@@ -70,6 +72,7 @@ export async function POST(request: Request) {
     const message = textValue(submission.message);
     const website = textValue(submission.website);
     const turnstileToken = textValue(submission.turnstileToken);
+    const sourcePath = normalizeContactSourcePath(submission.sourcePath);
     const services = Array.isArray(submission.services)
       ? Array.from(
           new Set(
@@ -137,7 +140,7 @@ ${message}
       name,
       email,
       services,
-      sourcePath: "/contact",
+      sourcePath,
       createdAt,
     });
     if (leadResult.status !== "recorded") {

@@ -111,6 +111,7 @@ function insertSearchSnapshot({
 const expectedTables = [
   "cr_action_evidence",
   "cr_action_workflow",
+  "cr_analytics_snapshots",
   "cr_capture_runs",
   "cr_change_events",
   "cr_leads",
@@ -131,11 +132,11 @@ const schema = get(
   "control_room_history_schema",
 );
 assert.deepEqual({ ...schema }, {
-  schema_version: 3,
-  migration_name: "0003_create_action_workflow.sql",
+  schema_version: 4,
+  migration_name: "0004_create_analytics_evidence.sql",
   compatibility_family: "sqlite",
 });
-assert.equal(get("SELECT COUNT(*) AS count FROM d1_migrations").count, 3);
+assert.equal(get("SELECT COUNT(*) AS count FROM d1_migrations").count, 4);
 
 const tables = all("SELECT name FROM sqlite_master WHERE type = 'table'").map((row) => row.name);
 for (const table of expectedTables) assert.ok(tables.includes(table), `Missing table ${table}.`);
@@ -147,6 +148,7 @@ const requiredIndexes = [
   "idx_cr_change_events_occurred",
   "idx_cr_action_evidence_action",
   "idx_cr_action_workflow_status_updated",
+  "idx_cr_analytics_period",
   "idx_cr_leads_status_created",
   "idx_cr_leads_retention",
 ];
@@ -281,6 +283,8 @@ try {
   run("INSERT INTO cr_action_workflow(action_id, source_kind, status, title, description, category, priority, effort, affected_area, success_measure, created_at, updated_at) VALUES ('custom-action', 'custom', 'backlog', 'Custom action', 'Fixture description', 'Content', 'medium', 'small', '/blog', 'Published', '2026-07-30', '2026-07-30')");
   expectConstraint("INSERT INTO cr_action_workflow(action_id, source_kind, status, title, created_at, updated_at) VALUES ('invalid-custom', 'custom', 'backlog', 'Incomplete', '2026-07-30', '2026-07-30')");
   expectConstraint("UPDATE cr_action_workflow SET status = 'done' WHERE action_id = 'custom-action'");
+  run("INSERT INTO cr_analytics_snapshots(id, source, period_start, period_end, page_views, visits, lcp_p75_ms, inp_p75_ms, cls_p75_milli, created_at) VALUES ('20000000-0000-4000-8000-000000000001', 'cloudflare-web-analytics', '2026-07-01', '2026-07-28', 100, 80, 2200, 180, 40, '2026-07-30')");
+  expectConstraint("INSERT INTO cr_analytics_snapshots(id, source, period_start, period_end, page_views, visits, created_at) VALUES ('20000000-0000-4000-8000-000000000002', 'unknown', '2026-07-01', '2026-07-28', 1, 1, '2026-07-30')");
 
   run("INSERT INTO cr_change_events(id, occurred_at, event_type, title, summary, affected_path, verification_state, lifecycle_state, created_at) VALUES ('change-original', '2026-07-01', 'technical', 'Original change', 'Original fixture summary', '/work', 'confirmed', 'implemented', '2026-07-01')");
   run("INSERT INTO cr_change_events(id, occurred_at, event_type, title, summary, affected_path, verification_state, lifecycle_state, supersedes_event_id, created_at) VALUES ('change-correction', '2026-07-02', 'technical', 'Corrected change', 'Correction fixture summary', '/work', 'confirmed', 'corrected', 'change-original', '2026-07-02')");
@@ -316,6 +320,7 @@ try {
     ["search", "EXPLAIN QUERY PLAN SELECT id FROM cr_search_snapshots WHERE property_id = 'sc-domain:tanbuidesigns.com' AND period_id = '28d' ORDER BY end_date DESC LIMIT 2", "idx_cr_search_period"],
     ["leads", "EXPLAIN QUERY PLAN SELECT id FROM cr_leads WHERE status = 'active' ORDER BY created_at DESC, id DESC LIMIT 20", "idx_cr_leads_status_created"],
     ["actions", "EXPLAIN QUERY PLAN SELECT action_id FROM cr_action_workflow WHERE status = 'backlog' ORDER BY updated_at DESC, action_id DESC LIMIT 20", "idx_cr_action_workflow_status_updated"],
+    ["analytics", "EXPLAIN QUERY PLAN SELECT id FROM cr_analytics_snapshots ORDER BY period_end DESC, created_at DESC LIMIT 12", "idx_cr_analytics_period"],
   ];
   for (const [label, sql, expectedIndex] of plans) {
     const detail = all(sql).map((row) => row.detail).join(" ");
@@ -339,4 +344,4 @@ try {
 }
 
 console.log(`Verified local D1 simulation: ${basename(databaseFiles[0])}`);
-console.log("Schema, constraints, lead retention, action workflow, atomicity, fixtures, pagination, evidence, and query plans passed.");
+console.log("Schema, constraints, lead retention, action workflow, analytics evidence, atomicity, fixtures, pagination, evidence, and query plans passed.");

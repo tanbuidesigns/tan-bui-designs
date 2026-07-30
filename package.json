@@ -28,6 +28,7 @@
     "validate:control-room-backup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/validate-control-room-backup.mjs",
     "test:control-room-leads": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/control-room/leads/domain.test.mjs",
     "test:contact-request": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/contact/bounded-json-request.test.mjs src/lib/contact/turnstile.test.mjs",
+    "test:contact-attribution": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/contact/source-attribution.test.mjs",
     "test:control-room-exports": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/control-room/exports/csv.test.mjs",
     "test:analysis-brief": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test tests/control-room/analysis-brief/imports.test.mjs tests/control-room/analysis-brief/builder.test.mjs tests/control-room/analysis-brief/security.test.mjs tests/control-room/analysis-brief/links.test.mjs tests/control-room/analysis-brief/formatters.test.mjs tests/control-room/analysis-brief/helpers.test.mjs",
     "test:control-room-d1-local": "node scripts/verify-control-room-d1-local.mjs"
