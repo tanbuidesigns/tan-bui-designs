@@ -3,12 +3,10 @@ export const CONTROL_ROOM_CRONS = {
   search28Days: "31 5 * * *",
   search90Days: "13 6 * * SUN",
   homePageSpeedMobile: "47 6 * * MON",
-  portableBackup: "13 7 * * SUN",
 } as const;
 
 export type ScheduledControlRoomTask =
   | { kind: "lead-retention" }
-  | { kind: "portable-backup" }
   | { kind: "search-comparison"; periodId: "28d" | "90d" }
   | { kind: "pagespeed"; targetId: "performance-home"; strategy: "mobile" };
 
@@ -22,14 +20,12 @@ export function resolveScheduledControlRoomTask(cron: string): ScheduledControlR
       return { kind: "search-comparison", periodId: "90d" };
     case CONTROL_ROOM_CRONS.homePageSpeedMobile:
       return { kind: "pagespeed", targetId: "performance-home", strategy: "mobile" };
-    case CONTROL_ROOM_CRONS.portableBackup:
-      return { kind: "portable-backup" };
     default:
       return null;
   }
 }
 
-function taskKey(task: Exclude<ScheduledControlRoomTask, { kind: "lead-retention" } | { kind: "portable-backup" }>): string {
+function taskKey(task: Exclude<ScheduledControlRoomTask, { kind: "lead-retention" }>): string {
   if (task.kind === "search-comparison") return `search-console:${task.periodId}`;
   return `pagespeed:${task.targetId}:${task.strategy}`;
 }
@@ -39,7 +35,7 @@ function hexadecimal(bytes: Uint8Array): string {
 }
 
 export async function scheduledCaptureIdentity(
-  task: Exclude<ScheduledControlRoomTask, { kind: "lead-retention" } | { kind: "portable-backup" }>,
+  task: Exclude<ScheduledControlRoomTask, { kind: "lead-retention" }>,
   scheduledTime: number,
 ): Promise<{ runId: string; idempotencyKey: string; startedAt: string }> {
   const startedAt = new Date(scheduledTime).toISOString();

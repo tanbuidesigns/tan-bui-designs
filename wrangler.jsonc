@@ -8,6 +8,9 @@
   "compatibility_flags": [
     "nodejs_compat"
   ],
+  "alias": {
+    "server-only": "./src/lib/cloudflare/server-only.ts"
+  },
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS",
@@ -32,8 +35,7 @@
       "17 4 * * *",
       "31 5 * * *",
       "13 6 * * SUN",
-      "47 6 * * MON",
-      "13 7 * * SUN"
+      "47 6 * * MON"
     ]
   },
   "vars": {
@@ -63,9 +65,6 @@
   "images": {
     "binding": "IMAGES"
   },
-  "ai": {
-    "binding": "AI"
-  },
   "version_metadata": {
     "binding": "CF_VERSION_METADATA"
   },
@@ -85,12 +84,6 @@
       "database_name": "tan-bui-control-room",
       "database_id": "7b156091-55fa-4a90-8a73-55552e7b825f",
       "migrations_dir": "migrations/control-room"
-    }
-  ],
-  "r2_buckets": [
-    {
-      "binding": "CONTROL_ROOM_BACKUPS",
-      "bucket_name": "tan-bui-control-room-backups"
     }
   ],
   "observability": {

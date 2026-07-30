@@ -21,10 +21,10 @@ export const securityReadiness: readonly OperationalReadinessItem[] = [
 ];
 
 export const storageReadiness: readonly OperationalReadinessItem[] = [
-  { id: "persistence", label: "Persistent storage", state: "active", explanation: "The source-controlled D1 binding and schema version 5 support measurement history, minimal private lead records, editable action workflow state, aggregate analytics snapshots and reviewed AI drafts." },
+  { id: "persistence", label: "Persistent storage", state: "active", explanation: "The source-controlled D1 binding and schema version 5 support measurement history, minimal private lead records, editable action workflow state and aggregate analytics snapshots." },
   { id: "schedule", label: "Scheduled collection", state: "active", explanation: "Bounded UTC schedules collect 28-day Search evidence daily, 90-day Search evidence weekly and homepage mobile PageSpeed evidence weekly." },
   { id: "d1", label: "Cloudflare D1", state: "active", explanation: "The Western Europe database has the reviewed migration, binding and generated runtime types." },
   { id: "kv", label: "Cloudflare KV", state: "not-configured", explanation: "No KV namespace or binding exists." },
-  { id: "r2", label: "Cloudflare R2", state: "planned", explanation: "The private backup binding and weekly archive workflow are implemented; account-level R2 activation and bucket provisioning remain the external gate." },
-  { id: "cron", label: "Cloudflare Cron", state: "active", explanation: "Five UTC triggers run lead retention, retry-safe Search and homepage PageSpeed captures, plus a weekly checksum-verified portable backup." },
+  { id: "backup", label: "Portable local backup", state: "active", explanation: "The protected dashboard creates a checksum-validated full JSON download for private storage on the owner's computer." },
+  { id: "cron", label: "Cloudflare Cron", state: "active", explanation: "Four UTC triggers run lead retention plus retry-safe Search and homepage PageSpeed captures." },
 ];

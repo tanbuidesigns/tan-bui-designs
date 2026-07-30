@@ -249,17 +249,17 @@ Capture runs record the current Worker version ID, optional version tag and Work
 
 Rollback before deployment is source-only: remove the unbound Stage A files. After a future deployment, first disable capture routes or remove the D1 binding while preserving the database, then restore the previous Worker version. Do not delete a database during incident response. Export/backup evidence must exist before any destructive schema operation.
 
-### Task 7.1 scheduling proposal only
+### Task 7.1 scheduled monitoring
 
-No Cron Trigger or scheduler is configured. A later Task 7.1 may consider low-frequency collection only after manual captures demonstrate value, provider quotas and D1 write volume are measured, overlapping runs are prevented, ownership and alerting are defined, and partial/failed runs are handled safely. PageSpeed variability and cost argue against frequent unattended runs. Search Console finalised data should respect Pacific Time and the three-day buffer. Any schedule requires a separate threat, quota, retry and rollback review.
+Four bounded Cloudflare Cron triggers are configured: daily closed-lead retention, daily 28-day Search comparison, weekly 90-day Search comparison and weekly homepage mobile PageSpeed capture. Scheduled provider work uses deterministic retry-safe identities and records safe failure evidence in D1. There is no scheduled backup task because portable backups are downloaded locally by the authorised owner.
 
-### Task 7.2 export and portability proposal only
+### Task 7.2 export and portability
 
-No export endpoint, downloadable file or R2 bucket exists. A later Task 7.2 should define a server-only, owner-authorised export process using portable ordered JSON/JSONL and SQLite-compatible tabular data, with schema version, generated time, checksums, row counts and sensitivity labels. Restricted query text should be excluded by default or placed in a separately encrypted restricted package. Import validation must run in a disposable local SQLite database before any restore. A Turso fallback would implement the same repository contract and run the same portable migrations; it must not become a live dual-write system without a separate consistency design.
+Reports provide protected JSON and spreadsheet-safe CSV downloads. Operations provides an owner-authorised full portable JSON backup containing every application-owned table, schema version, checksums, row counts and a restricted-data label. The complete file is validated before the browser downloads it and must be stored in a private encrypted local folder. Import validation runs in disposable local D1 state before any restore. No R2 bucket or subscription is required.
 
 ### Task 8 readiness only
 
-Task 8 may use `ReportingEvidencePacketV1` as bounded evidence for later interpretation. It must not receive raw provider responses, credentials, exact restricted queries by default, D1 bindings or arbitrary SQL access. Evidence packets intentionally separate facts, deltas, references and limitations from conclusions. No model, prompt, AI provider, automated narrative or decision-making feature is implemented in Task 7.
+Task 8 uses `ReportingEvidencePacketV1` as bounded evidence for manual interpretation. It does not receive raw provider responses, credentials, exact restricted queries by default, D1 bindings or arbitrary SQL access. Evidence packets intentionally separate facts, deltas, references and limitations from conclusions. The dashboard does not contact an AI provider or automate decisions.
 
 ## Task 8: Webmaster Analysis Brief
 
@@ -267,4 +267,4 @@ Task 8 formats the existing `ReportingEvidencePacketV1` as a private, determinis
 
 Automated checks cover exact copy payloads, clipboard success and fallback results, and print-function invocation. Final print-preview appearance, Save as PDF output, and system-clipboard readback remain manual browser checks because the lightweight test setup intentionally has no DOM or print-dialog framework.
 
-Exact Search query text, credentials, identity, raw provider responses, database details and local paths are excluded. Evidence references resolve only to approved private Control Room routes. The brief uses deterministic factual wording, explains data-quality limits, treats Lighthouse as a laboratory measurement, and does not infer causality. The manual workflow is: capture evidence, generate and review the brief, copy it into ChatGPT, approve one action, prepare one narrow Codex task, implement and verify it, record the change, then measure it later. Task 9 remains a future human-reviewed action workflow only.
+Exact Search query text, credentials, identity, raw provider responses, database details and local paths are excluded. Evidence references resolve only to approved private Control Room routes. The brief uses deterministic factual wording, explains data-quality limits, treats Lighthouse as a laboratory measurement, and does not infer causality. The manual workflow is: capture evidence, generate and review the brief, copy it into ChatGPT, approve one action, prepare one narrow Codex task, implement and verify it, record the change, then measure it later. The editable D1 action workflow remains separate and owner-controlled.
