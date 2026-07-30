@@ -136,7 +136,8 @@ export type IntegrationId =
   | "search-console"
   | "cloudflare-analytics"
   | "lead-store"
-  | "github-change-history";
+  | "github-change-history"
+  | "ai-analyst";
 
 export type IntegrationLifecycleState =
   | "local"

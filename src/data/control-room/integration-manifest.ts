@@ -177,6 +177,27 @@ export const integrationDescriptors: readonly IntegrationDescriptor[] = [
     verificationStatus: "confirmed",
     source: "repository-review",
   },
+  {
+    id: "ai-analyst",
+    displayName: "Human-approved AI analyst",
+    description: "On-demand Workers AI interpretation of the restricted-data-safe Webmaster Analysis Brief.",
+    sourceType: "cloudflare-binding",
+    lifecycleState: "healthy",
+    dataMode: "live",
+    freshness: { state: "current", generatedAt: "2026-07-30", lastSuccessfulUpdate: null, threshold: "On demand", explanation: "The server-only binding is source-controlled; an inference occurs only when the authorised owner requests a draft." },
+    plannedCadence: "Manual on demand only",
+    currentRefreshMode: "Protected owner-triggered generation with explicit draft review",
+    configurationState: "ready",
+    configurationRequirements: ["AI", "CONTROL_ROOM_DB"],
+    accessRequirements: "Protected Control Room host, authorised owner session and Cloudflare Workers AI binding",
+    persistenceRequired: true,
+    schedulingRequired: false,
+    securityClassification: "internal",
+    limitation: "Model output is non-deterministic and may be wrong; it remains a draft until the owner explicitly approves or rejects it.",
+    nextTask: "Evaluate draft quality against real evidence before using any recommendation as an action.",
+    verificationStatus: "confirmed",
+    source: "repository-review",
+  },
 ];
 
 export const futureConfigurationManifest: readonly FutureConfigurationItem[] = [
@@ -196,4 +217,5 @@ export const futureConfigurationManifest: readonly FutureConfigurationItem[] = [
   { name: "BETTER_AUTH_SECRET", purpose: "Encrypt and authenticate the private stateless session", secret: true, serverOnly: true, futureTask: "Task 6 · configured remotely; value unread; production use confirmed", required: true, status: "runtime-derived" },
   { name: "CONTROL_ROOM_ALLOWED_EMAIL", purpose: "Restrict the application boundary to the approved identity", secret: true, serverOnly: true, futureTask: "Task 6 · configured remotely; value unread; production use confirmed", required: true, status: "runtime-derived" },
   { name: "CONTROL_ROOM_DB", purpose: "Bind normalized Control Room history and evidence to the approved D1 database", secret: false, serverOnly: true, futureTask: "Task 7 Stage C source-controlled runtime binding", required: true, status: "runtime-derived" },
+  { name: "AI", purpose: "Run owner-triggered evidence analysis through the server-only Cloudflare Workers AI binding", secret: false, serverOnly: true, futureTask: "Human-approved AI analyst", required: true, status: "runtime-derived" },
 ];

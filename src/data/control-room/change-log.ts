@@ -235,4 +235,17 @@ export const changeLog: readonly ChangeLogEntry[] = [
     reviewDate: "30 July 2026",
     notes: "The integration is read-only and local to the build. Commit subjects cannot prove deployment state, business reason or outcome, so the curated confirmed log remains authoritative.",
   },
+  {
+    id: "control-room-human-approved-ai-2026-07-30",
+    date: "30 July 2026",
+    changeType: "integration-foundation",
+    summary: "Human-approved AI analyst implemented",
+    reason: "Turn the deterministic Analysis Brief into an optional reviewed draft without granting a model permission to publish, deploy or create work automatically.",
+    affectedArea: "Analysis Brief, Workers AI binding, protected write routes, portable backup inventory and D1 schema version 5",
+    expectedOutcome: "The owner can generate a bounded evidence analysis, inspect its cited evidence and explicitly approve or reject the stored draft.",
+    verificationStatus: "confirmed",
+    source: "repository-review",
+    reviewDate: "30 July 2026",
+    notes: "Generation is manual and usage-billed. Exact Search queries, lead details, credentials and identity are excluded; model output remains non-deterministic and cannot change the public website. Production recovery bookmark before schema version 5: 00000027-00000002-000050b8-f112d67a699097e37f4996863fe0d7f2.",
+  },
 ];
