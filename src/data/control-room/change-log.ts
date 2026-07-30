@@ -209,4 +209,17 @@ export const changeLog: readonly ChangeLogEntry[] = [
     reviewDate: "30 July 2026",
     notes: "Attribution uses only the immediate same-origin referrer at form submission; no cookie, local storage, IP address, browser or device identifier is added. Production recovery bookmark before schema version 4: 00000026-00000000-000050b8-a2539eada4913750383344c797e5766e.",
   },
+  {
+    id: "control-room-content-evidence-2026-07-30",
+    date: "30 July 2026",
+    changeType: "analytics",
+    summary: "Search-backed content review queue implemented",
+    reason: "Separate measurable search evidence from manually curated content ideas and avoid presenting hypotheses as keyword recommendations.",
+    affectedArea: "Control Room Content and stored Search Console query comparisons",
+    expectedOutcome: "The owner sees a bounded queue of emerging, ranking-range and low-CTR query evidence linked to its exact capture run.",
+    verificationStatus: "confirmed",
+    source: "repository-review",
+    reviewDate: "30 July 2026",
+    notes: "The deterministic thresholds are conservative and explicitly preserve Search Console privacy, top-row and page-attribution limitations.",
+  },
 ];

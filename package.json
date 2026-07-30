@@ -25,6 +25,7 @@
     "test:control-room-scheduling": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/control-room/history/scheduled-capture.test.mjs",
     "test:control-room-backups": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/control-room/backups/portable-backup.test.mjs",
     "test:control-room-actions": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/control-room/actions/service.test.mjs",
+    "test:control-room-content": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/control-room/content/search-opportunities.test.mjs",
     "validate:control-room-backup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types scripts/validate-control-room-backup.mjs",
     "test:control-room-leads": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/control-room/leads/domain.test.mjs",
     "test:contact-request": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test src/lib/contact/bounded-json-request.test.mjs src/lib/contact/turnstile.test.mjs",
