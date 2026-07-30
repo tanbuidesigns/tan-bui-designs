@@ -831,6 +831,7 @@ function CarouselLightbox({
     );
   }, [items.length]);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- The portal must wait for client mount and resynchronise when its requested opening index changes. */
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -838,6 +839,7 @@ function CarouselLightbox({
   useEffect(() => {
     setActiveIndex(startIndex);
   }, [startIndex]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     const activeThumbnail =

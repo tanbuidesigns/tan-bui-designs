@@ -18,10 +18,12 @@ export default function PlaygroundGallery({ items }: PlaygroundGalleryProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- A replaced item collection intentionally resets pagination and the active card. */
   useEffect(() => {
     setVisibleCount(Math.min(batchSize, items.length));
     setActiveId(null);
   }, [items]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     const sentinel = sentinelRef.current;

@@ -57,6 +57,7 @@ export default function CaseStudyLightbox({
     );
   }, [total]);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- The lightbox portal waits for client mount and follows the caller's selected image. */
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -64,6 +65,7 @@ export default function CaseStudyLightbox({
   useEffect(() => {
     setSelected(getSafeIndex(startIndex, total));
   }, [startIndex, total]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     const originalOverflow =

@@ -194,6 +194,7 @@ function FeaturedImageSlider({
   const isFirstImage = activeIndex === 0;
   const isLastImage = activeIndex === totalImages - 1;
 
+  /* eslint-disable react-hooks/set-state-in-effect -- Client-side image shuffling intentionally resets the approved slider when its image set changes. */
   useEffect(() => {
     if (safeImages.length <= 1) {
       setOrderedImages(safeImages);
@@ -206,6 +207,7 @@ function FeaturedImageSlider({
     setOrderedImages(shuffledImages);
     setActiveIndex(0);
   }, [safeImages]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {

@@ -132,6 +132,7 @@ export default function CaseStudyProgressNav({
     startSectionId,
   ]);
 
+  /* eslint-disable react-hooks/set-state-in-effect -- Hover changes intentionally start the existing timed label reveal. */
   useEffect(() => {
     if (!hoveredSection) return;
 
@@ -144,6 +145,7 @@ export default function CaseStudyProgressNav({
 
     return () => window.clearTimeout(timer);
   }, [hoveredSection]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const scrollToSection = (
     event: MouseEvent<HTMLAnchorElement>,
