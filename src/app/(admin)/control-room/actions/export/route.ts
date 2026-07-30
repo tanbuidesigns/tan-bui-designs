@@ -1,4 +1,7 @@
 import { actionRegister } from "@/data/control-room/actions";
+import { getActionWorkflowStorage } from "@/lib/control-room/actions/storage";
+import { mergeActionWorkflow } from "@/lib/control-room/actions/service";
+import type { ActionWorkflowRecord } from "@/lib/control-room/actions/domain";
 import { withPrivateResponseHeaders } from "@/lib/control-room/auth/private-response";
 import { buildCsv } from "@/lib/control-room/exports/csv";
 import { filterActions, type SearchParamRecord } from "@/lib/control-room/filters";
@@ -29,7 +32,12 @@ export async function GET(request: Request) {
     if (value) filters[key] = value;
   }
 
-  const actions = sortActions(filterActions(actionRegister, filters));
+  const workflowStorage = await getActionWorkflowStorage();
+  let workflow: readonly ActionWorkflowRecord[] = [];
+  if (workflowStorage.status === "ready") {
+    try { workflow = [...await workflowStorage.repository.list()]; } catch { workflow = []; }
+  }
+  const actions = sortActions(filterActions(mergeActionWorkflow(actionRegister, workflow), filters));
   const csv = buildCsv(
     [
       "ID",

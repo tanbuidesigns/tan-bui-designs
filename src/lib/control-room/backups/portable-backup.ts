@@ -11,6 +11,7 @@ export const PORTABLE_BACKUP_TABLES = [
   "cr_search_device_rows",
   "cr_change_events",
   "cr_action_evidence",
+  "cr_action_workflow",
   "cr_leads",
 ] as const;
 

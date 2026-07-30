@@ -183,4 +183,17 @@ export const changeLog: readonly ChangeLogEntry[] = [
     reviewDate: "30 July 2026",
     notes: "Code verification is automated. Account-level R2 activation and the first production archive remain required before this entry can be marked confirmed.",
   },
+  {
+    id: "control-room-action-workflow-2026-07-30",
+    date: "30 July 2026",
+    changeType: "planning-system",
+    summary: "Editable D1 action workflow completed",
+    reason: "Turn the static planning register into a protected owner workflow without replacing its reviewed descriptions or manufacturing completion evidence.",
+    affectedArea: "Control Room Actions, protected write routes and D1 schema version 3",
+    expectedOutcome: "The owner can create actions, assign an owner, move work through explicit states and mark it done from the private dashboard.",
+    verificationStatus: "confirmed",
+    source: "repository-review",
+    reviewDate: "30 July 2026",
+    notes: "The additive production migration was verified from recovery bookmark 00000025-00000000-000050b8-48ee839ff16b2681c0a92230117209bc and seeded no fabricated action rows.",
+  },
 ];

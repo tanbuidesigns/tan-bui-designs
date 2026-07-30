@@ -110,6 +110,7 @@ function insertSearchSnapshot({
 
 const expectedTables = [
   "cr_action_evidence",
+  "cr_action_workflow",
   "cr_capture_runs",
   "cr_change_events",
   "cr_leads",
@@ -130,11 +131,11 @@ const schema = get(
   "control_room_history_schema",
 );
 assert.deepEqual({ ...schema }, {
-  schema_version: 2,
-  migration_name: "0002_create_lead_tracking.sql",
+  schema_version: 3,
+  migration_name: "0003_create_action_workflow.sql",
   compatibility_family: "sqlite",
 });
-assert.equal(get("SELECT COUNT(*) AS count FROM d1_migrations").count, 2);
+assert.equal(get("SELECT COUNT(*) AS count FROM d1_migrations").count, 3);
 
 const tables = all("SELECT name FROM sqlite_master WHERE type = 'table'").map((row) => row.name);
 for (const table of expectedTables) assert.ok(tables.includes(table), `Missing table ${table}.`);
@@ -145,6 +146,7 @@ const requiredIndexes = [
   "idx_cr_search_period",
   "idx_cr_change_events_occurred",
   "idx_cr_action_evidence_action",
+  "idx_cr_action_workflow_status_updated",
   "idx_cr_leads_status_created",
   "idx_cr_leads_retention",
 ];
@@ -273,6 +275,13 @@ try {
   assert.equal(get("SELECT COUNT(*) AS count FROM cr_leads WHERE status = 'closed'").count, 0);
   assert.equal(get("SELECT COUNT(*) AS count FROM cr_leads WHERE status = 'active'").count, 1);
 
+  run("INSERT INTO cr_action_workflow(action_id, source_kind, status, assigned_owner, created_at, updated_at) VALUES ('baseline-action', 'baseline', 'ready', 'Tan', '2026-07-30', '2026-07-30')");
+  run("UPDATE cr_action_workflow SET status = 'done', completed_at = '2026-07-30', updated_at = '2026-07-30' WHERE action_id = 'baseline-action'");
+  assert.equal(get("SELECT status FROM cr_action_workflow WHERE action_id = 'baseline-action'").status, "done");
+  run("INSERT INTO cr_action_workflow(action_id, source_kind, status, title, description, category, priority, effort, affected_area, success_measure, created_at, updated_at) VALUES ('custom-action', 'custom', 'backlog', 'Custom action', 'Fixture description', 'Content', 'medium', 'small', '/blog', 'Published', '2026-07-30', '2026-07-30')");
+  expectConstraint("INSERT INTO cr_action_workflow(action_id, source_kind, status, title, created_at, updated_at) VALUES ('invalid-custom', 'custom', 'backlog', 'Incomplete', '2026-07-30', '2026-07-30')");
+  expectConstraint("UPDATE cr_action_workflow SET status = 'done' WHERE action_id = 'custom-action'");
+
   run("INSERT INTO cr_change_events(id, occurred_at, event_type, title, summary, affected_path, verification_state, lifecycle_state, created_at) VALUES ('change-original', '2026-07-01', 'technical', 'Original change', 'Original fixture summary', '/work', 'confirmed', 'implemented', '2026-07-01')");
   run("INSERT INTO cr_change_events(id, occurred_at, event_type, title, summary, affected_path, verification_state, lifecycle_state, supersedes_event_id, created_at) VALUES ('change-correction', '2026-07-02', 'technical', 'Corrected change', 'Correction fixture summary', '/work', 'confirmed', 'corrected', 'change-original', '2026-07-02')");
   assert.equal(get("SELECT supersedes_event_id FROM cr_change_events WHERE id = 'change-correction'").supersedes_event_id, "change-original");
@@ -306,6 +315,7 @@ try {
     ["pagespeed", "EXPLAIN QUERY PLAN SELECT run_id FROM cr_pagespeed_snapshots WHERE target_id = 'home' AND strategy = 'mobile' ORDER BY captured_at DESC LIMIT 1", "idx_cr_pagespeed_target"],
     ["search", "EXPLAIN QUERY PLAN SELECT id FROM cr_search_snapshots WHERE property_id = 'sc-domain:tanbuidesigns.com' AND period_id = '28d' ORDER BY end_date DESC LIMIT 2", "idx_cr_search_period"],
     ["leads", "EXPLAIN QUERY PLAN SELECT id FROM cr_leads WHERE status = 'active' ORDER BY created_at DESC, id DESC LIMIT 20", "idx_cr_leads_status_created"],
+    ["actions", "EXPLAIN QUERY PLAN SELECT action_id FROM cr_action_workflow WHERE status = 'backlog' ORDER BY updated_at DESC, action_id DESC LIMIT 20", "idx_cr_action_workflow_status_updated"],
   ];
   for (const [label, sql, expectedIndex] of plans) {
     const detail = all(sql).map((row) => row.detail).join(" ");
@@ -329,4 +339,4 @@ try {
 }
 
 console.log(`Verified local D1 simulation: ${basename(databaseFiles[0])}`);
-console.log("Schema, constraints, lead retention, atomicity, fixtures, pagination, evidence, and query plans passed.");
+console.log("Schema, constraints, lead retention, action workflow, atomicity, fixtures, pagination, evidence, and query plans passed.");

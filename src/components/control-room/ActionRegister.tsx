@@ -10,7 +10,7 @@ const priorityStyles: Record<ReviewPriority, string> = {
   low: "bg-slate-100 text-slate-700 ring-slate-600/15",
 };
 
-export default function ActionRegister({ actions }: { actions: readonly ActionRecord[] }) {
+export default function ActionRegister({ actions, editable = true }: { actions: readonly ActionRecord[]; editable?: boolean }) {
   return (
     <section aria-labelledby="action-register-title" className="rounded-[1.35rem] border border-black/8 bg-white p-5 shadow-[0_18px_50px_rgba(0,0,0,0.04)] sm:p-7">
       <div className="flex flex-wrap items-end justify-between gap-3">
@@ -43,6 +43,12 @@ export default function ActionRegister({ actions }: { actions: readonly ActionRe
               <div><dt className="font-semibold text-black">Governance</dt><dd className="mt-1 text-gray-600">Approval {action.approvalRequired ? "required" : "not currently required"}; external access {action.externalAccessRequired ? "required" : "not required"}.</dd></div>
             </dl>
             <div className="mt-5 flex flex-wrap gap-2"><VerificationBadge status={action.verificationStatus} /><DataSourceBadge source={action.source} /></div>
+            <form action="/control-room/actions/update" method="post" className="mt-5 grid gap-3 rounded-xl border border-black/8 bg-white p-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] sm:items-end">
+              <input type="hidden" name="actionId" value={action.id} />
+              <label className="text-sm font-semibold">Workflow status<select name="status" defaultValue={action.status} className="mt-1 block min-h-11 w-full rounded-lg border border-black/15 bg-white px-3 font-normal"><option value="backlog">Backlog</option><option value="ready">Ready</option><option value="in-progress">In progress</option><option value="blocked">Blocked</option><option value="review">Review</option><option value="done">Done</option></select></label>
+              <label className="text-sm font-semibold">Assigned owner<input name="assignedOwner" defaultValue={action.suggestedOwner === "Unassigned" ? "" : action.suggestedOwner} maxLength={120} className="mt-1 block min-h-11 w-full rounded-lg border border-black/15 bg-white px-3 font-normal" /></label>
+              <button disabled={!editable} className="min-h-11 rounded-lg bg-black px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-40" type="submit">Save workflow</button>
+            </form>
             <details className="mt-5 border-t border-black/8 pt-4">
               <summary className="cursor-pointer text-sm font-semibold underline decoration-gray-300 underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black">Evidence and notes</summary>
               <ul className="mt-3 space-y-1 font-mono text-xs text-gray-500">
