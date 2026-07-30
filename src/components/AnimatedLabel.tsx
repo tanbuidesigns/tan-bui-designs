@@ -59,7 +59,8 @@ export default function AnimatedLabel({
       onPointerUp={triggerTouchTreatment}
       className={`${styles.label} ${className}`}
     >
-      <span className={styles.labelText} aria-label={children}>
+      <span className={styles.labelText}>
+        <span className="sr-only">{children}</span>
         <span aria-hidden="true">
           {Array.from(children).map((letter, index) => (
             <span

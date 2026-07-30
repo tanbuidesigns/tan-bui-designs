@@ -35,6 +35,7 @@ export default function ClientLogoShowcase() {
   const dragStartYRef = useRef(0);
   const dragStartScrollRef = useRef(0);
   const dragDirectionRef = useRef<DragDirection>(null);
+  const autoScrollingRef = useRef(false);
   const syncAnimationRef = useRef<() => void>(() => undefined);
   const pauseStateRef = useRef<PauseState>({
     inView: false,
@@ -107,7 +108,10 @@ export default function ClientLogoShowcase() {
     };
 
     const syncAnimation = () => {
-      if (shouldAnimate()) {
+      const autoScrolling = shouldAnimate();
+      autoScrollingRef.current = autoScrolling;
+
+      if (autoScrolling) {
         if (animationFrame === null) {
           lastTimestamp = null;
           animationFrame = window.requestAnimationFrame(animate);
@@ -198,6 +202,7 @@ export default function ClientLogoShowcase() {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       document.removeEventListener("keydown", handleKeyboardInput);
       reducedMotion.removeEventListener("change", handleReducedMotionChange);
+      autoScrollingRef.current = false;
       syncAnimationRef.current = () => undefined;
     };
   }, []);
@@ -300,6 +305,7 @@ export default function ClientLogoShowcase() {
     const viewport = viewportRef.current;
 
     if (!viewport) return;
+    if (autoScrollingRef.current && !pauseStateRef.current.manual) return;
 
     positionRef.current = viewport.scrollLeft;
 
