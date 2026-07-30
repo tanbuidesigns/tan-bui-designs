@@ -48,4 +48,7 @@ next-env.d.ts
 .dev.vars*
 !.dev.vars.example
 
+# generated private dashboard build evidence
+/src/data/generated/control-room-build-manifest.json
+
 !.env.example

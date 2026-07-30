@@ -222,4 +222,17 @@ export const changeLog: readonly ChangeLogEntry[] = [
     reviewDate: "30 July 2026",
     notes: "The deterministic thresholds are conservative and explicitly preserve Search Console privacy, top-row and page-attribution limitations.",
   },
+  {
+    id: "control-room-build-inventory-2026-07-30",
+    date: "30 July 2026",
+    changeType: "inventory",
+    summary: "Automatic route inventory and repository candidates implemented",
+    reason: "Detect App Router page files and recent repository changes automatically while preserving human review for operational meaning.",
+    affectedArea: "Build manifest generator, Control Room Pages and Change Log",
+    expectedOutcome: "New public, private and dynamic page files appear in a deterministic build snapshot, and recent commits are visible as review candidates rather than unverified deployment claims.",
+    verificationStatus: "confirmed",
+    source: "repository-review",
+    reviewDate: "30 July 2026",
+    notes: "The integration is read-only and local to the build. Commit subjects cannot prove deployment state, business reason or outcome, so the curated confirmed log remains authoritative.",
+  },
 ];
